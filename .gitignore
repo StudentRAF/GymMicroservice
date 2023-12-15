@@ -1,0 +1,22 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ
+out/
+.idea/
+
+# Gradle
+.gradle/
+build/
+
+# Maven
+target/
+dependency-reduced-pom.xml
+
+# File-based project format
+*.iws
+*.iml
+*.ipr
+*.log
