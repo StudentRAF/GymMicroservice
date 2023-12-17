@@ -1,4 +1,4 @@
 # Maven
 target/
 dependency-reduced-pom.xml
-application.properties
+local.properties
