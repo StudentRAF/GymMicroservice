@@ -16,6 +16,7 @@
 
 package rs.raf.gym.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,7 +25,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,21 +38,20 @@ public class ClientTrainingAppointment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "date"),
-            @JoinColumn(name = "gym_id"),
-            @JoinColumn(name = "training_id"),
-            @JoinColumn(name = "time")
+            @JoinColumn(name = "date",        nullable = false),
+            @JoinColumn(name = "gym_id",      nullable = false),
+            @JoinColumn(name = "training_id", nullable = false),
+            @JoinColumn(name = "time",        nullable = false)
     })
     private TrainingAppointment trainingAppointment;
 
-    @NotNull
+    @Column(nullable = false)
     private Long clientId;
 
-    @NotNull
     @ManyToOne
+    @JoinColumn(nullable = false)
     private ClientAppointmentStatus status;
 
 }

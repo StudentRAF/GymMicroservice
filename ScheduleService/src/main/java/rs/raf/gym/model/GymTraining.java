@@ -16,14 +16,13 @@
 
 package rs.raf.gym.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import rs.raf.gym.model.composite.GymTrainingComposite;
@@ -47,16 +46,13 @@ public class GymTraining {
     @JoinColumn(name = "training_id")
     private Training training;
 
-    @NotNull
-    @Positive
+    @Column(nullable = false)
     private Double duration;
 
-    @NotNull
-    @Positive
+    @Column(nullable = false)
     private Integer maxParticipants;
 
-    @NotNull
-    @Positive
+    @Column(nullable = false)
     private Integer minParticipants;
 
     @Override

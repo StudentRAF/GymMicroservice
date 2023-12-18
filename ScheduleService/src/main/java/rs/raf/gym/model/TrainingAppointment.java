@@ -16,6 +16,7 @@
 
 package rs.raf.gym.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -23,8 +24,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import rs.raf.gym.model.composite.TrainingAppointmentComposite;
@@ -53,12 +52,12 @@ public class TrainingAppointment {
     @Id
     private LocalTime time;
 
-    @NotNull
-    @Positive
+    @Column(nullable = false)
     private Integer duration;
 
-    @NotNull
+
     @ManyToOne
+    @JoinColumn(nullable = false)
     private AppointmentStatus status;
 
 }
