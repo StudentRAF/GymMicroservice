@@ -1,0 +1,58 @@
+/*
+ * Copyright (C) 2023. Lazar Dobrota and Nemanja Radovanovic
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package rs.raf.gym.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+@Entity
+@Table(name = "client_training_appointment")
+public class ClientTrainingAppointment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "date"),
+            @JoinColumn(name = "gym_id"),
+            @JoinColumn(name = "training_id"),
+            @JoinColumn(name = "time")
+    })
+    private TrainingAppointment trainingAppointment;
+
+    @NotNull
+    private Long clientId;
+
+    @NotNull
+    @ManyToOne
+    private ClientAppointmentStatus status;
+
+}
