@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.repository;
+package rs.raf.gym.service;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import rs.raf.gym.model.Gym;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import rs.raf.gym.dto.TrainingTypeCreateDto;
+import rs.raf.gym.dto.TrainingTypeDto;
+import rs.raf.gym.dto.TrainingTypeUpdateDto;
 
-import java.util.Optional;
+import java.util.List;
 
-@Repository
-public interface GymRepository extends JpaRepository<Gym, String> {
+public interface ITrainingTypeService {
 
-    Optional<Gym> findByManagerId(Long managerId);
+    List<TrainingTypeDto> findAll();
+
+    Page<TrainingTypeDto> findAll(Pageable pageable);
+
+    TrainingTypeDto findByName(String name);
+
+    TrainingTypeDto create(TrainingTypeCreateDto trainingTypeCreateDto);
+
+    TrainingTypeDto update(TrainingTypeUpdateDto trainingTypeUpdateDto);
 
 }

@@ -24,7 +24,7 @@ import rs.raf.gym.dto.GymDto;
 import rs.raf.gym.dto.GymUpdateDto;
 import rs.raf.gym.mapper.GymMapper;
 import rs.raf.gym.model.Gym;
-import rs.raf.gym.repository.GymRepository;
+import rs.raf.gym.repository.IGymRepository;
 import rs.raf.gym.service.IGymService;
 
 import java.util.List;
@@ -32,10 +32,10 @@ import java.util.List;
 @Service
 public class GymService implements IGymService {
 
-    private final GymRepository gymRepository;
-    private final GymMapper     gymMapper;
+    private final IGymRepository gymRepository;
+    private final GymMapper      gymMapper;
 
-    public GymService(GymRepository gymRepository, GymMapper gymMapper) {
+    public GymService(IGymRepository gymRepository, GymMapper gymMapper) {
         this.gymRepository = gymRepository;
         this.gymMapper     = gymMapper;
     }
