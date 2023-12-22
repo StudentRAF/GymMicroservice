@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto;
+package rs.raf.gym.dto.training_type;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +24,12 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class TrainingTypeCreateDto {
+public class TrainingTypeUpdateDto {
+
+    @NotNull
+    @NotBlank
+    @Size(max = 30)
+    private String oldName;
 
     @NotNull
     @NotBlank

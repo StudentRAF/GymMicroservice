@@ -17,9 +17,9 @@
 package rs.raf.gym.mapper;
 
 import org.springframework.stereotype.Component;
-import rs.raf.gym.dto.GymCreateDto;
-import rs.raf.gym.dto.GymDto;
-import rs.raf.gym.dto.GymUpdateDto;
+import rs.raf.gym.dto.gym.GymCreateDto;
+import rs.raf.gym.dto.gym.GymDto;
+import rs.raf.gym.dto.gym.GymUpdateDto;
 import rs.raf.gym.model.Gym;
 
 @Component

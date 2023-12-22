@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto;
+package rs.raf.gym.dto.gym;
 
 import lombok.Getter;
 import lombok.Setter;

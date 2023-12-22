@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto;
+package rs.raf.gym.dto.gym;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class TrainingTypeUpdateDto {
+public class GymCreateDto {
 
     @NotNull
-    @NotBlank
-    @Size(max = 30)
-    private String oldName;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 30)
     private String name;
+
+    private String description;
+
+    @NotNull
+    @PositiveOrZero
+    private Integer trainers;
 
 }

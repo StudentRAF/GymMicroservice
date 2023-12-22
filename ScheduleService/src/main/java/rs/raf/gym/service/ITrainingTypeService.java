@@ -18,9 +18,9 @@ package rs.raf.gym.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import rs.raf.gym.dto.TrainingTypeCreateDto;
-import rs.raf.gym.dto.TrainingTypeDto;
-import rs.raf.gym.dto.TrainingTypeUpdateDto;
+import rs.raf.gym.dto.training_type.TrainingTypeCreateDto;
+import rs.raf.gym.dto.training_type.TrainingTypeDto;
+import rs.raf.gym.dto.training_type.TrainingTypeUpdateDto;
 
 import java.util.List;
 

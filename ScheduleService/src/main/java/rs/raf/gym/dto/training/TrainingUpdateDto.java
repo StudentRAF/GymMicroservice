@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto;
+package rs.raf.gym.dto.training;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

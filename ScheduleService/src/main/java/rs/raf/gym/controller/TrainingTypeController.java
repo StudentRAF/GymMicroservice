@@ -28,10 +28,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.dto.TrainingTypeCreateDto;
-import rs.raf.gym.dto.TrainingTypeDto;
-import rs.raf.gym.dto.TrainingTypeUpdateDto;
+import rs.raf.gym.dto.training_type.TrainingTypeCreateDto;
+import rs.raf.gym.dto.training_type.TrainingTypeDto;
+import rs.raf.gym.dto.training_type.TrainingTypeUpdateDto;
 import rs.raf.gym.service.ITrainingTypeService;
 
 import java.util.List;
@@ -56,8 +57,8 @@ public class TrainingTypeController {
         return new ResponseEntity<>(trainingTypeService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/name={name}")
-    public ResponseEntity<TrainingTypeDto> getTrainingTypeWithName(@PathVariable("name") String name) {
+    @GetMapping(params = "{name}")
+    public ResponseEntity<TrainingTypeDto> getTrainingTypeWithName(@RequestParam("name") String name) {
         return new ResponseEntity<>(trainingTypeService.findByName(name), HttpStatus.OK);
     }
 

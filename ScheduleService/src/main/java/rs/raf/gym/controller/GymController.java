@@ -22,15 +22,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.dto.GymCreateDto;
-import rs.raf.gym.dto.GymDto;
-import rs.raf.gym.dto.GymUpdateDto;
+import rs.raf.gym.dto.gym.GymCreateDto;
+import rs.raf.gym.dto.gym.GymDto;
+import rs.raf.gym.dto.gym.GymUpdateDto;
 import rs.raf.gym.service.IGymService;
 
 import java.util.List;
@@ -55,13 +55,13 @@ public class GymController {
         return new ResponseEntity<>(gymService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/name={name}")
-    public ResponseEntity<GymDto> getUserWithName(@PathVariable("name") String name) {
+    @GetMapping(params = "name")
+    public ResponseEntity<GymDto> getUserWithName(@RequestParam("name") String name) {
         return new ResponseEntity<>(gymService.findByName(name), HttpStatus.OK);
     }
 
-    @GetMapping("/manager={manager}")
-    public ResponseEntity<GymDto> getUserWithName(@PathVariable("manager") Long managerId) {
+    @GetMapping(params = "manager")
+    public ResponseEntity<GymDto> getUserWithName(@RequestParam("manager") Long managerId) {
         return new ResponseEntity<>(gymService.findByManager(managerId), HttpStatus.OK);
     }
 
