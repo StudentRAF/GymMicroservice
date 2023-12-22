@@ -64,4 +64,44 @@ public class GymTraining {
         return false;
     }
 
+    /**
+     * Returns the gym field identifier.
+     * @return gym identifier
+     */
+    public static String gym() {
+        return "gym";
+    }
+
+    /**
+     * Returns the training field identifier.
+     * @return training identifier
+     */
+    public static String training() {
+        return "training";
+    }
+
+    /**
+     * Returns the duration field identifier.
+     * @return duration identifier
+     */
+    public static String duration() {
+        return "duration";
+    }
+
+    /**
+     * Returns the max participants field identifier.
+     * @return max participants identifier
+     */
+    public static String maxParticipants() {
+        return "maxParticipants";
+    }
+
+    /**
+     * Returns the min participants field identifier.
+     * @return min participants identifier
+     */
+    public static String minParticipants() {
+        return "minParticipants";
+    }
+
 }

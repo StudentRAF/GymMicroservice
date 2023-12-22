@@ -51,4 +51,36 @@ public class Gym {
         return false;
     }
 
+    /**
+     * Returns the gym name field identifier.
+     * @return name identifier
+     */
+    public static String name() {
+        return "name";
+    }
+
+    /**
+     * Returns the gym description field identifier.
+     * @return description identifier
+     */
+    public static String description() {
+        return "type";
+    }
+
+    /**
+     * Returns the gym manager field identifier.
+     * @return description identifier
+     */
+    public static String manager() {
+        return "managerId";
+    }
+
+    /**
+     * Returns the gym trainers field identifier.
+     * @return description identifier
+     */
+    public static String trainers() {
+        return "trainers";
+    }
+
 }

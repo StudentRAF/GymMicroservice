@@ -54,4 +54,28 @@ public class ClientTrainingAppointment {
     @JoinColumn(nullable = false)
     private ClientAppointmentStatus status;
 
+    /**
+     * Returns the training appointment field identifier.
+     * @return training appointment identifier
+     */
+    public static String trainingAppointment() {
+        return "trainingAppointment";
+    }
+
+    /**
+     * Returns the client field identifier.
+     * @return client identifier
+     */
+    public static String client() {
+        return "clientId";
+    }
+
+    /**
+     * Returns the status field identifier.
+     * @return status identifier
+     */
+    public static String status() {
+        return "status";
+    }
+
 }

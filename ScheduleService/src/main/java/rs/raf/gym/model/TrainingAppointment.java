@@ -44,7 +44,7 @@ public class TrainingAppointment {
             @JoinColumn(name = "gym_id"),
             @JoinColumn(name = "training_id")
     })
-    private GymTraining gymTraining;
+    private GymTraining training;
 
     @Id
     private LocalDate date;
@@ -59,5 +59,37 @@ public class TrainingAppointment {
     @ManyToOne
     @JoinColumn(nullable = false)
     private AppointmentStatus status;
+
+    /**
+     * Returns the gym training field identifier.
+     * @return gym training identifier
+     */
+    public static String gymTraining() {
+        return "training";
+    }
+
+    /**
+     * Returns the appointment date field identifier.
+     * @return appointment date identifier
+     */
+    public static String date() {
+        return "date";
+    }
+
+    /**
+     * Returns the appointment time field identifier.
+     * @return appointment time identifier
+     */
+    public static String time() {
+        return "time";
+    }
+
+    /**
+     * Returns the appointment duration field identifier.
+     * @return appointment duration identifier
+     */
+    public static String duration() {
+        return "duration";
+    }
 
 }

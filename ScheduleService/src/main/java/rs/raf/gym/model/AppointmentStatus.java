@@ -33,4 +33,12 @@ public class AppointmentStatus {
     @Column(length = 30)
     private String name;
 
+    /**
+     * Returns the appointment name field identifier.
+     * @return name identifier
+     */
+    public static String name() {
+        return "name";
+    }
+
 }

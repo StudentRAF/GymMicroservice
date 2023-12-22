@@ -54,4 +54,36 @@ public class Training {
         return false;
     }
 
+    /**
+     * Returns the training name field identifier.
+     * @return name identifier
+     */
+    public static String name() {
+        return "name";
+    }
+
+    /**
+     * Returns the training type identifier.
+     * @return training type identifier
+     */
+    public static String trainingType() {
+        return "type";
+    }
+
+    /**
+     * Returns the description field identifier.
+     * @return description identifier
+     */
+    public static String description() {
+        return "type";
+    }
+
+    /**
+     * Returns the loyalty field identifier.
+     * @return loyalty identifier
+     */
+    public static String loyalty() {
+        return "type";
+    }
+
 }

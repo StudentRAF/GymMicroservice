@@ -29,7 +29,7 @@ import java.util.Objects;
 @Getter
 public class TrainingAppointmentComposite implements Serializable {
 
-    private GymTraining gymTraining;
+    private GymTraining training;
 
     private LocalDate date;
 
@@ -38,9 +38,9 @@ public class TrainingAppointmentComposite implements Serializable {
     @Override
     public boolean equals(Object object) {
         if (object instanceof TrainingAppointmentComposite composite)
-            return Objects.equals(composite.getDate(), date)            &&
-                   Objects.equals(composite.getTime(), time)            &&
-                   Objects.equals(composite.getGymTraining(), gymTraining);
+            return Objects.equals(composite.getDate(), date)      &&
+                   Objects.equals(composite.getTime(), time)      &&
+                   Objects.equals(composite.getTraining(), training);
 
         return false;
     }

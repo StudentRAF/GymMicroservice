@@ -33,4 +33,12 @@ public class TrainingType {
     @Column(length = 30)
     private String name;
 
+    /**
+     * Returns the training type name field identifier.
+     * @return training type name identifier
+     */
+    public static String name() {
+        return "name";
+    }
+
 }
