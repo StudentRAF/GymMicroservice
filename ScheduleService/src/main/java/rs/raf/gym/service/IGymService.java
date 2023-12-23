@@ -22,17 +22,9 @@ import rs.raf.gym.dto.gym.GymCreateDto;
 import rs.raf.gym.dto.gym.GymDto;
 import rs.raf.gym.dto.gym.GymUpdateDto;
 
-import java.util.List;
-
 public interface IGymService {
 
-    List<GymDto> findAll();
-
-    Page<GymDto> findAll(Pageable pageable);
-
-    GymDto findByName(String name);
-
-    GymDto findByManager(Long managerId);
+    Page<GymDto> findAll(String name, Integer managerId, Pageable pageable);
 
     GymDto create(GymCreateDto gymCreateDto);
 

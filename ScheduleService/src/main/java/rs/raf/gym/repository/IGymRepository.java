@@ -16,15 +16,10 @@
 
 package rs.raf.gym.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import rs.raf.gym.model.Gym;
 
-import java.util.Optional;
-
 @Repository
-public interface IGymRepository extends JpaRepository<Gym, String> {
-
-    Optional<Gym> findByManagerId(Long managerId);
+public interface IGymRepository extends JpaSpecificationRepository<Gym, String> {
 
 }

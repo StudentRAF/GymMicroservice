@@ -18,6 +18,7 @@ package rs.raf.gym.service.implementation;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import rs.raf.gym.dto.gym.GymCreateDto;
 import rs.raf.gym.dto.gym.GymDto;
@@ -26,8 +27,7 @@ import rs.raf.gym.mapper.GymMapper;
 import rs.raf.gym.model.Gym;
 import rs.raf.gym.repository.IGymRepository;
 import rs.raf.gym.service.IGymService;
-
-import java.util.List;
+import rs.raf.gym.specification.GymSpecification;
 
 @Service
 public class GymService implements IGymService {
@@ -41,31 +41,10 @@ public class GymService implements IGymService {
     }
 
     @Override
-    public List<GymDto> findAll() {
-        return gymRepository.findAll()
-                            .stream()
-                            .map(gymMapper::toGymDto)
-                            .toList();
-    }
-
-    @Override
-    public Page<GymDto> findAll(Pageable pageable) {
-        return gymRepository.findAll(pageable)
-                            .map(gymMapper::toGymDto);
-    }
-
-    @Override
-    public GymDto findByName(String name) {
-        return gymRepository.findById(name)
-                            .map(gymMapper::toGymDto)
-                            .orElse(null);
-    }
-
-    @Override
-    public GymDto findByManager(Long managerId) {
-        return gymRepository.findByManagerId(managerId)
-                            .map(gymMapper::toGymDto)
-                            .orElse(null);
+    public Page<GymDto> findAll(String name, Integer managerId, Pageable pageable) {
+        Specification<Gym> specification = GymSpecification.get(name, managerId);
+        
+        return gymRepository.findAll(specification, pageable).map(gymMapper::toGymDto);
     }
 
     @Override

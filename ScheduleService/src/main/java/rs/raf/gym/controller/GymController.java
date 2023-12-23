@@ -33,8 +33,6 @@ import rs.raf.gym.dto.gym.GymDto;
 import rs.raf.gym.dto.gym.GymUpdateDto;
 import rs.raf.gym.service.IGymService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/gym")
 public class GymController {
@@ -45,24 +43,11 @@ public class GymController {
         this.gymService = gymService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<GymDto>> getAllUsers() {
-        return new ResponseEntity<>(gymService.findAll(), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/all", params = { "page", "size" })
-    public ResponseEntity<Page<GymDto>> getAllUsers(Pageable pageable) {
-        return new ResponseEntity<>(gymService.findAll(pageable), HttpStatus.OK);
-    }
-
-    @GetMapping(params = "name")
-    public ResponseEntity<GymDto> getUserWithName(@RequestParam("name") String name) {
-        return new ResponseEntity<>(gymService.findByName(name), HttpStatus.OK);
-    }
-
-    @GetMapping(params = "manager")
-    public ResponseEntity<GymDto> getUserWithName(@RequestParam("manager") Long managerId) {
-        return new ResponseEntity<>(gymService.findByManager(managerId), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Page<GymDto>> getAllUsers(@RequestParam(value = "name", required = false) String name,
+                                                    @RequestParam(value = "manager", required = false) Integer manager,
+                                                    Pageable pageable) {
+        return new ResponseEntity<>(gymService.findAll(name, manager,pageable), HttpStatus.OK);
     }
 
     @PostMapping
