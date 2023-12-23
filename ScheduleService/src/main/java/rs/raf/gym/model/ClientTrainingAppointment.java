@@ -30,11 +30,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Setter
 @Getter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "client_training_appointment")
 public class ClientTrainingAppointment {
 
@@ -57,6 +59,19 @@ public class ClientTrainingAppointment {
     @ManyToOne
     @JoinColumn(nullable = false)
     private ClientAppointmentStatus status;
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof ClientTrainingAppointment appointment)
+            return Objects.equals(appointment.getId(), id);
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, trainingAppointment, clientId, status);
+    }
 
     /**
      * Returns the training appointment field identifier.

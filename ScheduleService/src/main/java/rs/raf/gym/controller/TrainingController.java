@@ -17,6 +17,7 @@
 package rs.raf.gym.controller;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,15 +34,12 @@ import rs.raf.gym.dto.training.TrainingDto;
 import rs.raf.gym.dto.training.TrainingUpdateDto;
 import rs.raf.gym.service.ITrainingService;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/training")
 public class TrainingController {
 
     private final ITrainingService service;
-
-    public TrainingController(ITrainingService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public ResponseEntity<Page<TrainingDto>> filter(@RequestParam(value = "name",    required = false) String  name,

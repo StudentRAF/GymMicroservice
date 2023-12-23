@@ -1,6 +1,7 @@
 package rs.raf.gym.controller;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,15 +18,12 @@ import rs.raf.gym.dto.gym_training.GymTrainingDto;
 import rs.raf.gym.dto.gym_training.GymTrainingUpdateDto;
 import rs.raf.gym.service.IGymTrainingService;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/gym-training")
 public class GymTrainingController {
 
     private final IGymTrainingService service;
-
-    public GymTrainingController(IGymTrainingService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public ResponseEntity<Page<GymTrainingDto>> filter(@RequestParam(value = "gym",      required = false) String  gym,

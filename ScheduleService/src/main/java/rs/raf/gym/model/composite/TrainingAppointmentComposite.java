@@ -16,6 +16,11 @@
 
 package rs.raf.gym.model.composite;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,8 +36,14 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Embeddable
 public class TrainingAppointmentComposite implements Serializable {
 
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "gym_id"),
+            @JoinColumn(name = "training_id")
+    })
     private GymTraining training;
 
     private LocalDate date;
@@ -51,7 +62,31 @@ public class TrainingAppointmentComposite implements Serializable {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(training, date, time);
+    }
+
+    /**
+     * Returns the gym training field identifier.
+     * @return gym training identifier
+     */
+    public static String gymTraining() {
+        return "training";
+    }
+
+    /**
+     * Returns the appointment date field identifier.
+     * @return appointment date identifier
+     */
+    public static String date() {
+        return "date";
+    }
+
+    /**
+     * Returns the appointment time field identifier.
+     * @return appointment time identifier
+     */
+    public static String time() {
+        return "time";
     }
 
 }

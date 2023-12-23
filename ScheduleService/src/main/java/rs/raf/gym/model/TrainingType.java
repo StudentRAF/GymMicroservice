@@ -25,17 +25,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Setter
 @Getter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "training_type")
 public class TrainingType {
 
     @Id
     @Column(length = 30)
     private String name;
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof TrainingType trainingType)
+            return Objects.equals(trainingType.getName(), name);
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
 
     /**
      * Returns the training type name field identifier.

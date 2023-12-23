@@ -31,9 +31,9 @@ import java.util.Objects;
 
 @Setter
 @Getter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "training")
 public class Training {
 
@@ -56,6 +56,11 @@ public class Training {
             return Objects.equals(training.getName(), name);
 
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type, description, loyalty);
     }
 
     /**

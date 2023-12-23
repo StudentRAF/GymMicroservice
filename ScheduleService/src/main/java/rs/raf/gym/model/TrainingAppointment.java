@@ -17,11 +17,9 @@
 package rs.raf.gym.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,62 +28,45 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.raf.gym.model.composite.TrainingAppointmentComposite;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Objects;
 
 @Setter
 @Getter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "training_appointment")
-@IdClass(TrainingAppointmentComposite.class)
 public class TrainingAppointment {
 
-    @Id
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "gym_id"),
-            @JoinColumn(name = "training_id")
-    })
-    private GymTraining training;
-
-    @Id
-    private LocalDate date;
-
-    @Id
-    private LocalTime time;
+    @EmbeddedId
+    TrainingAppointmentComposite trainingAppointment;
 
     @Column(nullable = false)
     private Integer duration;
-
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private AppointmentStatus status;
 
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof TrainingAppointment appointment)
+            return Objects.equals(appointment.getTrainingAppointment(), trainingAppointment);
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(trainingAppointment, duration, status);
+    }
+
     /**
      * Returns the gym training field identifier.
      * @return gym training identifier
      */
-    public static String gymTraining() {
-        return "training";
-    }
-
-    /**
-     * Returns the appointment date field identifier.
-     * @return appointment date identifier
-     */
-    public static String date() {
-        return "date";
-    }
-
-    /**
-     * Returns the appointment time field identifier.
-     * @return appointment time identifier
-     */
-    public static String time() {
-        return "time";
+    public static String composite() {
+        return "trainingAppointment";
     }
 
     /**
@@ -94,6 +75,14 @@ public class TrainingAppointment {
      */
     public static String duration() {
         return "duration";
+    }
+
+    /**
+     * Returns the appointment status field identifier.
+     * @return appointment status identifier
+     */
+    public static String status() {
+        return "status";
     }
 
 }
