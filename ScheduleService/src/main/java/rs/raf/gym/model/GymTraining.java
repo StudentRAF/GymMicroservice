@@ -17,11 +17,8 @@
 package rs.raf.gym.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,21 +30,13 @@ import java.util.Objects;
 @Getter
 @Entity
 @Table(name = "gym_training")
-@IdClass(GymTrainingComposite.class)
 public class GymTraining {
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "gym_id")
-    private Gym gym;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "training_id")
-    private Training training;
+    @EmbeddedId
+    private GymTrainingComposite gymTraining;
 
     @Column(nullable = false)
-    private Double duration;
+    private Double price;
 
     @Column(nullable = false)
     private Integer maxParticipants;
@@ -58,34 +47,25 @@ public class GymTraining {
     @Override
     public boolean equals(Object object) {
         if (object instanceof GymTraining instance)
-            return Objects.equals(instance.getGym(),      gym)   &&
-                   Objects.equals(instance.getTraining(), training);
+            return Objects.equals(instance.getGymTraining(), gymTraining);
 
         return false;
     }
 
     /**
-     * Returns the gym field identifier.
-     * @return gym identifier
+     * Returns the composite (GymTrainingComposite) field identifier.
+     * @return composite identifier
      */
-    public static String gym() {
-        return "gym";
+    public static String composite() {
+        return "gymTraining";
     }
 
     /**
-     * Returns the training field identifier.
-     * @return training identifier
+     * Returns the price field identifier.
+     * @return price identifier
      */
-    public static String training() {
-        return "training";
-    }
-
-    /**
-     * Returns the duration field identifier.
-     * @return duration identifier
-     */
-    public static String duration() {
-        return "duration";
+    public static String price() {
+        return "price";
     }
 
     /**

@@ -17,13 +17,12 @@
 package rs.raf.gym.specification;
 
 import lombok.Getter;
-import org.springframework.data.jpa.domain.Specification;
 import rs.raf.gym.model.Gym;
 
 @Getter
 public class GymSpecification extends BaseSpecification<Gym> {
 
-    private GymSpecification(String name, Integer manager) {
+    public GymSpecification(String name, Integer manager) {
         addNameSpecification(name);
         addManagerSpecification(manager);
     }
@@ -40,10 +39,6 @@ public class GymSpecification extends BaseSpecification<Gym> {
             return;
 
         specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Gym.manager()), manager));
-    }
-
-    public static Specification<Gym> of(String name, Integer manager) {
-        return new GymSpecification(name, manager).merge();
     }
 
 }

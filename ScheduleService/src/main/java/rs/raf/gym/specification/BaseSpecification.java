@@ -23,14 +23,14 @@ public class BaseSpecification<Type> {
         return specifications.size();
     }
 
-    protected Specification<Type> merge() {
+    public Specification<Type> filter() {
         if (isEmpty())
             return null;
 
         Specification<Type> specification = Specification.where(get(0));
 
         for (int index = 1; index < size(); ++index)
-             specification.and(get(index));
+             specification = specification.and(get(index));
 
         return specification;
     }

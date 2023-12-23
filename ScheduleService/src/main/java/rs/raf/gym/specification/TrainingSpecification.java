@@ -1,11 +1,10 @@
 package rs.raf.gym.specification;
 
-import org.springframework.data.jpa.domain.Specification;
 import rs.raf.gym.model.Training;
 
 public class TrainingSpecification extends BaseSpecification<Training> {
 
-    private TrainingSpecification(String name, String type, Integer loyalty) {
+    public TrainingSpecification(String name, String type, Integer loyalty) {
         addNameSpecification(name);
         addTypeSpecification(type);
         addLoyaltySpecification(loyalty);
@@ -33,10 +32,6 @@ public class TrainingSpecification extends BaseSpecification<Training> {
 
         specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Training.loyalty()),
                                                                                    loyalty));
-    }
-
-    public static Specification<Training> of(String name, String type, Integer loyalty) {
-        return new TrainingSpecification(name, type, loyalty).merge();
     }
 
 }
