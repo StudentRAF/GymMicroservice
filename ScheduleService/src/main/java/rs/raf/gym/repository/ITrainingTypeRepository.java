@@ -16,11 +16,10 @@
 
 package rs.raf.gym.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import rs.raf.gym.model.TrainingType;
 
 @Repository
-public interface ITrainingTypeRepository extends JpaRepository<TrainingType, String> {
+public interface ITrainingTypeRepository extends JpaSpecificationRepository<TrainingType, String> {
 
 }

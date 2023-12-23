@@ -22,15 +22,9 @@ import rs.raf.gym.dto.training_type.TrainingTypeCreateDto;
 import rs.raf.gym.dto.training_type.TrainingTypeDto;
 import rs.raf.gym.dto.training_type.TrainingTypeUpdateDto;
 
-import java.util.List;
-
 public interface ITrainingTypeService {
 
-    List<TrainingTypeDto> findAll();
-
-    Page<TrainingTypeDto> findAll(Pageable pageable);
-
-    TrainingTypeDto findByName(String name);
+    Page<TrainingTypeDto> findAll(String name, Pageable pageable);
 
     TrainingTypeDto create(TrainingTypeCreateDto trainingTypeCreateDto);
 

@@ -18,6 +18,7 @@ package rs.raf.gym.service.implementation;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import rs.raf.gym.dto.training_type.TrainingTypeCreateDto;
 import rs.raf.gym.dto.training_type.TrainingTypeDto;
@@ -26,8 +27,7 @@ import rs.raf.gym.mapper.TrainingTypeMapper;
 import rs.raf.gym.model.TrainingType;
 import rs.raf.gym.repository.ITrainingTypeRepository;
 import rs.raf.gym.service.ITrainingTypeService;
-
-import java.util.List;
+import rs.raf.gym.specification.TrainingTypeSpecification;
 
 @Service
 public class TrainingTypeService implements ITrainingTypeService {
@@ -41,24 +41,11 @@ public class TrainingTypeService implements ITrainingTypeService {
     }
 
     @Override
-    public List<TrainingTypeDto> findAll() {
-        return trainingTypeRepository.findAll()
-                                     .stream()
-                                     .map(trainingTypeMapper::toTrainingTypeDto)
-                                     .toList();
-    }
+    public Page<TrainingTypeDto> findAll(String name, Pageable pageable) {
+        Specification<TrainingType> specification = TrainingTypeSpecification.get(name);
 
-    @Override
-    public Page<TrainingTypeDto> findAll(Pageable pageable) {
-        return trainingTypeRepository.findAll(pageable)
+        return trainingTypeRepository.findAll(specification, pageable)
                                      .map(trainingTypeMapper::toTrainingTypeDto);
-    }
-
-    @Override
-    public TrainingTypeDto findByName(String name) {
-        return trainingTypeRepository.findById(name)
-                                     .map(trainingTypeMapper::toTrainingTypeDto)
-                                     .orElse(null);
     }
 
     @Override

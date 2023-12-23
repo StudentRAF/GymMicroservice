@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,8 +34,6 @@ import rs.raf.gym.dto.training_type.TrainingTypeDto;
 import rs.raf.gym.dto.training_type.TrainingTypeUpdateDto;
 import rs.raf.gym.service.ITrainingTypeService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/training-type")
 public class TrainingTypeController {
@@ -47,19 +44,11 @@ public class TrainingTypeController {
         this.trainingTypeService = trainingTypeService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<TrainingTypeDto>> getAllTrainingTypes() {
-        return new ResponseEntity<>(trainingTypeService.findAll(), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/all", params = { "page", "size" })
-    public ResponseEntity<Page<TrainingTypeDto>> getAllTrainingTypes(Pageable pageable) {
-        return new ResponseEntity<>(trainingTypeService.findAll(pageable), HttpStatus.OK);
-    }
-
-    @GetMapping(params = "{name}")
-    public ResponseEntity<TrainingTypeDto> getTrainingTypeWithName(@RequestParam("name") String name) {
-        return new ResponseEntity<>(trainingTypeService.findByName(name), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Page<TrainingTypeDto>> getAllTrainingTypes(@RequestParam(value = "name", required = false)
+                                                                     String name,
+                                                                     Pageable pageable) {
+        return new ResponseEntity<>(trainingTypeService.findAll(name, pageable), HttpStatus.OK);
     }
 
     @PostMapping
