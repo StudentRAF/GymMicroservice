@@ -21,21 +21,10 @@ import org.springframework.data.domain.Pageable;
 import rs.raf.gym.dto.training.TrainingCreateDto;
 import rs.raf.gym.dto.training.TrainingDto;
 import rs.raf.gym.dto.training.TrainingUpdateDto;
-import rs.raf.gym.model.TrainingType;
-
-import java.util.List;
 
 public interface ITrainingService {
 
-    List<TrainingDto> findAll();
-
-    Page<TrainingDto> findAll(Pageable pageable);
-
-    List<TrainingDto> findByType(TrainingType trainingType);
-
-    Page<TrainingDto> findByType(TrainingType trainingType, Pageable pageable);
-
-    TrainingDto findByName(String name);
+    Page<TrainingDto> findAll(String name, String type, Integer loyalty, Pageable pageable);
 
     TrainingDto create(TrainingCreateDto trainingCreateDto);
 

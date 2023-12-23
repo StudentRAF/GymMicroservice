@@ -75,7 +75,7 @@ public class Training {
      * @return description identifier
      */
     public static String description() {
-        return "type";
+        return "description";
     }
 
     /**
@@ -83,7 +83,7 @@ public class Training {
      * @return loyalty identifier
      */
     public static String loyalty() {
-        return "type";
+        return "loyalty";
     }
 
 }

@@ -42,8 +42,8 @@ public class GymService implements IGymService {
 
     @Override
     public Page<GymDto> findAll(String name, Integer managerId, Pageable pageable) {
-        Specification<Gym> specification = GymSpecification.get(name, managerId);
-        
+        Specification<Gym> specification = GymSpecification.of(name, managerId);
+
         return gymRepository.findAll(specification, pageable).map(gymMapper::toGymDto);
     }
 

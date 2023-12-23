@@ -24,23 +24,26 @@ import rs.raf.gym.model.Gym;
 public class GymSpecification extends BaseSpecification<Gym> {
 
     private GymSpecification(String name, Integer manager) {
-        if (name != null)
-            addNameSpecification(name);
-
-        if (manager != null)
-            addManagerSpecification(manager);
+        addNameSpecification(name);
+        addManagerSpecification(manager);
     }
 
     private void addNameSpecification(String name) {
+        if (name == null)
+            return;
+
         specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Gym.name()), name));
     }
 
     private void addManagerSpecification(Integer manager) {
+        if (manager == null)
+            return;
+
         specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Gym.manager()), manager));
     }
 
-    public static Specification<Gym> get(String name, Integer manager) {
-        return BaseSpecification.get(new GymSpecification(name, manager));
+    public static Specification<Gym> of(String name, Integer manager) {
+        return new GymSpecification(name, manager).merge();
     }
 
 }

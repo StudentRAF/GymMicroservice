@@ -42,7 +42,7 @@ public class TrainingTypeService implements ITrainingTypeService {
 
     @Override
     public Page<TrainingTypeDto> findAll(String name, Pageable pageable) {
-        Specification<TrainingType> specification = TrainingTypeSpecification.get(name);
+        Specification<TrainingType> specification = TrainingTypeSpecification.of(name);
 
         return trainingTypeRepository.findAll(specification, pageable)
                                      .map(trainingTypeMapper::toTrainingTypeDto);

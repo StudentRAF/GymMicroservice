@@ -31,10 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.dto.training.TrainingCreateDto;
 import rs.raf.gym.dto.training.TrainingDto;
 import rs.raf.gym.dto.training.TrainingUpdateDto;
-import rs.raf.gym.model.TrainingType;
 import rs.raf.gym.service.ITrainingService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/training")
@@ -46,29 +43,12 @@ public class TrainingController {
         this.trainingService = trainingService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<TrainingDto>> getAllTrainings() {
-        return new ResponseEntity<>(trainingService.findAll(), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/all", params = { "page", "size" })
-    public ResponseEntity<Page<TrainingDto>> getAllTrainings(Pageable pageable) {
-        return new ResponseEntity<>(trainingService.findAll(pageable), HttpStatus.OK);
-    }
-
-    @GetMapping(params = "type")
-    public ResponseEntity<List<TrainingDto>> getAllTrainingsWithType(@RequestParam("type") @Valid TrainingType trainingType) {
-        return new ResponseEntity<>(trainingService.findByType(trainingType), HttpStatus.OK);
-    }
-
-    @GetMapping(params = { "page", "size", "type" })
-    public ResponseEntity<Page<TrainingDto>> getAllTrainingsWithType(@RequestParam("type") @Valid TrainingType trainingType, Pageable pageable) {
-        return new ResponseEntity<>(trainingService.findByType(trainingType, pageable), HttpStatus.OK);
-    }
-
-    @GetMapping(params = "name")
-    public ResponseEntity<TrainingDto> getTrainingWithName(@RequestParam("name") String name) {
-        return new ResponseEntity<>(trainingService.findByName(name), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Page<TrainingDto>> getAllTrainings(@RequestParam(value = "name", required = false) String name,
+                                                             @RequestParam(value = "type", required = false) String type,
+                                                             @RequestParam(value = "loyalty", required = false) Integer loyalty,
+                                                             Pageable pageable) {
+        return new ResponseEntity<>(trainingService.findAll(name, type, loyalty, pageable), HttpStatus.OK);
     }
 
     @PostMapping

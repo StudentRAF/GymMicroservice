@@ -18,17 +18,16 @@ package rs.raf.gym.service.implementation;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import rs.raf.gym.dto.training.TrainingCreateDto;
 import rs.raf.gym.dto.training.TrainingDto;
 import rs.raf.gym.dto.training.TrainingUpdateDto;
 import rs.raf.gym.mapper.TrainingMapper;
 import rs.raf.gym.model.Training;
-import rs.raf.gym.model.TrainingType;
 import rs.raf.gym.repository.ITrainingRepository;
 import rs.raf.gym.service.ITrainingService;
-
-import java.util.List;
+import rs.raf.gym.specification.TrainingSpecification;
 
 @Service
 public class TrainingService implements ITrainingService {
@@ -41,40 +40,12 @@ public class TrainingService implements ITrainingService {
         this.trainingMapper     = trainingMapper;
     }
 
-
     @Override
-    public List<TrainingDto> findAll() {
-        return trainingRepository.findAll()
-                                 .stream()
-                                 .map(trainingMapper::toTrainingDto)
-                                 .toList();
-    }
+    public Page<TrainingDto> findAll(String name, String type, Integer loyalty, Pageable pageable) {
+        Specification<Training> specification = TrainingSpecification.of(name, type, loyalty);
 
-    @Override
-    public Page<TrainingDto> findAll(Pageable pageable) {
-        return trainingRepository.findAll(pageable)
+        return trainingRepository.findAll(specification, pageable)
                                  .map(trainingMapper::toTrainingDto);
-    }
-
-    @Override
-    public List<TrainingDto> findByType(TrainingType trainingType) {
-        return trainingRepository.findByType(trainingType)
-                                 .stream()
-                                 .map(trainingMapper::toTrainingDto)
-                                 .toList();
-    }
-
-    @Override
-    public Page<TrainingDto> findByType(TrainingType trainingType, Pageable pageable) {
-        return trainingRepository.findByType(trainingType, pageable)
-                                 .map(trainingMapper::toTrainingDto);
-    }
-
-    @Override
-    public TrainingDto findByName(String name) {
-        return trainingRepository.findById(name)
-                                 .map(trainingMapper::toTrainingDto)
-                                 .orElse(null);
     }
 
     @Override

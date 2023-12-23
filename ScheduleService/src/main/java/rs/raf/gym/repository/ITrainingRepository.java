@@ -16,20 +16,10 @@
 
 package rs.raf.gym.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import rs.raf.gym.model.Training;
-import rs.raf.gym.model.TrainingType;
-
-import java.util.List;
 
 @Repository
-public interface ITrainingRepository extends JpaRepository<Training, String> {
-
-    List<Training> findByType(TrainingType type);
-
-    Page<Training> findByType(TrainingType type, Pageable pageable);
+public interface ITrainingRepository extends JpaSpecificationRepository<Training, String> {
 
 }
