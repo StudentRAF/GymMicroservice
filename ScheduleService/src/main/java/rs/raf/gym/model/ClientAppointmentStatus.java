@@ -25,17 +25,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Setter
 @Getter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "client_appointment_status")
 public class ClientAppointmentStatus {
 
     @Id
     @Column(length = 30)
     private String name;
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof ClientAppointmentStatus status)
+            return Objects.equals(status.getName(), name);
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
 
     /**
      * Returns the appointment name field identifier.
