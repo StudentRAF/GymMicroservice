@@ -9,7 +9,12 @@ import rs.raf.gym.model.GymTraining;
 @Component
 public class GymTrainingMapper {
 
-    public GymTrainingDto toGymTrainingDto(GymTraining gymTraining) {
+    /**
+     * Maps GymTraining to GymTrainingDto object.
+     * @param gymTraining gym training
+     * @return GymTrainingDto object
+     */
+    public GymTrainingDto mapGymTrainingDto(GymTraining gymTraining) {
         GymTrainingDto gymTrainingDto = new GymTrainingDto();
 
         gymTrainingDto.setGym(gymTraining.getGymTraining().getGym());
@@ -21,7 +26,13 @@ public class GymTrainingMapper {
         return gymTrainingDto;
     }
 
-    public GymTraining update(GymTraining gymTraining, GymTrainingCreateDto createDto) {
+    /**
+     * Maps GymTrainingCreateDto to existing GymTraining object.
+     * @param gymTraining gymTraining
+     * @param createDto create dto
+     * @return GymTraining object
+     */
+    public GymTraining map(GymTraining gymTraining, GymTrainingCreateDto createDto) {
         gymTraining.setPrice(createDto.getPrice());
         gymTraining.setMinParticipants(createDto.getMinParticipants());
         gymTraining.setMaxParticipants(createDto.getMaxParticipants());
@@ -29,7 +40,13 @@ public class GymTrainingMapper {
         return gymTraining;
     }
 
-    public GymTraining update(GymTraining gymTraining, GymTrainingUpdateDto updateDto) {
+    /**
+     * Maps GymTrainingUpdateDto to existing GymTraining object.
+     * @param gymTraining gym training
+     * @param updateDto update dto
+     * @return GymTraining object
+     */
+    public GymTraining map(GymTraining gymTraining, GymTrainingUpdateDto updateDto) {
         gymTraining.setPrice(updateDto.getPrice());
         gymTraining.setMinParticipants(updateDto.getMinParticipants());
         gymTraining.setMaxParticipants(updateDto.getMaxParticipants());

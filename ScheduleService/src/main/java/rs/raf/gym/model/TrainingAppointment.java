@@ -24,7 +24,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.raf.gym.model.composite.TrainingAppointmentComposite;
 
@@ -34,6 +36,8 @@ import java.time.LocalTime;
 @Setter
 @Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "training_appointment")
 @IdClass(TrainingAppointmentComposite.class)
 public class TrainingAppointment {

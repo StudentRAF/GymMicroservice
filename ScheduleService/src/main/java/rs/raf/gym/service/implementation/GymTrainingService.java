@@ -16,6 +16,7 @@
 
 package rs.raf.gym.service.implementation;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,19 +35,13 @@ import rs.raf.gym.service.IGymTrainingService;
 import rs.raf.gym.specification.GymTrainingSpecification;
 
 @Service
+@AllArgsConstructor
 public class GymTrainingService implements IGymTrainingService {
 
     private final IGymTrainingRepository repository;
     private final IGymRepository         gymRepository;
     private final ITrainingRepository    trainingRepository;
     private final GymTrainingMapper      mapper;
-
-    public GymTrainingService(IGymTrainingRepository repository, IGymRepository gymRepository, ITrainingRepository trainingRepository, GymTrainingMapper mapper) {
-        this.repository         = repository;
-        this.gymRepository      = gymRepository;
-        this.trainingRepository = trainingRepository;
-        this.mapper             = mapper;
-    }
 
     @Override
     public Page<GymTrainingDto> findAll(String gym, String training, Double price, Integer minParticipants,
@@ -55,7 +50,7 @@ public class GymTrainingService implements IGymTrainingService {
                                                                               maxParticipants);
 
         return repository.findAll(specification.filter(), pageable)
-                         .map(mapper::toGymTrainingDto);
+                         .map(mapper::mapGymTrainingDto);
     }
 
     @Override
@@ -70,10 +65,11 @@ public class GymTrainingService implements IGymTrainingService {
             return null;
 
         GymTraining gymTraining = new GymTraining();
-        gymTraining.setGymTraining(new GymTrainingComposite(gym, training));
-        mapper.update(gymTraining, createDto);
 
-        return mapper.toGymTrainingDto(repository.save(gymTraining));
+        gymTraining.setGymTraining(new GymTrainingComposite(gym, training));
+        mapper.map(gymTraining, createDto);
+
+        return mapper.mapGymTrainingDto(repository.save(gymTraining));
     }
 
     @Override
@@ -88,6 +84,7 @@ public class GymTrainingService implements IGymTrainingService {
             return null;
 
         GymTrainingComposite gymTrainingComposite = new GymTrainingComposite();
+
         gymTrainingComposite.setGym(gym);
         gymTrainingComposite.setTraining(training);
 
@@ -97,9 +94,9 @@ public class GymTrainingService implements IGymTrainingService {
         if (gymTraining == null) //TODO: Replace with exception
             return null;
 
-        mapper.update(gymTraining, updateDto);
+        mapper.map(gymTraining, updateDto);
 
-        return mapper.toGymTrainingDto(repository.save(gymTraining));
+        return mapper.mapGymTrainingDto(repository.save(gymTraining));
     }
 
 }

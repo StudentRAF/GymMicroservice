@@ -25,7 +25,12 @@ import rs.raf.gym.model.Training;
 @Component
 public class TrainingMapper {
 
-    public TrainingDto toTrainingDto(Training training) {
+    /**
+     * Maps Training to TrainingDto object.
+     * @param training training
+     * @return TrainingDto object
+     */
+    public TrainingDto mapTrainingDto(Training training) {
         TrainingDto trainingDto = new TrainingDto();
 
         trainingDto.setName(training.getName());
@@ -36,24 +41,30 @@ public class TrainingMapper {
         return trainingDto;
     }
 
-    public Training toTraining(TrainingCreateDto trainingCreateDto) {
-        Training training = new Training();
-
-        training.setName(trainingCreateDto.getName());
-        training.setType(trainingCreateDto.getType());
-        training.setDescription(trainingCreateDto.getDescription());
-        training.setLoyalty(trainingCreateDto.getLoyalty());
+    /**
+     * Maps TrainingCreateDto to existing Training object.
+     * @param training training
+     * @param createDto create dto
+     * @return Training object
+     */
+    public Training map(Training training, TrainingCreateDto createDto) {
+        training.setName(createDto.getName());
+        training.setDescription(createDto.getDescription());
+        training.setLoyalty(createDto.getLoyalty());
 
         return training;
     }
 
-    public Training toTraining(TrainingUpdateDto trainingUpdateDto) {
-        Training training = new Training();
-
-        training.setName(trainingUpdateDto.getName());
-        training.setType(trainingUpdateDto.getType());
-        training.setDescription(trainingUpdateDto.getDescription());
-        training.setLoyalty(trainingUpdateDto.getLoyalty());
+    /**
+     * Maps TrainingUpdateDto to existing Training object.
+     * @param training training
+     * @param updateDto update dto
+     * @return Training object
+     */
+    public Training map(Training training, TrainingUpdateDto updateDto) {
+        training.setName(updateDto.getName());
+        training.setDescription(updateDto.getDescription());
+        training.setLoyalty(updateDto.getLoyalty());
 
         return training;
     }

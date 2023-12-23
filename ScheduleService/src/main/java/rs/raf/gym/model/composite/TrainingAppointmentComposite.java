@@ -16,7 +16,9 @@
 
 package rs.raf.gym.model.composite;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.raf.gym.model.GymTraining;
 
@@ -27,6 +29,8 @@ import java.util.Objects;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TrainingAppointmentComposite implements Serializable {
 
     private GymTraining training;

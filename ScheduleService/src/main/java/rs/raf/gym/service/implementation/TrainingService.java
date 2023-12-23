@@ -16,59 +16,67 @@
 
 package rs.raf.gym.service.implementation;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import rs.raf.gym.dto.training.TrainingCreateDto;
 import rs.raf.gym.dto.training.TrainingDto;
 import rs.raf.gym.dto.training.TrainingUpdateDto;
 import rs.raf.gym.mapper.TrainingMapper;
 import rs.raf.gym.model.Training;
+import rs.raf.gym.model.TrainingType;
 import rs.raf.gym.repository.ITrainingRepository;
+import rs.raf.gym.repository.ITrainingTypeRepository;
 import rs.raf.gym.service.ITrainingService;
 import rs.raf.gym.specification.TrainingSpecification;
 
 @Service
+@AllArgsConstructor
 public class TrainingService implements ITrainingService {
 
-    private final ITrainingRepository trainingRepository;
-    private final TrainingMapper      trainingMapper;
-
-    public TrainingService(ITrainingRepository trainingRepository, TrainingMapper trainingMapper) {
-        this.trainingRepository = trainingRepository;
-        this.trainingMapper     = trainingMapper;
-    }
+    private final ITrainingRepository     repository;
+    private final ITrainingTypeRepository trainingTypeRepository;
+    private final TrainingMapper          mapper;
 
     @Override
     public Page<TrainingDto> findAll(String name, String type, Integer loyalty, Pageable pageable) {
-        Specification<Training> specification = TrainingSpecification.of(name, type, loyalty);
+        TrainingSpecification specification = new TrainingSpecification(name, type, loyalty);
 
-        return trainingRepository.findAll(specification, pageable)
-                                 .map(trainingMapper::toTrainingDto);
+        return repository.findAll(specification.filter(), pageable)
+                         .map(mapper::mapTrainingDto);
     }
 
     @Override
     public TrainingDto create(TrainingCreateDto trainingCreateDto) {
-        Training training = trainingMapper.toTraining(trainingCreateDto);
+        TrainingType trainingType = trainingTypeRepository.findById(trainingCreateDto.getType())
+                                                          .orElse(null);
 
-        return trainingMapper.toTrainingDto(trainingRepository.save(training));
+        if (trainingType == null) //TODO: Replace with exception
+            return null;
+
+        Training training = new Training();
+
+        training.setType(trainingType);
+        mapper.map(training, trainingCreateDto);
+
+        return mapper.mapTrainingDto(repository.save(training));
     }
 
     @Override
     public TrainingDto update(TrainingUpdateDto trainingUpdateDto) {
-        Training training = trainingRepository.findById(trainingUpdateDto.getOldName())
-                                              .orElse(null);
+        Training training = repository.findById(trainingUpdateDto.getOldName())
+                                      .orElse(null);
 
-        if (training == null)
+        if (training == null) //TODO: Replace with exception
             return null;
 
         if (!training.getName().equals(trainingUpdateDto.getName()))
-            trainingRepository.delete(training);
+            repository.delete(training);
 
-        training = trainingMapper.toTraining(trainingUpdateDto);
+        mapper.map(training, trainingUpdateDto);
 
-        return trainingMapper.toTrainingDto(trainingRepository.save(training));
+        return mapper.mapTrainingDto(repository.save(training));
     }
 
 }

@@ -25,7 +25,12 @@ import rs.raf.gym.model.Gym;
 @Component
 public class GymMapper {
 
-    public GymDto toGymDto(Gym gym) {
+    /**
+     * Maps Gym to GymDto object.
+     * @param gym gym
+     * @return GymDto object
+     */
+    public GymDto mapGymDto(Gym gym) {
         GymDto gymDto = new GymDto();
 
         gymDto.setName(gym.getName());
@@ -36,23 +41,31 @@ public class GymMapper {
         return gymDto;
     }
 
-    public Gym toGym(GymCreateDto gymCreateDto) {
-        Gym gym = new Gym();
-
-        gym.setName(gymCreateDto.getName());
-        gym.setDescription(gymCreateDto.getDescription());
-        gym.setTrainers(gymCreateDto.getTrainers());
+    /**
+     * Maps GymCreateDto to existing Gym object.
+     * @param gym gym
+     * @param createDto create dto
+     * @return Gym object
+     */
+    public Gym map(Gym gym, GymCreateDto createDto) {
+        gym.setName(createDto.getName());
+        gym.setDescription(createDto.getDescription());
+        gym.setTrainers(createDto.getTrainers());
 
         return gym;
     }
 
-    public Gym toGym(GymUpdateDto gymUpdateDto) {
-        Gym gym = new Gym();
-
-        gym.setName(gymUpdateDto.getName());
-        gym.setDescription(gymUpdateDto.getDescription());
-        gym.setManagerId(gymUpdateDto.getManagerId());
-        gym.setTrainers(gymUpdateDto.getTrainers());
+    /**
+     * Maps GymUpdateDto to existing Gym object.
+     * @param gym gym
+     * @param updateDto update dto
+     * @return Gym object
+     */
+    public Gym map(Gym gym, GymUpdateDto updateDto) {
+        gym.setName(updateDto.getName());
+        gym.setDescription(updateDto.getDescription());
+        gym.setManagerId(updateDto.getManagerId());
+        gym.setTrainers(updateDto.getTrainers());
 
         return gym;
     }

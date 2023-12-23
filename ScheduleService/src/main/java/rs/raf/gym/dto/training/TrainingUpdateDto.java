@@ -22,7 +22,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import rs.raf.gym.model.TrainingType;
 
 @Setter
 @Getter
@@ -39,7 +38,7 @@ public class TrainingUpdateDto {
     private String name;
 
     @NotNull
-    private TrainingType type;
+    private String type;
 
     @Size(max = 1000)
     private String description;

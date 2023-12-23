@@ -25,7 +25,12 @@ import rs.raf.gym.model.TrainingType;
 @Component
 public class TrainingTypeMapper {
 
-    public TrainingTypeDto toTrainingTypeDto(TrainingType trainingType) {
+    /**
+     * Maps TrainingType to TrainingTypeDto object.
+     * @param trainingType training type
+     * @return TrainingTypeDto object
+     */
+    public TrainingTypeDto mapTrainingTypeDto(TrainingType trainingType) {
         TrainingTypeDto trainingTypeDto = new TrainingTypeDto();
 
         trainingTypeDto.setName(trainingType.getName());
@@ -33,18 +38,26 @@ public class TrainingTypeMapper {
         return trainingTypeDto;
     }
 
-    public TrainingType toTrainingType(TrainingTypeCreateDto trainingTypeCreateDto) {
-        TrainingType trainingType = new TrainingType();
-
-        trainingType.setName(trainingTypeCreateDto.getName());
+    /**
+     * Maps TrainingTypeCreateDto to existing TrainingType object.
+     * @param trainingType training type
+     * @param createDto create dto
+     * @return TrainingType object
+     */
+    public TrainingType map(TrainingType trainingType, TrainingTypeCreateDto createDto) {
+        trainingType.setName(createDto.getName());
 
         return trainingType;
     }
 
-    public TrainingType toTrainingType(TrainingTypeUpdateDto trainingTypeUpdateDto) {
-        TrainingType trainingType = new TrainingType();
-
-        trainingType.setName(trainingTypeUpdateDto.getName());
+    /**
+     * Maps TrainingTypeUpdateDto to existing TrainingType object.
+     * @param trainingType training type
+     * @param updateDto update dto
+     * @return TrainingType object
+     */
+    public TrainingType map(TrainingType trainingType, TrainingTypeUpdateDto updateDto) {
+        trainingType.setName(updateDto.getName());
 
         return trainingType;
     }

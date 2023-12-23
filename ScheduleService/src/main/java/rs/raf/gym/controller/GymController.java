@@ -37,27 +37,27 @@ import rs.raf.gym.service.IGymService;
 @RequestMapping("/gym")
 public class GymController {
 
-    private final IGymService gymService;
+    private final IGymService service;
 
-    public GymController(IGymService gymService) {
-        this.gymService = gymService;
+    public GymController(IGymService service) {
+        this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<Page<GymDto>> getAllUsers(@RequestParam(value = "name", required = false) String name,
-                                                    @RequestParam(value = "manager", required = false) Integer manager,
-                                                    Pageable pageable) {
-        return new ResponseEntity<>(gymService.findAll(name, manager,pageable), HttpStatus.OK);
+    public ResponseEntity<Page<GymDto>> filter(@RequestParam(value = "name",    required = false) String  name,
+                                               @RequestParam(value = "manager", required = false) Integer manager,
+                                               Pageable pageable) {
+        return new ResponseEntity<>(service.findAll(name, manager, pageable), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<GymDto> createUser(@RequestBody @Valid GymCreateDto gymCreateDto) {
-        return new ResponseEntity<>(gymService.create(gymCreateDto), HttpStatus.OK);
+    public ResponseEntity<GymDto> create(@RequestBody @Valid GymCreateDto createDto) {
+        return new ResponseEntity<>(service.create(createDto), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<GymDto> updateUser(@RequestBody @Valid GymUpdateDto gymUpdateDto) {
-        return new ResponseEntity<>(gymService.update(gymUpdateDto), HttpStatus.OK);
+    public ResponseEntity<GymDto> update(@RequestBody @Valid GymUpdateDto updateDto) {
+        return new ResponseEntity<>(service.update(updateDto), HttpStatus.OK);
     }
 
 }

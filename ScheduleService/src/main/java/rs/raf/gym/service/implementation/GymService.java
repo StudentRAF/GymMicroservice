@@ -16,9 +16,9 @@
 
 package rs.raf.gym.service.implementation;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import rs.raf.gym.dto.gym.GymCreateDto;
 import rs.raf.gym.dto.gym.GymDto;
@@ -30,44 +30,43 @@ import rs.raf.gym.service.IGymService;
 import rs.raf.gym.specification.GymSpecification;
 
 @Service
+@AllArgsConstructor
 public class GymService implements IGymService {
 
-    private final IGymRepository gymRepository;
-    private final GymMapper      gymMapper;
-
-    public GymService(IGymRepository gymRepository, GymMapper gymMapper) {
-        this.gymRepository = gymRepository;
-        this.gymMapper     = gymMapper;
-    }
+    private final IGymRepository repository;
+    private final GymMapper      mapper;
 
     @Override
     public Page<GymDto> findAll(String name, Integer managerId, Pageable pageable) {
-        Specification<Gym> specification = GymSpecification.of(name, managerId);
+        GymSpecification specification = new GymSpecification(name, managerId);
 
-        return gymRepository.findAll(specification, pageable).map(gymMapper::toGymDto);
+        return repository.findAll(specification.filter(), pageable)
+                         .map(mapper::mapGymDto);
     }
 
     @Override
     public GymDto create(GymCreateDto gymCreateDto) {
-        Gym gym = gymMapper.toGym(gymCreateDto);
+        Gym gym = new Gym();
 
-        return gymMapper.toGymDto(gymRepository.save(gym));
+        mapper.map(gym, gymCreateDto);
+
+        return mapper.mapGymDto(repository.save(gym));
     }
 
     @Override
     public GymDto update(GymUpdateDto gymUpdateDto) {
-        Gym gym = gymRepository.findById(gymUpdateDto.getOldName())
-                               .orElse(null);
+        Gym gym = repository.findById(gymUpdateDto.getOldName())
+                            .orElse(null);
 
-        if (gym == null)
+        if (gym == null) //TODO: Replace with exception
             return null;
 
         if (!gym.getName().equals(gymUpdateDto.getName()))
-            gymRepository.delete(gym);
+            repository.delete(gym);
 
-        gym = gymMapper.toGym(gymUpdateDto);
+        mapper.map(gym, gymUpdateDto);
 
-        return gymMapper.toGymDto(gymRepository.save(gym));
+        return mapper.mapGymDto(repository.save(gym));
     }
 
 }

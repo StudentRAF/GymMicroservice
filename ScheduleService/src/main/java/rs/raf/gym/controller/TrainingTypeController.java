@@ -38,27 +38,26 @@ import rs.raf.gym.service.ITrainingTypeService;
 @RequestMapping("/training-type")
 public class TrainingTypeController {
 
-    private final ITrainingTypeService trainingTypeService;
+    private final ITrainingTypeService service;
 
-    public TrainingTypeController(ITrainingTypeService trainingTypeService) {
-        this.trainingTypeService = trainingTypeService;
+    public TrainingTypeController(ITrainingTypeService service) {
+        this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<Page<TrainingTypeDto>> getAllTrainingTypes(@RequestParam(value = "name", required = false)
-                                                                     String name,
-                                                                     Pageable pageable) {
-        return new ResponseEntity<>(trainingTypeService.findAll(name, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<TrainingTypeDto>> filter(@RequestParam(value = "name", required = false) String name,
+                                                        Pageable pageable) {
+        return new ResponseEntity<>(service.findAll(name, pageable), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<TrainingTypeDto> createTrainingType(@RequestBody @Valid TrainingTypeCreateDto trainingTypeCreateDto) {
-        return new ResponseEntity<>(trainingTypeService.create(trainingTypeCreateDto), HttpStatus.OK);
+    public ResponseEntity<TrainingTypeDto> create(@RequestBody @Valid TrainingTypeCreateDto createDto) {
+        return new ResponseEntity<>(service.create(createDto), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<TrainingTypeDto> updateTrainingType(@RequestBody @Valid TrainingTypeUpdateDto trainingTypeUpdateDto) {
-        return new ResponseEntity<>(trainingTypeService.update(trainingTypeUpdateDto), HttpStatus.OK);
+    public ResponseEntity<TrainingTypeDto> update(@RequestBody @Valid TrainingTypeUpdateDto updateDto) {
+        return new ResponseEntity<>(service.update(updateDto), HttpStatus.OK);
     }
 
 }

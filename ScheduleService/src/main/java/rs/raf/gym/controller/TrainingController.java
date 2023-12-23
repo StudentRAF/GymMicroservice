@@ -37,28 +37,28 @@ import rs.raf.gym.service.ITrainingService;
 @RequestMapping("/training")
 public class TrainingController {
 
-    private final ITrainingService trainingService;
+    private final ITrainingService service;
 
-    public TrainingController(ITrainingService trainingService) {
-        this.trainingService = trainingService;
+    public TrainingController(ITrainingService service) {
+        this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<Page<TrainingDto>> getAllTrainings(@RequestParam(value = "name", required = false) String name,
-                                                             @RequestParam(value = "type", required = false) String type,
-                                                             @RequestParam(value = "loyalty", required = false) Integer loyalty,
-                                                             Pageable pageable) {
-        return new ResponseEntity<>(trainingService.findAll(name, type, loyalty, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<TrainingDto>> filter(@RequestParam(value = "name",    required = false) String  name,
+                                                    @RequestParam(value = "type",    required = false) String  type,
+                                                    @RequestParam(value = "loyalty", required = false) Integer loyalty,
+                                                    Pageable pageable) {
+        return new ResponseEntity<>(service.findAll(name, type, loyalty, pageable), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<TrainingDto> createTraining(@RequestBody @Valid TrainingCreateDto trainingCreateDto) {
-        return new ResponseEntity<>(trainingService.create(trainingCreateDto), HttpStatus.OK);
+    public ResponseEntity<TrainingDto> create(@RequestBody @Valid TrainingCreateDto createDto) {
+        return new ResponseEntity<>(service.create(createDto), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<TrainingDto> updateTraining(@RequestBody @Valid TrainingUpdateDto trainingUpdateDto) {
-        return new ResponseEntity<>(trainingService.update(trainingUpdateDto), HttpStatus.OK);
+    public ResponseEntity<TrainingDto> update(@RequestBody @Valid TrainingUpdateDto updateDto) {
+        return new ResponseEntity<>(service.update(updateDto), HttpStatus.OK);
     }
 
 }
