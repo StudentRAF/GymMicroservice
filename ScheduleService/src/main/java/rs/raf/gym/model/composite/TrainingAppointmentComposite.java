@@ -16,8 +16,9 @@
 
 package rs.raf.gym.model.composite;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
@@ -25,7 +26,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.GymTraining;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -39,15 +39,22 @@ import java.util.Objects;
 @Embeddable
 public class TrainingAppointmentComposite implements Serializable {
 
-    @ManyToOne
+//    @ManyToOne
+//    @JoinColumns({
+//            @JoinColumn(name = "gym_id"),
+//            @JoinColumn(name = "training_id")
+//    })
+    @Embedded
     @JoinColumns({
             @JoinColumn(name = "gym_id"),
             @JoinColumn(name = "training_id")
     })
-    private GymTraining training;
+    private GymTrainingComposite gymTraining;
 
+    @JoinColumn(name = "date")
     private LocalDate date;
 
+    @JoinColumn(name = "time")
     private LocalTime time;
 
     @Override
@@ -55,14 +62,14 @@ public class TrainingAppointmentComposite implements Serializable {
         if (object instanceof TrainingAppointmentComposite composite)
             return Objects.equals(composite.getDate(), date)      &&
                    Objects.equals(composite.getTime(), time)      &&
-                   Objects.equals(composite.getTraining(), training);
+                   Objects.equals(composite.getGymTraining(), gymTraining);
 
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(training, date, time);
+        return Objects.hash(gymTraining, date, time);
     }
 
     /**
@@ -70,7 +77,7 @@ public class TrainingAppointmentComposite implements Serializable {
      * @return gym training identifier
      */
     public static String gymTraining() {
-        return "training";
+        return "gymTraining";
     }
 
     /**

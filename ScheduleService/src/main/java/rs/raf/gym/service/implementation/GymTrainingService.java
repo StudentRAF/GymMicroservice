@@ -61,7 +61,7 @@ public class GymTrainingService implements IGymTrainingService {
         Training training = trainingRepository.findById(createDto.getTrainingName())
                                               .orElse(null);
 
-        if (gym == null || training == null)
+        if (gym == null || training == null) //TODO: Replace with exception
             return null;
 
         GymTraining gymTraining = new GymTraining();
