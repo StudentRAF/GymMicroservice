@@ -18,19 +18,54 @@ package rs.raf.gym.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Objects;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "client_appointment_status")
+@Table(name = "client_appointment_status", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueStatusName", columnNames = "name")
+})
 public class ClientAppointmentStatus {
 
     @Id
-    @Column(length = 30)
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name", length = 30, nullable = false)
     private String name;
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof ClientAppointmentStatus status)
+            return Objects.equals(status.getId(), id);
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+
+    /**
+     * Returns the appointment name field identifier.
+     * @return name identifier
+     */
+    public static String name() {
+        return "name";
+    }
 
 }

@@ -16,56 +16,107 @@
 
 package rs.raf.gym.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.composite.GymTrainingComposite;
 
 import java.util.Objects;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "gym_training")
-@IdClass(GymTrainingComposite.class)
+@Table(name = "gym_training", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueTrainingPerGym", columnNames = {
+                "gym_id",
+                "training_id"
+        })
+})
 public class GymTraining {
 
     @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
+
     @ManyToOne
-    @JoinColumn(name = "gym_id")
+    @JoinColumn(name = "gym_id", nullable = false)
     private Gym gym;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "training_id")
+    @JoinColumn(name = "training_id", nullable = false)
     private Training training;
 
-    @NotNull
-    @Positive
-    private Double duration;
+    @Column(name = "price", nullable = false)
+    private Double price;
 
-    @NotNull
-    @Positive
+    @Column(name = "max_participants", nullable = false)
     private Integer maxParticipants;
 
-    @NotNull
-    @Positive
+    @Column(name = "min_participants", nullable = false)
     private Integer minParticipants;
 
     @Override
     public boolean equals(Object object) {
         if (object instanceof GymTraining instance)
-            return Objects.equals(instance.getGym(),      gym)   &&
-                   Objects.equals(instance.getTraining(), training);
+            return Objects.equals(instance.getId(), id);
 
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, gym, training, price, maxParticipants, minParticipants);
+    }
+
+    /**
+     * Returns the gym field identifier.
+     * @return training identifier
+     */
+    public static String gym() {
+        return "gym";
+    }
+
+    /**
+     * Returns the training field identifier.
+     * @return training identifier
+     */
+    public static String training() {
+        return "training";
+    }
+
+    /**
+     * Returns the price field identifier.
+     * @return price identifier
+     */
+    public static String price() {
+        return "price";
+    }
+
+    /**
+     * Returns the max participants field identifier.
+     * @return max participants identifier
+     */
+    public static String maxParticipants() {
+        return "maxParticipants";
+    }
+
+    /**
+     * Returns the min participants field identifier.
+     * @return min participants identifier
+     */
+    public static String minParticipants() {
+        return "minParticipants";
     }
 
 }

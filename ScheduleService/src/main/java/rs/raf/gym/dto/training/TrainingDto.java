@@ -14,36 +14,26 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.model.composite;
+package rs.raf.gym.dto.training;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.Gym;
-import rs.raf.gym.model.Training;
-
-import java.io.Serializable;
-import java.util.Objects;
+import rs.raf.gym.dto.training_type.TrainingTypeDto;
 
 @Setter
 @Getter
-public class GymTrainingComposite implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class TrainingDto {
 
-    private Gym gym;
+    private String name;
 
-    private Training training;
+    private TrainingTypeDto type;
 
-    @Override
-    public boolean equals(Object object) {
-        if (object instanceof GymTrainingComposite composite)
-            return Objects.equals(composite.getGym(),      gym)   &&
-                   Objects.equals(composite.getTraining(), training);
+    private String description;
 
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+    private Integer loyalty;
 
 }

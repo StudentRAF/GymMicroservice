@@ -16,49 +16,110 @@
 
 package rs.raf.gym.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.composite.TrainingAppointmentComposite;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "training_appointment")
-@IdClass(TrainingAppointmentComposite.class)
+@Table(name = "training_appointment", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueGymTrainingForDateTime", columnNames = {
+                "gym_training_id",
+                "date",
+                "time"
+        })
+})
 public class TrainingAppointment {
 
     @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
+
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "gym_id"),
-            @JoinColumn(name = "training_id")
-    })
+    @JoinColumn(name = "gym_training_id", nullable = false)
     private GymTraining gymTraining;
 
-    @Id
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Id
+    @Column(name = "time", nullable = false)
     private LocalTime time;
 
-    @NotNull
-    @Positive
+    @Column(name = "duration", nullable = false)
     private Integer duration;
 
-    @NotNull
     @ManyToOne
+    @JoinColumn(name = "status", nullable = false)
     private AppointmentStatus status;
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof TrainingAppointment appointment)
+            return Objects.equals(appointment.getId(), id);
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, gymTraining, date, time, duration, status);
+    }
+
+    /**
+     * Returns the gym training field identifier.
+     * @return gym training identifier
+     */
+    public static String gymTraining() {
+        return "gymTraining";
+    }
+
+    /**
+     * Returns the date field identifier.
+     * @return date identifier
+     */
+    public static String date() {
+        return "date";
+    }
+
+    /**
+     * Returns the time field identifier.
+     * @return time identifier
+     */
+    public static String time() {
+        return "time";
+    }
+
+    /**
+     * Returns the appointment duration field identifier.
+     * @return appointment duration identifier
+     */
+    public static String duration() {
+        return "duration";
+    }
+
+    /**
+     * Returns the appointment status field identifier.
+     * @return appointment status identifier
+     */
+    public static String status() {
+        return "status";
+    }
 
 }

@@ -14,40 +14,35 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.model.composite;
+package rs.raf.gym.dto.training_appointment;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.GymTraining;
+import rs.raf.gym.dto.appointment_status.AppointmentStatusDto;
+import rs.raf.gym.dto.gym.GymDto;
+import rs.raf.gym.dto.training.TrainingDto;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Objects;
 
 @Setter
 @Getter
-public class TrainingAppointmentComposite implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class TrainingAppointmentDto {
 
-    private GymTraining gymTraining;
+    private GymDto gym;
+
+    private TrainingDto training;
 
     private LocalDate date;
 
     private LocalTime time;
 
-    @Override
-    public boolean equals(Object object) {
-        if (object instanceof TrainingAppointmentComposite composite)
-            return Objects.equals(composite.getDate(), date)            &&
-                   Objects.equals(composite.getTime(), time)            &&
-                   Objects.equals(composite.getGymTraining(), gymTraining);
+    private Integer duration;
 
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+    private AppointmentStatusDto status;
 
 }

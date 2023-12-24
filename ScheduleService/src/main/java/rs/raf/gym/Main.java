@@ -20,6 +20,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
         @PropertySource("classpath:config/spring/local.properties"),
         @PropertySource("classpath:config/spring/application.properties")
 })
+@EnableJpaRepositories()
 public class Main {
 
     public static void main(String[] args) {
