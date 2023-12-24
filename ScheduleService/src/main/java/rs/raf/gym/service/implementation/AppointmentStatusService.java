@@ -61,11 +61,6 @@ public class AppointmentStatusService implements IAppointmentStatusService {
         if (appointmentStatus == null) //TODO: Replace with exception
             return null;
 
-        if (appointmentStatus.getName().equals(updateDto.getName()))
-            return mapper.toAppointmentStatusDto(appointmentStatus);
-
-        repository.delete(appointmentStatus);
-
         mapper.map(appointmentStatus, updateDto);
 
         return mapper.toAppointmentStatusDto(repository.save(appointmentStatus));

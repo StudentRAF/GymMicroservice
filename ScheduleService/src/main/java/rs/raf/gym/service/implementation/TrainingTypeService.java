@@ -61,11 +61,6 @@ public class TrainingTypeService implements ITrainingTypeService {
         if (trainingType == null) //TODO: Replace with exception
             return null;
 
-        if (trainingType.getName().equals(trainingTypeUpdateDto.getName()))
-            return mapper.toTrainingTypeDto(trainingType);
-
-        repository.delete(trainingType);
-
         mapper.map(trainingType, trainingTypeUpdateDto);
 
         return mapper.toTrainingTypeDto(repository.save(trainingType));

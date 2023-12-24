@@ -61,9 +61,6 @@ public class GymService implements IGymService {
         if (gym == null) //TODO: Replace with exception
             return null;
 
-        if (!gym.getName().equals(gymUpdateDto.getName()))
-            repository.delete(gym);
-
         mapper.map(gym, gymUpdateDto);
 
         return mapper.toGymDto(repository.save(gym));

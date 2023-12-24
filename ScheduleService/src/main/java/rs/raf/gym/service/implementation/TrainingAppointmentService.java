@@ -92,19 +92,6 @@ public class TrainingAppointmentService implements ITrainingAppointmentService {
                                                                                              updateDto.getTime())
                                                             .orElse(null);
 
-//        //NOTE: its just work around
-//        //TODO: Remove in the future
-//        TrainingAppointmentSpecification specification = new TrainingAppointmentSpecification(updateDto.getGymName(),
-//                                                                                              updateDto.getTrainingName(),
-//                                                                                              updateDto.getDate(),
-//                                                                                              updateDto.getTime(),
-//                                                                                              null, null);
-//
-//        //TODO: Remove in the future
-//        TrainingAppointment trainingAppointment = repository.findAll(specification.filter(), PageRequest.ofSize(1))
-//                                                            .getContent()
-//                                                            .get(0);
-
         if (trainingAppointment == null) //TODO: Replace with exception
             return null;
 
