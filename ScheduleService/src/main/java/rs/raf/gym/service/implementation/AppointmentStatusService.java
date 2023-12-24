@@ -39,7 +39,7 @@ public class AppointmentStatusService implements IAppointmentStatusService {
 
     @Override
     public AppointmentStatusDto update(AppointmentStatusUpdateDto updateDto) {
-        AppointmentStatus appointmentStatus = repository.findById(updateDto.getOldName())
+        AppointmentStatus appointmentStatus = repository.findByName(updateDto.getOldName())
                                                         .orElse(null);
 
         if (appointmentStatus == null) //TODO: Replace with exception

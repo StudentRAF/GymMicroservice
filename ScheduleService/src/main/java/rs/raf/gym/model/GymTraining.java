@@ -17,14 +17,17 @@
 package rs.raf.gym.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.composite.GymTrainingComposite;
 
 import java.util.Objects;
 
@@ -33,40 +36,63 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "gym_training")
+@Table(name = "gym_training", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueTrainingPerGym", columnNames = {
+                "gym_id",
+                "training_id"
+        })
+})
 public class GymTraining {
 
-    @EmbeddedId
-    private GymTrainingComposite gymTraining;
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "gym_id", nullable = false)
+    private Gym gym;
+
+    @ManyToOne
+    @JoinColumn(name = "training_id", nullable = false)
+    private Training training;
+
+    @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(nullable = false)
+    @Column(name = "max_participants", nullable = false)
     private Integer maxParticipants;
 
-    @Column(nullable = false)
+    @Column(name = "min_participants", nullable = false)
     private Integer minParticipants;
 
     @Override
     public boolean equals(Object object) {
         if (object instanceof GymTraining instance)
-            return Objects.equals(instance.getGymTraining(), gymTraining);
+            return Objects.equals(instance.getId(), id);
 
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gymTraining, price, maxParticipants, minParticipants);
+        return Objects.hash(id, gym, training, price, maxParticipants, minParticipants);
     }
 
     /**
-     * Returns the composite (GymTrainingComposite) field identifier.
-     * @return composite identifier
+     * Returns the gym field identifier.
+     * @return training identifier
      */
-    public static String composite() {
-        return "gymTraining";
+    public static String gym() {
+        return "gym";
+    }
+
+    /**
+     * Returns the training field identifier.
+     * @return training identifier
+     */
+    public static String training() {
+        return "training";
     }
 
     /**

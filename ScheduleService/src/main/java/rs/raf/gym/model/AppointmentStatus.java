@@ -18,8 +18,10 @@ package rs.raf.gym.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,24 +34,30 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "appointment_status")
+@Table(name = "appointment_status", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueStatusName", columnNames = "name")
+})
 public class AppointmentStatus {
 
     @Id
-    @Column(length = 30)
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name", length = 30, nullable = false)
     private String name;
 
     @Override
     public boolean equals(Object object) {
         if (object instanceof AppointmentStatus status)
-            return Objects.equals(status.getName(), name);
+            return Objects.equals(status.getId(), id);
 
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(id, name);
     }
 
     /**

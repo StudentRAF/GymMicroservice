@@ -19,7 +19,11 @@ package rs.raf.gym.repository;
 import org.springframework.stereotype.Repository;
 import rs.raf.gym.model.TrainingType;
 
+import java.util.Optional;
+
 @Repository
-public interface ITrainingTypeRepository extends JpaSpecificationRepository<TrainingType, String> {
+public interface ITrainingTypeRepository extends JpaSpecificationRepository<TrainingType, Long> {
+
+    Optional<TrainingType> findByName(String name);
 
 }

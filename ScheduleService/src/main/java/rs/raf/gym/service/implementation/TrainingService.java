@@ -44,12 +44,12 @@ public class TrainingService implements ITrainingService {
         TrainingSpecification specification = new TrainingSpecification(name, type, loyalty);
 
         return repository.findAll(specification.filter(), pageable)
-                         .map(mapper::mapTrainingDto);
+                         .map(mapper::toTrainingDto);
     }
 
     @Override
     public TrainingDto create(TrainingCreateDto trainingCreateDto) {
-        TrainingType trainingType = trainingTypeRepository.findById(trainingCreateDto.getType())
+        TrainingType trainingType = trainingTypeRepository.findByName(trainingCreateDto.getType())
                                                           .orElse(null);
 
         if (trainingType == null) //TODO: Replace with exception
@@ -60,12 +60,12 @@ public class TrainingService implements ITrainingService {
         training.setType(trainingType);
         mapper.map(training, trainingCreateDto);
 
-        return mapper.mapTrainingDto(repository.save(training));
+        return mapper.toTrainingDto(repository.save(training));
     }
 
     @Override
     public TrainingDto update(TrainingUpdateDto trainingUpdateDto) {
-        Training training = repository.findById(trainingUpdateDto.getOldName())
+        Training training = repository.findByName(trainingUpdateDto.getOldName())
                                       .orElse(null);
 
         if (training == null) //TODO: Replace with exception
@@ -76,7 +76,7 @@ public class TrainingService implements ITrainingService {
 
         mapper.map(training, trainingUpdateDto);
 
-        return mapper.mapTrainingDto(repository.save(training));
+        return mapper.toTrainingDto(repository.save(training));
     }
 
 }

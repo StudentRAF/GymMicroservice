@@ -18,8 +18,10 @@ package rs.raf.gym.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,32 +34,40 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "gym")
+@Table(name = "gym", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueGymName", columnNames = "name"),
+        @UniqueConstraint(name = "UniqueStatusName", columnNames = "manager_id")
+})
 public class Gym {
 
     @Id
-    @Column(length = 30)
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name", length = 40, nullable = false)
     private String name;
 
-    @Column(length = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
 
+    @Column(name = "manager_id")
     private Long managerId;
 
-    @Column(nullable = false)
+    @Column(name = "number_of_trainers", nullable = false)
     private Integer trainers;
 
     @Override
     public boolean equals(Object object) {
         if (object instanceof Gym gym)
-            return Objects.equals(gym.getName(), name);
+            return Objects.equals(gym.getId(), id);
 
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, managerId, trainers);
+        return Objects.hash(id, name, description, managerId, trainers);
     }
 
     /**

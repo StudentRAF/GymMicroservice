@@ -27,7 +27,6 @@ import rs.raf.gym.mapper.GymTrainingMapper;
 import rs.raf.gym.model.Gym;
 import rs.raf.gym.model.GymTraining;
 import rs.raf.gym.model.Training;
-import rs.raf.gym.model.composite.GymTrainingComposite;
 import rs.raf.gym.repository.IGymRepository;
 import rs.raf.gym.repository.IGymTrainingRepository;
 import rs.raf.gym.repository.ITrainingRepository;
@@ -50,15 +49,15 @@ public class GymTrainingService implements IGymTrainingService {
                                                                               maxParticipants);
 
         return repository.findAll(specification.filter(), pageable)
-                         .map(mapper::mapGymTrainingDto);
+                         .map(mapper::toGymTrainingDto);
     }
 
     @Override
     public GymTrainingDto create(GymTrainingCreateDto createDto) {
-        Gym gym = gymRepository.findById(createDto.getGymName())
+        Gym gym = gymRepository.findByName(createDto.getGymName())
                                .orElse(null);
 
-        Training training = trainingRepository.findById(createDto.getTrainingName())
+        Training training = trainingRepository.findByName(createDto.getTrainingName())
                                               .orElse(null);
 
         if (gym == null || training == null)
@@ -66,29 +65,26 @@ public class GymTrainingService implements IGymTrainingService {
 
         GymTraining gymTraining = new GymTraining();
 
-        gymTraining.setGymTraining(new GymTrainingComposite(gym, training));
+        gymTraining.setGym(gym);
+        gymTraining.setTraining(training);
         mapper.map(gymTraining, createDto);
 
-        return mapper.mapGymTrainingDto(repository.save(gymTraining));
+        return mapper.toGymTrainingDto(repository.save(gymTraining));
     }
 
     @Override
     public GymTrainingDto update(GymTrainingUpdateDto updateDto) {
-        Gym gym = gymRepository.findById(updateDto.getGymName())
+        Gym gym = gymRepository.findByName(updateDto.getGymName())
                                .orElse(null);
 
-        Training training = trainingRepository.findById(updateDto.getTrainingName())
+        Training training = trainingRepository.findByName(updateDto.getTrainingName())
                                               .orElse(null);
 
         if (gym == null || training == null) //TODO: Replace with exception
             return null;
 
-        GymTrainingComposite gymTrainingComposite = new GymTrainingComposite();
 
-        gymTrainingComposite.setGym(gym);
-        gymTrainingComposite.setTraining(training);
-
-        GymTraining gymTraining = repository.findById(gymTrainingComposite)
+        GymTraining gymTraining = repository.findByGymAndTraining(gym, training)
                                             .orElse(null);
 
         if (gymTraining == null) //TODO: Replace with exception
@@ -96,7 +92,7 @@ public class GymTrainingService implements IGymTrainingService {
 
         mapper.map(gymTraining, updateDto);
 
-        return mapper.mapGymTrainingDto(repository.save(gymTraining));
+        return mapper.toGymTrainingDto(repository.save(gymTraining));
     }
 
 }

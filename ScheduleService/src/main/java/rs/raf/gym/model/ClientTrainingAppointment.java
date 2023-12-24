@@ -19,12 +19,11 @@ package rs.raf.gym.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,27 +36,28 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "client_training_appointment")
+@Table(name = "client_training_appointment", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueTrainingAppointmentPerClient", columnNames = {
+                "training_appointment_id",
+                "client_id"
+        })
+})
 public class ClientTrainingAppointment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "date",        nullable = false),
-            @JoinColumn(name = "gym_id",      nullable = false),
-            @JoinColumn(name = "training_id", nullable = false),
-            @JoinColumn(name = "time",        nullable = false)
-    })
+    @JoinColumn(name = "training_appointment_id", nullable = false)
     private TrainingAppointment trainingAppointment;
 
-    @Column(nullable = false)
+    @Column(name = "client_id", nullable = false)
     private Long clientId;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "appointment_status_id", nullable = false)
     private ClientAppointmentStatus status;
 
     @Override

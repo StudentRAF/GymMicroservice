@@ -17,22 +17,32 @@
 package rs.raf.gym.dto.gym;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class GymUpdateDto {
 
     @NotNull
+    @Size(max = 40)
     private String oldName;
 
     @NotNull
+    @Size(max = 40)
     private String name;
 
+    @Size(max = 1000)
     private String description;
 
+    @Positive
     private Long managerId;
 
     @NotNull

@@ -3,9 +3,6 @@ package rs.raf.gym.specification;
 import rs.raf.gym.model.Gym;
 import rs.raf.gym.model.GymTraining;
 import rs.raf.gym.model.Training;
-import rs.raf.gym.model.composite.GymTrainingComposite;
-
-import java.text.MessageFormat;
 
 public class GymTrainingSpecification extends BaseSpecification<GymTraining> {
 
@@ -22,8 +19,7 @@ public class GymTrainingSpecification extends BaseSpecification<GymTraining> {
         if (gym == null)
             return;
 
-        specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(GymTraining.composite())
-                                                                                       .join(GymTrainingComposite.gym())
+        specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(GymTraining.gym())
                                                                                        .get(Gym.name()), gym));
     }
 
@@ -31,8 +27,7 @@ public class GymTrainingSpecification extends BaseSpecification<GymTraining> {
         if (training == null)
             return;
 
-        specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(GymTraining.composite())
-                                                                                       .join(GymTrainingComposite.training())
+        specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(GymTraining.training())
                                                                                        .get(Training.name()), training));
     }
 

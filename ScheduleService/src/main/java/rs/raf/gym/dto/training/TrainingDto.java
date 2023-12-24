@@ -16,12 +16,16 @@
 
 package rs.raf.gym.dto.training;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.raf.gym.model.TrainingType;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TrainingDto {
 
     private String name;

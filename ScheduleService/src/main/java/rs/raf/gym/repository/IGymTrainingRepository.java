@@ -17,10 +17,15 @@
 package rs.raf.gym.repository;
 
 import org.springframework.stereotype.Repository;
+import rs.raf.gym.model.Gym;
 import rs.raf.gym.model.GymTraining;
-import rs.raf.gym.model.composite.GymTrainingComposite;
+import rs.raf.gym.model.Training;
+
+import java.util.Optional;
 
 @Repository
-public interface IGymTrainingRepository extends JpaSpecificationRepository<GymTraining, GymTrainingComposite> {
+public interface IGymTrainingRepository extends JpaSpecificationRepository<GymTraining, Long> {
+
+    Optional<GymTraining> findByGymAndTraining(Gym gym, Training training);
 
 }

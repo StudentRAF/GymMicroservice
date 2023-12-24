@@ -14,16 +14,12 @@ public class GymTrainingMapper {
      * @param gymTraining gym training
      * @return GymTrainingDto object
      */
-    public GymTrainingDto mapGymTrainingDto(GymTraining gymTraining) {
-        GymTrainingDto gymTrainingDto = new GymTrainingDto();
-
-        gymTrainingDto.setGym(gymTraining.getGymTraining().getGym());
-        gymTrainingDto.setTraining(gymTraining.getGymTraining().getTraining());
-        gymTrainingDto.setPrice(gymTraining.getPrice());
-        gymTrainingDto.setMinParticipants(gymTraining.getMinParticipants());
-        gymTrainingDto.setMaxParticipants(gymTraining.getMaxParticipants());
-
-        return gymTrainingDto;
+    public GymTrainingDto toGymTrainingDto(GymTraining gymTraining) {
+        return new GymTrainingDto(gymTraining.getGym(),
+                                  gymTraining.getTraining(),
+                                  gymTraining.getPrice(),
+                                  gymTraining.getMaxParticipants(),
+                                  gymTraining.getMinParticipants());
     }
 
     /**

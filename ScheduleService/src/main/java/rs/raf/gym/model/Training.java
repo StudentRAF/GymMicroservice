@@ -18,10 +18,12 @@ package rs.raf.gym.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,33 +36,40 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "training")
+@Table(name = "training", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueTrainingName", columnNames = "name")
+})
 public class Training {
 
     @Id
-    @Column(length = 30)
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name", length = 40, nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "training_type", nullable = false)
     private TrainingType type;
 
-    @Column(length = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
 
+    @Column(name = "loyalty")
     private Integer loyalty;
 
     @Override
     public boolean equals(Object object) {
         if (object instanceof Training training)
-            return Objects.equals(training.getName(), name);
+            return Objects.equals(training.getId(), id);
 
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, type, description, loyalty);
+        return Objects.hash(id, name, type, description, loyalty);
     }
 
     /**

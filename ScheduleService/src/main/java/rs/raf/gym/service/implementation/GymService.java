@@ -41,7 +41,7 @@ public class GymService implements IGymService {
         GymSpecification specification = new GymSpecification(name, managerId);
 
         return repository.findAll(specification.filter(), pageable)
-                         .map(mapper::mapGymDto);
+                         .map(mapper::toGymDto);
     }
 
     @Override
@@ -50,12 +50,12 @@ public class GymService implements IGymService {
 
         mapper.map(gym, gymCreateDto);
 
-        return mapper.mapGymDto(repository.save(gym));
+        return mapper.toGymDto(repository.save(gym));
     }
 
     @Override
     public GymDto update(GymUpdateDto gymUpdateDto) {
-        Gym gym = repository.findById(gymUpdateDto.getOldName())
+        Gym gym = repository.findByName(gymUpdateDto.getOldName())
                             .orElse(null);
 
         if (gym == null) //TODO: Replace with exception
@@ -66,7 +66,7 @@ public class GymService implements IGymService {
 
         mapper.map(gym, gymUpdateDto);
 
-        return mapper.mapGymDto(repository.save(gym));
+        return mapper.toGymDto(repository.save(gym));
     }
 
 }

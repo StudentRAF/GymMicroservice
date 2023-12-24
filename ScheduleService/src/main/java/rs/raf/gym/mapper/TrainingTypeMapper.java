@@ -30,12 +30,8 @@ public class TrainingTypeMapper {
      * @param trainingType training type
      * @return TrainingTypeDto object
      */
-    public TrainingTypeDto mapTrainingTypeDto(TrainingType trainingType) {
-        TrainingTypeDto trainingTypeDto = new TrainingTypeDto();
-
-        trainingTypeDto.setName(trainingType.getName());
-
-        return trainingTypeDto;
+    public TrainingTypeDto toTrainingTypeDto(TrainingType trainingType) {
+        return new TrainingTypeDto(trainingType.getName());
     }
 
     /**

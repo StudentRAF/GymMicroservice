@@ -30,15 +30,11 @@ public class GymMapper {
      * @param gym gym
      * @return GymDto object
      */
-    public GymDto mapGymDto(Gym gym) {
-        GymDto gymDto = new GymDto();
-
-        gymDto.setName(gym.getName());
-        gymDto.setDescription(gym.getDescription());
-        gymDto.setManagerId(gym.getManagerId());
-        gymDto.setTrainers(gym.getTrainers());
-
-        return gymDto;
+    public GymDto toGymDto(Gym gym) {
+        return new GymDto(gym.getName(),
+                          gym.getDescription(),
+                          gym.getManagerId(),
+                          gym.getTrainers());
     }
 
     /**

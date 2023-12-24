@@ -19,7 +19,11 @@ package rs.raf.gym.repository;
 import org.springframework.stereotype.Repository;
 import rs.raf.gym.model.Gym;
 
+import java.util.Optional;
+
 @Repository
-public interface IGymRepository extends JpaSpecificationRepository<Gym, String> {
+public interface IGymRepository extends JpaSpecificationRepository<Gym, Long> {
+
+    Optional<Gym> findByName(String name);
 
 }

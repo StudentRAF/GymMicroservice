@@ -15,11 +15,7 @@ public class AppointmentStatusMapper {
      * @return AppointmentStatusDto object
      */
     public AppointmentStatusDto toAppointmentStatusDto(AppointmentStatus appointmentStatus) {
-        AppointmentStatusDto appointmentStatusDto = new AppointmentStatusDto();
-
-        appointmentStatusDto.setName(appointmentStatus.getName());
-
-        return appointmentStatusDto;
+        return new AppointmentStatusDto(appointmentStatus.getName());
     }
 
     /**
