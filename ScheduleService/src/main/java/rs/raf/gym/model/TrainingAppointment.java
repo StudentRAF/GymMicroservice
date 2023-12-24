@@ -40,7 +40,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "training_appointment", uniqueConstraints = {
         @UniqueConstraint(name = "UniqueGymTrainingForDateTime", columnNames = {
-                "gymTraining",
+                "gym_training_id",
                 "date",
                 "time"
         })
