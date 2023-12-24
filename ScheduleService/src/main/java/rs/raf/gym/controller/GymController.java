@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.dto.gym.GymCreateDto;
-import rs.raf.gym.dto.gym.GymDto;
-import rs.raf.gym.dto.gym.GymUpdateDto;
+import rs.raf.gym.commons.dto.gym.GymCreateDto;
+import rs.raf.gym.commons.dto.gym.GymDto;
+import rs.raf.gym.commons.dto.gym.GymUpdateDto;
 import rs.raf.gym.service.IGymService;
 
 @AllArgsConstructor

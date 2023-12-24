@@ -17,9 +17,9 @@
 package rs.raf.gym.mapper;
 
 import org.springframework.stereotype.Component;
-import rs.raf.gym.dto.appointment_status.AppointmentStatusCreateDto;
-import rs.raf.gym.dto.appointment_status.AppointmentStatusDto;
-import rs.raf.gym.dto.appointment_status.AppointmentStatusUpdateDto;
+import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusCreateDto;
+import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusDto;
+import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusUpdateDto;
 import rs.raf.gym.model.AppointmentStatus;
 
 @Component

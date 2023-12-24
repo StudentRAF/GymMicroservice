@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.dto.training_appointment.TrainingAppointmentCreateDto;
-import rs.raf.gym.dto.training_appointment.TrainingAppointmentDto;
-import rs.raf.gym.dto.training_appointment.TrainingAppointmentUpdateDto;
+import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentCreateDto;
+import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentDto;
+import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentUpdateDto;
 import rs.raf.gym.service.ITrainingAppointmentService;
 
 import java.time.LocalDate;

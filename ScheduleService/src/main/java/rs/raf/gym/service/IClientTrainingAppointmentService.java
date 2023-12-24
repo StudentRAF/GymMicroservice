@@ -18,9 +18,9 @@ package rs.raf.gym.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import rs.raf.gym.dto.client_training_appointment.ClientTrainingAppointmentCreateDto;
-import rs.raf.gym.dto.client_training_appointment.ClientTrainingAppointmentDto;
-import rs.raf.gym.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
+import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentCreateDto;
+import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentDto;
+import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

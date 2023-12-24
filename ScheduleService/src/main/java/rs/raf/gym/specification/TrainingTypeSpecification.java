@@ -16,6 +16,7 @@
 
 package rs.raf.gym.specification;
 
+import rs.raf.gym.commons.specification.BaseSpecification;
 import rs.raf.gym.model.TrainingType;
 
 public class TrainingTypeSpecification extends BaseSpecification<TrainingType> {

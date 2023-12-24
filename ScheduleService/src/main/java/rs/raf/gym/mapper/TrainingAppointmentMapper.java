@@ -18,9 +18,9 @@ package rs.raf.gym.mapper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import rs.raf.gym.dto.training_appointment.TrainingAppointmentCreateDto;
-import rs.raf.gym.dto.training_appointment.TrainingAppointmentDto;
-import rs.raf.gym.dto.training_appointment.TrainingAppointmentUpdateDto;
+import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentCreateDto;
+import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentDto;
+import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentUpdateDto;
 import rs.raf.gym.model.TrainingAppointment;
 
 @Component

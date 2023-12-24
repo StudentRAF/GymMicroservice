@@ -30,9 +30,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.dto.training_type.TrainingTypeCreateDto;
-import rs.raf.gym.dto.training_type.TrainingTypeDto;
-import rs.raf.gym.dto.training_type.TrainingTypeUpdateDto;
+import rs.raf.gym.commons.dto.training_type.TrainingTypeCreateDto;
+import rs.raf.gym.commons.dto.training_type.TrainingTypeDto;
+import rs.raf.gym.commons.dto.training_type.TrainingTypeUpdateDto;
 import rs.raf.gym.service.ITrainingTypeService;
 
 @AllArgsConstructor

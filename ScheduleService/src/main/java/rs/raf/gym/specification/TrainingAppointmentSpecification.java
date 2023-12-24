@@ -16,6 +16,7 @@
 
 package rs.raf.gym.specification;
 
+import rs.raf.gym.commons.specification.BaseSpecification;
 import rs.raf.gym.model.AppointmentStatus;
 import rs.raf.gym.model.Gym;
 import rs.raf.gym.model.GymTraining;

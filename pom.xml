@@ -29,6 +29,7 @@
         <module>ScheduleService</module>
         <module>NotificationService</module>
         <module>APIGateway</module>
+        <module>GymCommons</module>
     </modules>
 
     <parent>

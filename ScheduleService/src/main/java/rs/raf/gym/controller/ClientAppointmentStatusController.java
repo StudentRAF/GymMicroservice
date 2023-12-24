@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.dto.client_appointment_status.ClientAppointmentStatusCreateDto;
-import rs.raf.gym.dto.client_appointment_status.ClientAppointmentStatusDto;
-import rs.raf.gym.dto.client_appointment_status.ClientAppointmentStatusUpdateDto;
+import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusCreateDto;
+import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusDto;
+import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusUpdateDto;
 import rs.raf.gym.service.IClientAppointmentStatusService;
 
 @AllArgsConstructor

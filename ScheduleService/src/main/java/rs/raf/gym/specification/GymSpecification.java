@@ -17,6 +17,7 @@
 package rs.raf.gym.specification;
 
 import lombok.Getter;
+import rs.raf.gym.commons.specification.BaseSpecification;
 import rs.raf.gym.model.Gym;
 
 @Getter
