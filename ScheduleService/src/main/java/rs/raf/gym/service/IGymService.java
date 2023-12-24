@@ -18,9 +18,9 @@ package rs.raf.gym.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import rs.raf.gym.dto.gym.GymCreateDto;
-import rs.raf.gym.dto.gym.GymDto;
-import rs.raf.gym.dto.gym.GymUpdateDto;
+import rs.raf.gym.commons.dto.gym.GymCreateDto;
+import rs.raf.gym.commons.dto.gym.GymDto;
+import rs.raf.gym.commons.dto.gym.GymUpdateDto;
 
 public interface IGymService {
 

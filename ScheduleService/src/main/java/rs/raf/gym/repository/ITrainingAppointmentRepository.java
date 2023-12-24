@@ -17,6 +17,7 @@
 package rs.raf.gym.repository;
 
 import org.springframework.stereotype.Repository;
+import rs.raf.gym.commons.service.JpaSpecificationRepository;
 import rs.raf.gym.model.GymTraining;
 import rs.raf.gym.model.TrainingAppointment;
 

@@ -18,9 +18,9 @@ package rs.raf.gym.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import rs.raf.gym.dto.client_appointment_status.ClientAppointmentStatusCreateDto;
-import rs.raf.gym.dto.client_appointment_status.ClientAppointmentStatusDto;
-import rs.raf.gym.dto.client_appointment_status.ClientAppointmentStatusUpdateDto;
+import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusCreateDto;
+import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusDto;
+import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusUpdateDto;
 
 public interface IClientAppointmentStatusService {
 
