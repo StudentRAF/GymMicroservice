@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.TrainingType;
+import rs.raf.gym.dto.training_type.TrainingTypeDto;
 
 @Setter
 @Getter
@@ -30,7 +30,7 @@ public class TrainingDto {
 
     private String name;
 
-    private TrainingType type;
+    private TrainingTypeDto type;
 
     private String description;
 

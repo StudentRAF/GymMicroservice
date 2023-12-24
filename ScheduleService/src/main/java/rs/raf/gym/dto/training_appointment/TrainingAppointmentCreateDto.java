@@ -34,11 +34,11 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class TrainingAppointmentCreateDto {
 
-    @NotNull
+    @NotBlank
     @Size(max = 40)
     private String gymName;
 
-    @NotNull
+    @NotBlank
     @Size(max = 40)
     private String trainingName;
 

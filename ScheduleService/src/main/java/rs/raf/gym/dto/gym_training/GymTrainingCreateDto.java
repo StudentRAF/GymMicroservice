@@ -16,6 +16,7 @@
 
 package rs.raf.gym.dto.gym_training;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -30,11 +31,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GymTrainingCreateDto {
 
-    @NotNull
+    @NotBlank
     @Size(max = 40)
     private String gymName;
 
-    @NotNull
+    @NotBlank
     @Size(max = 40)
     private String trainingName;
 

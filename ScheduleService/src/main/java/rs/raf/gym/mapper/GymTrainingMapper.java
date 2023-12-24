@@ -16,6 +16,7 @@
 
 package rs.raf.gym.mapper;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import rs.raf.gym.dto.gym_training.GymTrainingCreateDto;
 import rs.raf.gym.dto.gym_training.GymTrainingDto;
@@ -23,7 +24,11 @@ import rs.raf.gym.dto.gym_training.GymTrainingUpdateDto;
 import rs.raf.gym.model.GymTraining;
 
 @Component
+@AllArgsConstructor
 public class GymTrainingMapper {
+
+    private final GymMapper      gymMapper;
+    private final TrainingMapper trainingMapper;
 
     /**
      * Maps GymTraining to GymTrainingDto object.
@@ -31,8 +36,8 @@ public class GymTrainingMapper {
      * @return GymTrainingDto object
      */
     public GymTrainingDto toGymTrainingDto(GymTraining gymTraining) {
-        return new GymTrainingDto(gymTraining.getGym(),
-                                  gymTraining.getTraining(),
+        return new GymTrainingDto(gymMapper.toGymDto(gymTraining.getGym()),
+                                  trainingMapper.toTrainingDto(gymTraining.getTraining()),
                                   gymTraining.getPrice(),
                                   gymTraining.getMaxParticipants(),
                                   gymTraining.getMinParticipants());

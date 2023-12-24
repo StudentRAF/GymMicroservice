@@ -20,8 +20,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.ClientAppointmentStatus;
-import rs.raf.gym.model.TrainingAppointment;
+import rs.raf.gym.dto.client_appointment_status.ClientAppointmentStatusDto;
+import rs.raf.gym.dto.training_appointment.TrainingAppointmentDto;
 
 @Setter
 @Getter
@@ -29,10 +29,10 @@ import rs.raf.gym.model.TrainingAppointment;
 @AllArgsConstructor
 public class ClientTrainingAppointmentDto {
 
-    private TrainingAppointment trainingAppointment;
+    private TrainingAppointmentDto trainingAppointment;
 
     private Long clientId;
 
-    private ClientAppointmentStatus status;
+    private ClientAppointmentStatusDto status;
 
 }

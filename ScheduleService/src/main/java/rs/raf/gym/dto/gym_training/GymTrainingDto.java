@@ -20,8 +20,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.model.Gym;
-import rs.raf.gym.model.Training;
+import rs.raf.gym.dto.gym.GymDto;
+import rs.raf.gym.dto.training.TrainingDto;
 
 @Setter
 @Getter
@@ -29,9 +29,9 @@ import rs.raf.gym.model.Training;
 @AllArgsConstructor
 public class GymTrainingDto {
 
-    private Gym gym;
+    private GymDto gym;
 
-    private Training training;
+    private TrainingDto training;
 
     private Double price;
 

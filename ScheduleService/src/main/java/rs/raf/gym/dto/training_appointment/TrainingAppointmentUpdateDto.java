@@ -16,6 +16,7 @@
 
 package rs.raf.gym.dto.training_appointment;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -33,11 +34,11 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class TrainingAppointmentUpdateDto {
 
-    @NotNull
+    @NotBlank
     @Size(max = 40)
     private String gymName;
 
-    @NotNull
+    @NotBlank
     @Size(max = 40)
     private String trainingName;
 
@@ -51,7 +52,7 @@ public class TrainingAppointmentUpdateDto {
     @Positive
     private Integer duration;
 
-    @NotNull
+    @NotBlank
     @Size(max = 30)
     private String statusName;
 

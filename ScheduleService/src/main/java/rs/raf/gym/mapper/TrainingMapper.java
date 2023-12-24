@@ -16,6 +16,7 @@
 
 package rs.raf.gym.mapper;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import rs.raf.gym.dto.training.TrainingCreateDto;
 import rs.raf.gym.dto.training.TrainingDto;
@@ -23,7 +24,10 @@ import rs.raf.gym.dto.training.TrainingUpdateDto;
 import rs.raf.gym.model.Training;
 
 @Component
+@AllArgsConstructor
 public class TrainingMapper {
+
+    private final TrainingTypeMapper trainingTypeMapper;
 
     /**
      * Maps Training to TrainingDto object.
@@ -32,7 +36,7 @@ public class TrainingMapper {
      */
     public TrainingDto toTrainingDto(Training training) {
         return new TrainingDto(training.getName(),
-                               training.getType(),
+                               trainingTypeMapper.toTrainingTypeDto(training.getType()),
                                training.getDescription(),
                                training.getLoyalty());
     }

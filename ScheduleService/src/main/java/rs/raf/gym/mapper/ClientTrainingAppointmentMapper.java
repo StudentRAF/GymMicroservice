@@ -16,6 +16,7 @@
 
 package rs.raf.gym.mapper;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import rs.raf.gym.dto.client_training_appointment.ClientTrainingAppointmentCreateDto;
 import rs.raf.gym.dto.client_training_appointment.ClientTrainingAppointmentDto;
@@ -23,7 +24,11 @@ import rs.raf.gym.dto.client_training_appointment.ClientTrainingAppointmentUpdat
 import rs.raf.gym.model.ClientTrainingAppointment;
 
 @Component
+@AllArgsConstructor
 public class ClientTrainingAppointmentMapper {
+
+    private final TrainingAppointmentMapper     trainingAppointmentMapper;
+    private final ClientAppointmentStatusMapper clientAppointmentStatusMapper;
 
     /**
      * Maps ClientTrainingAppointment to ClientTrainingAppointmentDto object.
@@ -31,9 +36,9 @@ public class ClientTrainingAppointmentMapper {
      * @return ClientTrainingAppointmentDto object
      */
     public ClientTrainingAppointmentDto toClientTrainingAppointmentDto(ClientTrainingAppointment trainingAppointment) {
-        return new ClientTrainingAppointmentDto(trainingAppointment.getTrainingAppointment(),
+        return new ClientTrainingAppointmentDto(trainingAppointmentMapper.toTrainingAppointmentDto(trainingAppointment.getTrainingAppointment()),
                                                 trainingAppointment.getClientId(),
-                                                trainingAppointment.getStatus());
+                                                clientAppointmentStatusMapper.toAppointmentStatusDto(trainingAppointment.getStatus()));
     }
 
     /**
