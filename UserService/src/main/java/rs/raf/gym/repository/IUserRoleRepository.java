@@ -17,13 +17,14 @@
 package rs.raf.gym.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import rs.raf.gym.model.UserRole;
 
 import java.util.Optional;
 
 @Repository
-public interface IUserRoleRepository extends JpaRepository<UserRole, Long> {
+public interface IUserRoleRepository extends JpaRepository<UserRole, Long>, JpaSpecificationExecutor<UserRole> {
 
     Optional<UserRole> findByName(String role);
 }

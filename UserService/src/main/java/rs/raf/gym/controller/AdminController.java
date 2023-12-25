@@ -24,19 +24,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.dto.user.UserDto;
 import rs.raf.gym.dto.user.UserUpdateDto;
+import rs.raf.gym.dto.userRole.UserRoleCreateDto;
+import rs.raf.gym.dto.userRole.UserRoleDto;
+import rs.raf.gym.dto.userRole.UserRoleUpdateDto;
+import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.service.IUserService;
 
 @AllArgsConstructor
 @RestController
 public class AdminController {
 
-    private final IUserService userService;
+    private final IUserService     userService;
+    private final IUserRoleService userRoleService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<Page<UserDto>> getAllUsers(@RequestParam(name = "role",      required = false) String role,
@@ -56,4 +62,21 @@ public class AdminController {
     public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto) {
         return new ResponseEntity<>(userService.updateUser(userUpdateDto), HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("/role/all")
+    public ResponseEntity<Page<UserRoleDto>> getAllUserRoles(@RequestParam(name = "role", required = false) String role,
+                                                       Pageable pageable) {
+        return new ResponseEntity<>(userRoleService.getAllUserRoles(role, pageable), HttpStatus.OK);
+    }
+
+    @PostMapping("/role")
+    public ResponseEntity<UserRoleDto> createUserRole(@RequestBody @Valid UserRoleCreateDto userRoleCreateDto) {
+        return new ResponseEntity<>(userRoleService.createUserRole(userRoleCreateDto), HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("/role")
+    public ResponseEntity<UserRoleDto> updateUserRole(@RequestBody @Valid UserRoleUpdateDto userRoleUpdateDto) {
+        return new ResponseEntity<>(userRoleService.updateUserRole(userRoleUpdateDto), HttpStatus.ACCEPTED);
+    }
+
 }

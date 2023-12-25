@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.userRole;
+package rs.raf.gym.service;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import rs.raf.gym.dto.userRole.UserRoleCreateDto;
+import rs.raf.gym.dto.userRole.UserRoleDto;
+import rs.raf.gym.dto.userRole.UserRoleUpdateDto;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserRoleUpdateDto {
+public interface IUserRoleService {
 
-    @NotBlank
-    @Size(max = 30)
-    private String name;
+    Page<UserRoleDto> getAllUserRoles(String role, Pageable pageable);
 
-    @NotBlank
-    @Size(max = 30)
-    private String oldName;
+    UserRoleDto createUserRole(UserRoleCreateDto userRoleCreateDto);
 
+    UserRoleDto updateUserRole(UserRoleUpdateDto userRoleUpdateDto);
+    
 }
