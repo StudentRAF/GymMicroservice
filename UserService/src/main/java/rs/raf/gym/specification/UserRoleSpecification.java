@@ -14,27 +14,22 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.userRole;
+package rs.raf.gym.specification;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import rs.raf.gym.commons.specification.BaseSpecification;
+import rs.raf.gym.model.UserRole;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserRoleUpdateDto {
+public class UserRoleSpecification extends BaseSpecification<UserRole> {
 
-    @NotBlank
-    @Size(max = 30)
-    private String name;
+    public UserRoleSpecification(String role) {
+        addRoleSpecification(role);
+    }
 
-    @NotBlank
-    @Size(max = 30)
-    private String oldName;
+    private void addRoleSpecification(String role) {
+        if (role == null)
+            return;
+
+        specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(UserRole.name()), role));
+    }
 
 }
