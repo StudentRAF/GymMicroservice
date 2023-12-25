@@ -18,16 +18,16 @@ package rs.raf.gym;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @PropertySources({
         @PropertySource("classpath:config/spring/local.properties"),
         @PropertySource("classpath:config/spring/application.properties")
 })
-@EnableJpaRepositories()
+@EnableEurekaServer
 public class Main {
 
     public static void main(String[] args) {
