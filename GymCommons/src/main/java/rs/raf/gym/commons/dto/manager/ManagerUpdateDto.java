@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.client;
+package rs.raf.gym.commons.dto.manager;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +32,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientCreateDto {
+public class ManagerUpdateDto {
 
     @NotBlank
     @Size(max = 30)
@@ -45,6 +47,10 @@ public class ClientCreateDto {
     private String username;
 
     @NotBlank
+    @Size(max = 50)
+    private String oldUsername;
+
+    @NotBlank
     @Size(min = 8, max = 50)
     private String password;
 
@@ -54,5 +60,9 @@ public class ClientCreateDto {
     private String email;
 
     private LocalDate dateOfBirth;
+
+    @NotNull
+    @Positive
+    private Long gymId;
 
 }

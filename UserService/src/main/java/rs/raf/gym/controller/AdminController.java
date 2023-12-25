@@ -29,11 +29,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.dto.user.UserDto;
-import rs.raf.gym.dto.user.UserUpdateDto;
-import rs.raf.gym.dto.userRole.UserRoleCreateDto;
-import rs.raf.gym.dto.userRole.UserRoleDto;
-import rs.raf.gym.dto.userRole.UserRoleUpdateDto;
+import rs.raf.gym.commons.dto.user.UserDto;
+import rs.raf.gym.commons.dto.user.UserUpdateDto;
+import rs.raf.gym.commons.dto.userRole.UserRoleCreateDto;
+import rs.raf.gym.commons.dto.userRole.UserRoleDto;
+import rs.raf.gym.commons.dto.userRole.UserRoleUpdateDto;
 import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.service.IUserService;
 

@@ -25,9 +25,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.dto.client.ClientCreateDto;
-import rs.raf.gym.dto.client.ClientDto;
-import rs.raf.gym.dto.client.ClientUpdateDto;
+import rs.raf.gym.commons.dto.client.ClientCreateDto;
+import rs.raf.gym.commons.dto.client.ClientDto;
+import rs.raf.gym.commons.dto.client.ClientUpdateDto;
 import rs.raf.gym.service.IUserService;
 
 @AllArgsConstructor

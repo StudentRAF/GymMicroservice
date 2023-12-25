@@ -18,9 +18,9 @@ package rs.raf.gym.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import rs.raf.gym.dto.userRole.UserRoleCreateDto;
-import rs.raf.gym.dto.userRole.UserRoleDto;
-import rs.raf.gym.dto.userRole.UserRoleUpdateDto;
+import rs.raf.gym.commons.dto.userRole.UserRoleCreateDto;
+import rs.raf.gym.commons.dto.userRole.UserRoleDto;
+import rs.raf.gym.commons.dto.userRole.UserRoleUpdateDto;
 
 public interface IUserRoleService {
 

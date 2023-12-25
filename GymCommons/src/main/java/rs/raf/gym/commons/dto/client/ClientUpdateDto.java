@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.userRole;
+package rs.raf.gym.commons.dto.client;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -23,18 +24,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRoleUpdateDto {
+public class ClientUpdateDto {
 
     @NotBlank
     @Size(max = 30)
-    private String name;
+    private String firstname;
 
     @NotBlank
     @Size(max = 30)
-    private String oldName;
+    private String lastname;
+
+    @NotBlank
+    @Size(max = 50)
+    private String username;
+
+    @NotBlank
+    @Size(max = 50)
+    private String oldUsername;
+
+    @NotBlank
+    @Size(min = 8, max = 50)
+    private String password;
+
+    @Email
+    @NotBlank
+    @Size(max = 50)
+    private String email;
+
+    private LocalDate dateOfBirth;
 
 }

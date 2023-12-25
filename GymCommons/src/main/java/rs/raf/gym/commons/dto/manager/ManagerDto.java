@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.client;
+package rs.raf.gym.commons.dto.manager;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.dto.userRole.UserRoleDto;
+import rs.raf.gym.commons.dto.userRole.UserRoleDto;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientDto {
+public class ManagerDto {
 
     private UserRoleDto userRole;
 
@@ -45,6 +44,8 @@ public class ClientDto {
 
     private LocalDate dateOfBirth;
 
-    private UUID membershipId;
+    private Long gymId;
+
+    private LocalDate recruitmentDate;
 
 }

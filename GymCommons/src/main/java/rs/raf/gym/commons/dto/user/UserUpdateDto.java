@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.manager;
+package rs.raf.gym.commons.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -32,7 +32,10 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ManagerUpdateDto {
+public class UserUpdateDto {
+
+    @NotBlank
+    private String userRole;
 
     @NotBlank
     @Size(max = 30)
@@ -54,15 +57,22 @@ public class ManagerUpdateDto {
     @Size(min = 8, max = 50)
     private String password;
 
-    @Email
     @NotBlank
-    @Size(max = 50)
+    @Email
+    @Size(min = 1, max = 50)
     private String email;
 
     private LocalDate dateOfBirth;
 
-    @NotNull
     @Positive
     private Long gymId;
+
+    private LocalDate recruitmentDate;
+
+    @NotNull
+    private boolean access;
+
+    @NotNull
+    private boolean activated;
 
 }
