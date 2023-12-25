@@ -14,35 +14,24 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.model;
+package rs.raf.gym.dto.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.raf.gym.dto.userRole.UserRoleDto;
 
-@Entity
 @Getter
 @Setter
-@Table(name = "user_role", uniqueConstraints = {
-        @UniqueConstraint(name = "UniqueUserRoleName", columnNames = "name")
-})
-public class UserRole {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserTokenDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UserRoleDto userRole;
 
-    @Column(name = "name", nullable = false, length = 30)
-    private String name;
+    private String username;
 
-    public static String name() {
-        return "name";
-    }
+    private boolean canAccess; //NOTE: change in future (remove)
 
 }

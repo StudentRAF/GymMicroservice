@@ -16,33 +16,33 @@
 
 package rs.raf.gym.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
-import lombok.Setter;
 
-@Entity
 @Getter
-@Setter
-@Table(name = "user_role", uniqueConstraints = {
-        @UniqueConstraint(name = "UniqueUserRoleName", columnNames = "name")
-})
-public class UserRole {
+public enum Roles {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    ADMIN("Admin"), //public static final Roles ADMIN = new Roles("Admin");
+    MANAGER("Manager"),
+    CLIENT("Client");
 
-    @Column(name = "name", nullable = false, length = 30)
-    private String name;
+    private final String name;
 
-    public static String name() {
-        return "name";
+    Roles(String name) {
+        this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    public UserRole getObject() {
+        UserRole userRole = new UserRole();
+        userRole.setName(this.name);
+        return userRole;
+    }
+
+    public boolean isEqual(UserRole userRole) {
+        return userRole.getName().equals(this.name);
+    }
 }
