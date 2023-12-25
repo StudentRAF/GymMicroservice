@@ -21,67 +21,118 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CurrentTimestamp;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
-@Entity
-@Table(name = "user")
 @Getter
 @Setter
+@Entity
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"username"}),
+        @UniqueConstraint(columnNames = {"email"})
+})
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
+    @JoinColumn(nullable = false)
     private UserRole userRole;
 
-    @NotNull
+    @Column(nullable = false, length = 30)
     private String firstname;
 
-    @NotNull
-    @Size(min = 1, max = 30)
+    @Column(nullable = false, length = 30)
     private String lastname;
 
-    @NotNull
-    @Column(unique = true)
-    @Size(min = 1, max = 50)
+    @Column(nullable = false, length = 50)
     private String username;
 
-    @NotNull
-    @Size(min = 8, max = 50)
+    @Column(nullable = false, length = 50)
     private String password;
 
-    @Column(unique = true, nullable = false)
-    @Email
+    @Column(nullable = false, length = 50)
     private String email;
 
     private LocalDate dateOfBirth;
 
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long membershipId; //TODO should automatically add numbers
+    private UUID membershipId;
 
-    @NotNull
-    private String gym; //foreign key
+    private Long gymId;
 
-    //CurrentTimestamp automatically generates current date (LocalDate.now())
-    @NotNull
-    @CurrentTimestamp
     private LocalDate recruitmentDate;
 
-    @NotNull
+    @Column(nullable = false)
     private boolean access;
-    @NotNull
+
+    @Column(nullable = false)
     private boolean activated;
+
+    //When insert in database is called
+    @PrePersist
+    protected void onInsert() {
+        if (Roles.CLIENT.isEqual(this.userRole))
+            this.setMembershipId(UUID.randomUUID());
+        else if (Roles.MANAGER.isEqual(this.userRole))
+            this.setRecruitmentDate(LocalDate.now());
+
+        this.access = true;
+        this.activated = true;
+    }
+
+
+    public static String userRole() {
+        return "userRole";
+    }
+
+    public static String firstname() {
+        return "firstname";
+    }
+
+    public static String lastname() {
+        return "lastname";
+    }
+
+    public static String username() {
+        return "username";
+    }
+
+    public static String password() {
+        return "password";
+    }
+
+    public static String email() {
+        return "email";
+    }
+
+    public static String dateOfBirth() {
+        return "dateOfBirth";
+    }
+
+    public static String membership() {
+        return "membershipId";
+    }
+
+    public static String gym() {
+        return "gymId";
+    }
+
+    public static String access() {
+        return "access";
+    }
+
+    public static String activated() {
+        return "activated";
+    }
+
 }
