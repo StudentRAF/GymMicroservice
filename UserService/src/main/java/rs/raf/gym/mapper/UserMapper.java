@@ -18,16 +18,15 @@ package rs.raf.gym.mapper;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import rs.raf.gym.dto.client.ClientCreateDto;
-import rs.raf.gym.dto.client.ClientDto;
-import rs.raf.gym.dto.client.ClientUpdateDto;
-import rs.raf.gym.dto.manager.ManagerCreateDto;
-import rs.raf.gym.dto.manager.ManagerDto;
-import rs.raf.gym.dto.manager.ManagerUpdateDto;
-import rs.raf.gym.dto.user.UserCreateDto;
-import rs.raf.gym.dto.user.UserDto;
-import rs.raf.gym.dto.user.UserUpdateDto;
-import rs.raf.gym.model.Roles;
+import rs.raf.gym.commons.dto.client.ClientCreateDto;
+import rs.raf.gym.commons.dto.client.ClientDto;
+import rs.raf.gym.commons.dto.client.ClientUpdateDto;
+import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
+import rs.raf.gym.commons.dto.manager.ManagerDto;
+import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
+import rs.raf.gym.commons.dto.user.UserCreateDto;
+import rs.raf.gym.commons.dto.user.UserDto;
+import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.model.User;
 
 @Component

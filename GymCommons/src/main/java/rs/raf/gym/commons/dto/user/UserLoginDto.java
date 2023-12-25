@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.user;
+package rs.raf.gym.commons.dto.user;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.dto.userRole.UserRoleDto;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserTokenDto {
+public class UserLoginDto {
 
-    private UserRoleDto userRole;
-
+    @NotBlank
+    @Size(max = 50)
     private String username;
 
-    private boolean canAccess; //NOTE: change in future (remove)
+    @NotNull
+    @Size(min = 8, max = 50)
+    private String password;
 
 }

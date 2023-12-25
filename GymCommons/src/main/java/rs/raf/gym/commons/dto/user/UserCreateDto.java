@@ -14,28 +14,60 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.user;
+package rs.raf.gym.commons.dto.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
+import java.time.LocalDate;
+
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDto {
+public class UserCreateDto { //NOTE: for admin
+
+    @NotBlank
+    @Size(max = 40)
+    private String roleName;
+
+    @NotBlank
+    @Size(max = 30)
+    private String firstname;
+
+    @NotBlank
+    @Size(max = 30)
+    private String lastname;
 
     @NotBlank
     @Size(max = 50)
     private String username;
 
-    @NotNull
-    @Size(min = 8, max = 50)
+    @NotBlank
+    @Size(max = 50)
     private String password;
+
+    @NotBlank
+    @Email
+    @Size(max = 50)
+    private String email;
+
+    private LocalDate dateOfBirth;
+
+    @Positive
+    private Long gymId;
+
+    @NotNull
+    private boolean access;
+
+    @NotNull
+    private boolean activated;
 
 }

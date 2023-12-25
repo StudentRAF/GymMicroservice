@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.client;
+package rs.raf.gym.commons.dto.client;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -30,7 +30,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientUpdateDto {
+public class ClientCreateDto {
 
     @NotBlank
     @Size(max = 30)
@@ -43,10 +43,6 @@ public class ClientUpdateDto {
     @NotBlank
     @Size(max = 50)
     private String username;
-
-    @NotBlank
-    @Size(max = 50)
-    private String oldUsername;
 
     @NotBlank
     @Size(min = 8, max = 50)

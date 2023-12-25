@@ -18,15 +18,11 @@ package rs.raf.gym.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.raf.gym.dto.user.UserDto;
-import rs.raf.gym.dto.user.UserLoginDto;
-import rs.raf.gym.dto.user.UserTokenDto;
-import rs.raf.gym.dto.user.UserUpdateDto;
+import rs.raf.gym.commons.dto.user.UserLoginDto;
+import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.service.IUserService;
 
 @AllArgsConstructor

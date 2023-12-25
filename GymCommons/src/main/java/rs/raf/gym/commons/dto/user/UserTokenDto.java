@@ -14,39 +14,24 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.manager;
+package rs.raf.gym.commons.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.dto.userRole.UserRoleDto;
-
-import java.time.LocalDate;
-import java.util.UUID;
+import rs.raf.gym.commons.dto.userRole.UserRoleDto;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ManagerDto {
+public class UserTokenDto {
 
     private UserRoleDto userRole;
 
-    private String firstname;
-
-    private String lastname;
-
     private String username;
 
-    private String password;
-
-    private String email;
-
-    private LocalDate dateOfBirth;
-
-    private Long gymId;
-
-    private LocalDate recruitmentDate;
+    private boolean canAccess; //NOTE: change in future (remove)
 
 }

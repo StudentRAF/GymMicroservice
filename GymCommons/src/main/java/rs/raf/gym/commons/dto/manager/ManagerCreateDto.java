@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.dto.manager;
+package rs.raf.gym.commons.dto.manager;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
