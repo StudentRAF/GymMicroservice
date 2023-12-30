@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.commons.dto.userRole;
+package rs.raf.gym.commons.dto.user_role;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,14 +27,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRoleUpdateDto {
+public class UserRoleCreateDto {
 
     @NotBlank
     @Size(max = 30)
     private String name;
-
-    @NotBlank
-    @Size(max = 30)
-    private String oldName;
-
 }

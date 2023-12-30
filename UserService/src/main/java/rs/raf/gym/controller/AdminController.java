@@ -27,13 +27,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
-import rs.raf.gym.commons.dto.userRole.UserRoleCreateDto;
-import rs.raf.gym.commons.dto.userRole.UserRoleDto;
-import rs.raf.gym.commons.dto.userRole.UserRoleUpdateDto;
+import rs.raf.gym.commons.dto.user_role.UserRoleCreateDto;
+import rs.raf.gym.commons.dto.user_role.UserRoleDto;
+import rs.raf.gym.commons.dto.user_role.UserRoleUpdateDto;
+import rs.raf.gym.model.Roles;
+import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.service.IUserService;
 
@@ -45,37 +48,47 @@ public class AdminController {
     private final IUserRoleService userRoleService;
 
     @GetMapping(value = "/all")
+    @CheckSecurity(roles = Roles.ADMIN)
     public ResponseEntity<Page<UserDto>> getAllUsers(@RequestParam(name = "role",      required = false) String role,
                                                      @RequestParam(name = "firstname", required = false) String firstname,
                                                      @RequestParam(name = "lastname",  required = false) String lastname,
                                                      @RequestParam(name = "username",  required = false) String username,
+                                                     @RequestHeader(name = "authorization") String authorization,
                                                      Pageable pageable) {
         return new ResponseEntity<>(userService.getAllUsers(role, firstname, lastname, username, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id) {
+    @CheckSecurity(roles = Roles.ADMIN)
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id, @RequestHeader(name = "authorization") String authorization) {
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto) {
+    @CheckSecurity(roles = Roles.ADMIN)
+    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto, @RequestHeader(name = "authorization") String authorization) {
         return new ResponseEntity<>(userService.updateUser(userUpdateDto), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/role/all")
+    @CheckSecurity(roles = Roles.ADMIN)
     public ResponseEntity<Page<UserRoleDto>> getAllUserRoles(@RequestParam(name = "role", required = false) String role,
-                                                       Pageable pageable) {
+                                                             @RequestHeader(name = "authorization") String authorization,
+                                                             Pageable pageable) {
         return new ResponseEntity<>(userRoleService.getAllUserRoles(role, pageable), HttpStatus.OK);
     }
 
     @PostMapping("/role")
-    public ResponseEntity<UserRoleDto> createUserRole(@RequestBody @Valid UserRoleCreateDto userRoleCreateDto) {
+    @CheckSecurity(roles = Roles.ADMIN)
+    public ResponseEntity<UserRoleDto> createUserRole(@RequestBody @Valid UserRoleCreateDto userRoleCreateDto,
+                                                      @RequestHeader(name = "authorization") String authorization) {
         return new ResponseEntity<>(userRoleService.createUserRole(userRoleCreateDto), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/role")
-    public ResponseEntity<UserRoleDto> updateUserRole(@RequestBody @Valid UserRoleUpdateDto userRoleUpdateDto) {
+    @CheckSecurity(roles = Roles.ADMIN)
+    public ResponseEntity<UserRoleDto> updateUserRole(@RequestBody @Valid UserRoleUpdateDto userRoleUpdateDto,
+                                                      @RequestHeader(name = "authorization") String authorization) {
         return new ResponseEntity<>(userRoleService.updateUserRole(userRoleUpdateDto), HttpStatus.ACCEPTED);
     }
 

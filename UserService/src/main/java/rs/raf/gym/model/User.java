@@ -91,6 +91,10 @@ public class User {
     }
 
 
+    public static String id() {
+        return "id";
+    }
+
     public static String userRole() {
         return "userRole";
     }

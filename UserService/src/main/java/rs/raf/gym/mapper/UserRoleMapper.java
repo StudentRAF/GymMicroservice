@@ -17,9 +17,9 @@
 package rs.raf.gym.mapper;
 
 import org.springframework.stereotype.Component;
-import rs.raf.gym.commons.dto.userRole.UserRoleCreateDto;
-import rs.raf.gym.commons.dto.userRole.UserRoleDto;
-import rs.raf.gym.commons.dto.userRole.UserRoleUpdateDto;
+import rs.raf.gym.commons.dto.user_role.UserRoleCreateDto;
+import rs.raf.gym.commons.dto.user_role.UserRoleDto;
+import rs.raf.gym.commons.dto.user_role.UserRoleUpdateDto;
 import rs.raf.gym.model.UserRole;
 
 @Component
