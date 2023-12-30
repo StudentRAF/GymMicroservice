@@ -50,4 +50,6 @@ public interface IUserService {
     ManagerDto updateManager(ManagerUpdateDto managerUpdateDto);
 
     String login(UserLoginDto userLoginDto);
+
+    String getRole(String token);
 }

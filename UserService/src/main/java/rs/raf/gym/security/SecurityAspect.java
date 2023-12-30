@@ -65,25 +65,33 @@ public class SecurityAspect {
             if (! paramContent.startsWith("Bearer"))
                 continue;
 
-            token = paramContent.split(" ")[1];
+            token = paramContent;
         }
 
-        if (token == null)
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        Roles role = getRole(token);
 
-        Claims payload = tokenService.decipherToken(token);
-
-        if (payload == null)
+        if (role == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
 
         CheckSecurity checkSecurity = method.getAnnotation(CheckSecurity.class);
-        UserRoleDto userRoleDto = new UserRoleDto();
-        userRoleDto.setName(payload.get(User.userRole(), String.class));
 
-        if (! Arrays.asList(checkSecurity.roles()).contains(Roles.findRole(userRoleDto.getName())))
+        if (! Arrays.asList(checkSecurity.roles()).contains(role))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         return joinPoint.proceed();
+    }
+
+    public Roles getRole(String token) {
+        if (token == null)
+            return null;
+
+        token = token.split(" ")[1];
+        Claims payload = tokenService.decipherToken(token);
+
+        if (payload == null)
+            return null;
+
+        return Roles.findRole(payload.get(User.userRole(), String.class));
     }
 }
