@@ -14,37 +14,18 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.commons.dto.client;
+package rs.raf.gym.security;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import rs.raf.gym.commons.dto.user_role.UserRoleDto;
+import rs.raf.gym.model.Roles;
 
-import java.time.LocalDate;
-import java.util.UUID;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ClientDto {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CheckSecurity {
 
-    private UserRoleDto userRole;
-
-    private String firstname;
-
-    private String lastname;
-
-    private String username;
-
-    private String password; //todo should probably be removed
-
-    private String email;
-
-    private LocalDate dateOfBirth;
-
-    private UUID membershipId;
-
+    Roles[] roles() default {};
 }

@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.commons.dto.userRole.UserRoleDto;
+import rs.raf.gym.commons.dto.user_role.UserRoleDto;
 
 import java.time.LocalDate;
 

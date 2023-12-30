@@ -42,6 +42,14 @@ public enum Roles {
         return userRole;
     }
 
+    public static Roles findRole(String name) {
+        for (Roles role : Roles.values())
+            if (role.name.equals(name))
+                return role;
+
+        return null;
+    }
+
     public boolean isEqual(UserRole userRole) {
         return userRole.getName().equals(this.name);
     }

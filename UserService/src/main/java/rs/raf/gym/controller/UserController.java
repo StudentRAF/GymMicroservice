@@ -23,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
 import rs.raf.gym.commons.dto.user.UserTokenDto;
+import rs.raf.gym.model.Roles;
+import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserService;
 
 @AllArgsConstructor
@@ -32,7 +34,7 @@ public class UserController {
     private final IUserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserTokenDto> loginUser(@RequestBody @Valid UserLoginDto userLoginDto) {
+    public ResponseEntity<String> loginUser(@RequestBody @Valid UserLoginDto userLoginDto) {
         return new ResponseEntity<>(userService.login(userLoginDto), HttpStatus.OK);
     }
 
