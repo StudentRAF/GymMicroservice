@@ -33,4 +33,47 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>rs.raf.gym</groupId>
+            <artifactId>GymCommons</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+    </dependencies>
+
 </project>
