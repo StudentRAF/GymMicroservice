@@ -16,7 +16,13 @@
 
 package rs.raf.gym.service.implementation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,8 +45,12 @@ import rs.raf.gym.model.User;
 import rs.raf.gym.model.UserRole;
 import rs.raf.gym.repository.IUserRepository;
 import rs.raf.gym.repository.IUserRoleRepository;
+import rs.raf.gym.security.service.ITokenService;
 import rs.raf.gym.service.IUserService;
 import rs.raf.gym.specification.UserSpecification;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -51,6 +61,8 @@ public class UserService implements IUserService {
     private final IUserRoleRepository userRoleRepository;
     private final UserMapper          userMapper;
     private final UserRoleMapper      userRoleMapper;
+    private final ObjectMapper        objectMapper;
+    private final ITokenService       tokenService;
 
     @Override
     public Page<UserDto> getAllUsers(String role, String firstname, String lastname, String username, Pageable pageable) {
@@ -133,16 +145,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserTokenDto login(UserLoginDto userLoginDto) {
+    public String login(UserLoginDto userLoginDto) {
         User user = userRepository.findUserByUsernameAndPassword(userLoginDto.getUsername(), userLoginDto.getPassword())
                                   .orElse(null);
 
-        if (user == null)
-            return new UserTokenDto(null, null, false);
+        if (user == null || !user.isActivated() || !user.isAccess())
+            return null;
 
-        //todo this should be checked with security
+        //Create token
+        Map<String, Object> payload = new HashMap<>();
+        payload.put(User.id(), user.getId());
+        payload.put(User.userRole(), user.getUserRole().getName());
 
-        return new UserTokenDto(userRoleMapper.userRoleToUserRoleDto(user.getUserRole()),
-                                user.getUsername(), user.isAccess() && user.isActivated());
+        return tokenService.encrypt(payload);
     }
 }

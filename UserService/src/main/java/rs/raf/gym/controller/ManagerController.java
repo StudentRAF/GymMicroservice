@@ -23,11 +23,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
+import rs.raf.gym.model.Roles;
+import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserService;
 
 @AllArgsConstructor
@@ -36,14 +39,17 @@ import rs.raf.gym.service.IUserService;
 public class ManagerController {
     private final IUserService userService;
 
-    //note only admin can use this
     @PostMapping("/register")
-    public ResponseEntity<ManagerDto> createManager(@RequestBody @Valid ManagerCreateDto managerCreateDto) {
+    @CheckSecurity(roles = Roles.ADMIN)
+    public ResponseEntity<ManagerDto> createManager(@RequestBody @Valid ManagerCreateDto managerCreateDto,
+                                                    @RequestHeader(name = "authorization") String authorization) {
         return new ResponseEntity<>(userService.createManager(managerCreateDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ManagerDto> updateManager(@RequestBody @Valid ManagerUpdateDto managerUpdateDto) {
+    @CheckSecurity(roles = Roles.MANAGER)
+    public ResponseEntity<ManagerDto> updateManager(@RequestBody @Valid ManagerUpdateDto managerUpdateDto,
+                                                    @RequestHeader(name = "authorization") String authorization) {
         return new ResponseEntity<>(userService.updateManager(managerUpdateDto), HttpStatus.ACCEPTED);
     }
 }

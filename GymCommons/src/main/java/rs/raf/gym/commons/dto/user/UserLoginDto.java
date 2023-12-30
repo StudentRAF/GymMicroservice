@@ -34,7 +34,7 @@ public class UserLoginDto {
     @Size(max = 50)
     private String username;
 
-    @NotNull
+    @NotBlank
     @Size(min = 8, max = 50)
     private String password;
 

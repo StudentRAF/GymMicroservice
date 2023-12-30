@@ -14,37 +14,18 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.commons.dto.client;
+package rs.raf.gym.commons.dto.user_role;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.commons.dto.user_role.UserRoleDto;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientDto {
+public class UserRoleDto {
 
-    private UserRoleDto userRole;
-
-    private String firstname;
-
-    private String lastname;
-
-    private String username;
-
-    private String password; //todo should probably be removed
-
-    private String email;
-
-    private LocalDate dateOfBirth;
-
-    private UUID membershipId;
-
+    private String name;
 }

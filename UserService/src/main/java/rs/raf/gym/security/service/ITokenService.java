@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.commons.dto.userRole;
+package rs.raf.gym.security.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.jsonwebtoken.Claims;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserRoleDto {
+import java.util.Map;
 
-    private String name;
+public interface ITokenService {
+
+    String encrypt(Map<String, Object> payload);
+
+    Claims decipherToken(String token);
 }
