@@ -20,11 +20,11 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
-import rs.raf.gym.commons.dto.user.UserTokenDto;
-import rs.raf.gym.model.Roles;
-import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserService;
 
 @AllArgsConstructor
@@ -36,6 +36,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody @Valid UserLoginDto userLoginDto) {
         return new ResponseEntity<>(userService.login(userLoginDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<String> getRole(@RequestBody String token) {
+        return new ResponseEntity<>(userService.getRole(token), HttpStatus.OK);
     }
 
 }

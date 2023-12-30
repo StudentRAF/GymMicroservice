@@ -16,13 +16,7 @@
 
 package rs.raf.gym.service.implementation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,15 +30,14 @@ import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
 import rs.raf.gym.commons.dto.user.UserCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
-import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.mapper.UserMapper;
-import rs.raf.gym.mapper.UserRoleMapper;
 import rs.raf.gym.model.Roles;
 import rs.raf.gym.model.User;
 import rs.raf.gym.model.UserRole;
 import rs.raf.gym.repository.IUserRepository;
 import rs.raf.gym.repository.IUserRoleRepository;
+import rs.raf.gym.security.SecurityAspect;
 import rs.raf.gym.security.service.ITokenService;
 import rs.raf.gym.service.IUserService;
 import rs.raf.gym.specification.UserSpecification;
@@ -60,9 +53,8 @@ public class UserService implements IUserService {
     private final IUserRepository     userRepository;
     private final IUserRoleRepository userRoleRepository;
     private final UserMapper          userMapper;
-    private final UserRoleMapper      userRoleMapper;
-    private final ObjectMapper        objectMapper;
     private final ITokenService       tokenService;
+    private final SecurityAspect      securityAspect;
 
     @Override
     public Page<UserDto> getAllUsers(String role, String firstname, String lastname, String username, Pageable pageable) {
@@ -158,5 +150,11 @@ public class UserService implements IUserService {
         payload.put(User.userRole(), user.getUserRole().getName());
 
         return tokenService.encrypt(payload);
+    }
+
+    @Override
+    public String getRole(String token) {
+        Roles role = securityAspect.getRole(token);
+        return role != null ? role.getName() : null;
     }
 }
