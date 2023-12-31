@@ -21,13 +21,14 @@ import org.springframework.data.domain.Pageable;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeCreateDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
 
 public interface ITrainingTypeService {
 
     Page<TrainingTypeDto> findAll(String name, Pageable pageable);
 
-    TrainingTypeDto create(TrainingTypeCreateDto trainingTypeCreateDto);
+    TrainingTypeDto create(TrainingTypeCreateDto createDto);
 
-    TrainingTypeDto update(TrainingTypeUpdateDto trainingTypeUpdateDto);
+    TrainingTypeDto update(TrainingTypeUpdateDto updateDto) throws GymException;
 
 }

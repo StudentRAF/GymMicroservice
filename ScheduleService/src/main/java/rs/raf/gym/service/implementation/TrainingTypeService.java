@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeCreateDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.TrainingTypeMapper;
 import rs.raf.gym.model.TrainingType;
 import rs.raf.gym.repository.ITrainingTypeRepository;
@@ -45,23 +47,21 @@ public class TrainingTypeService implements ITrainingTypeService {
     }
 
     @Override
-    public TrainingTypeDto create(TrainingTypeCreateDto trainingTypeCreateDto) {
+    public TrainingTypeDto create(TrainingTypeCreateDto createDto) {
         TrainingType trainingType = new TrainingType();
 
-        mapper.map(trainingType, trainingTypeCreateDto);
+        mapper.map(trainingType, createDto);
 
         return mapper.toTrainingTypeDto(repository.save(trainingType));
     }
 
     @Override
-    public TrainingTypeDto update(TrainingTypeUpdateDto trainingTypeUpdateDto) {
-        TrainingType trainingType = repository.findByName(trainingTypeUpdateDto.getOldName())
-                                              .orElse(null);
+    public TrainingTypeDto update(TrainingTypeUpdateDto updateDto) throws GymException {
+        TrainingType trainingType = repository.findByName(updateDto.getOldName())
+                                              .orElseThrow(() -> new GymException(ExceptionType.UPDATE_TRAINING_TYPE_NOT_FOUND_TRAINING_TYPE,
+                                                                                  updateDto.getOldName()));
 
-        if (trainingType == null) //TODO: Replace with exception
-            return null;
-
-        mapper.map(trainingType, trainingTypeUpdateDto);
+        mapper.map(trainingType, updateDto);
 
         return mapper.toTrainingTypeDto(repository.save(trainingType));
     }

@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import rs.raf.gym.commons.dto.gym_training.GymTrainingCreateDto;
 import rs.raf.gym.commons.dto.gym_training.GymTrainingDto;
 import rs.raf.gym.commons.dto.gym_training.GymTrainingUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.GymTrainingMapper;
 import rs.raf.gym.model.Gym;
 import rs.raf.gym.model.GymTraining;
@@ -53,15 +55,12 @@ public class GymTrainingService implements IGymTrainingService {
     }
 
     @Override
-    public GymTrainingDto create(GymTrainingCreateDto createDto) {
+    public GymTrainingDto create(GymTrainingCreateDto createDto) throws GymException {
         Gym gym = gymRepository.findByName(createDto.getGymName())
-                               .orElse(null);
+                               .orElseThrow(() -> new GymException(ExceptionType.CREATE_GYM_TRAINING_NOT_FOUND_GYM, createDto.getGymName()));
 
         Training training = trainingRepository.findByName(createDto.getTrainingName())
-                                              .orElse(null);
-
-        if (gym == null || training == null)
-            return null;
+                                              .orElseThrow(() -> new GymException(ExceptionType.CREATE_GYM_TRAINING_NOT_FOUND_TRAINING, createDto.getTrainingName()));
 
         GymTraining gymTraining = new GymTraining();
 
@@ -73,22 +72,16 @@ public class GymTrainingService implements IGymTrainingService {
     }
 
     @Override
-    public GymTrainingDto update(GymTrainingUpdateDto updateDto) {
+    public GymTrainingDto update(GymTrainingUpdateDto updateDto) throws GymException {
         Gym gym = gymRepository.findByName(updateDto.getGymName())
-                               .orElse(null);
+                               .orElseThrow(() -> new GymException(ExceptionType.UPDATE_GYM_TRAINING_NOT_FOUND_GYM, updateDto.getGymName()));
 
         Training training = trainingRepository.findByName(updateDto.getTrainingName())
-                                              .orElse(null);
-
-        if (gym == null || training == null) //TODO: Replace with exception
-            return null;
-
+                                              .orElseThrow(() -> new GymException(ExceptionType.UPDATE_GYM_TRAINING_NOT_FOUND_TRAINING, updateDto.getTrainingName()));
 
         GymTraining gymTraining = repository.findByGymAndTraining(gym, training)
-                                            .orElse(null);
-
-        if (gymTraining == null) //TODO: Replace with exception
-            return null;
+                                            .orElseThrow(() -> new GymException(ExceptionType.UPDATE_GYM_TRAINING_NOT_FOUND_GYM_TRAINING,
+                                                                                updateDto.getGymName(), updateDto.getTrainingName()));
 
         mapper.map(gymTraining, updateDto);
 

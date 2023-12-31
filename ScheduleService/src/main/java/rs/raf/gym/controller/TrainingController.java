@@ -51,7 +51,7 @@ public class TrainingController {
 
     @PostMapping
     public ResponseEntity<TrainingDto> create(@RequestBody @Valid TrainingCreateDto createDto) {
-        return new ResponseEntity<>(service.create(createDto), HttpStatus.OK);
+        return new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED);
     }
 
     @PutMapping

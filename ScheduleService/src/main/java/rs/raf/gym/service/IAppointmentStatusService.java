@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusCreateDto;
 import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusDto;
 import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
 
 public interface IAppointmentStatusService {
 
@@ -28,6 +29,6 @@ public interface IAppointmentStatusService {
 
     AppointmentStatusDto create(AppointmentStatusCreateDto createDto);
 
-    AppointmentStatusDto update(AppointmentStatusUpdateDto updateDto);
+    AppointmentStatusDto update(AppointmentStatusUpdateDto updateDto) throws GymException;
 
 }
