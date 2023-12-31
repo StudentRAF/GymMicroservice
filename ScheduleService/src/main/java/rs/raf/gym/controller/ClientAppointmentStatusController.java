@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusCreateDto;
 import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusDto;
 import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusUpdateDto;
+import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.IClientAppointmentStatusService;
 
 @AllArgsConstructor
@@ -44,17 +45,17 @@ public class ClientAppointmentStatusController {
     @GetMapping
     public ResponseEntity<Page<ClientAppointmentStatusDto>> filter(@RequestParam(value = "name", required = false) String name,
                                                                    Pageable pageable) {
-        return new ResponseEntity<>(service.findAll(name, pageable), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(name, pageable), HttpStatus.OK));
     }
 
     @PostMapping
     public ResponseEntity<ClientAppointmentStatusDto> create(@RequestBody @Valid ClientAppointmentStatusCreateDto createDto) {
-        return new ResponseEntity<>(service.create(createDto), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.OK));
     }
 
     @PutMapping
     public ResponseEntity<ClientAppointmentStatusDto> update(@RequestBody @Valid ClientAppointmentStatusUpdateDto updateDto) {
-        return new ResponseEntity<>(service.update(updateDto), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.CREATED));
     }
 
 }

@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentDto;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentUpdateDto;
+import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.ITrainingAppointmentService;
 
 import java.time.LocalDate;
@@ -52,17 +53,17 @@ public class TrainingAppointmentController {
                                                                @RequestParam(value = "duration", required = false) Integer   duration,
                                                                @RequestParam(value = "status",   required = false) String    status,
                                                                Pageable pageable) {
-        return new ResponseEntity<>(service.findAll(gym, training, date, time, duration, status, pageable), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(gym, training, date, time, duration, status, pageable), HttpStatus.OK));
     }
 
     @PostMapping
     public ResponseEntity<TrainingAppointmentDto> create(@RequestBody @Valid TrainingAppointmentCreateDto createDto) {
-        return new ResponseEntity<>(service.create(createDto), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.OK));
     }
 
     @PutMapping
     public ResponseEntity<TrainingAppointmentDto> update(@RequestBody @Valid TrainingAppointmentUpdateDto updateDto) {
-        return new ResponseEntity<>(service.update(updateDto), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 
 }

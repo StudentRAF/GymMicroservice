@@ -21,13 +21,14 @@ import org.springframework.data.domain.Pageable;
 import rs.raf.gym.commons.dto.gym.GymCreateDto;
 import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
 
 public interface IGymService {
 
     Page<GymDto> findAll(String name, Integer managerId, Pageable pageable);
 
-    GymDto create(GymCreateDto gymCreateDto);
+    GymDto create(GymCreateDto createDto);
 
-    GymDto update(GymUpdateDto gymUpdateDto);
+    GymDto update(GymUpdateDto updateDto) throws GymException;
     
 }

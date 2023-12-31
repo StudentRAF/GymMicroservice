@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -30,8 +31,8 @@ public interface IClientTrainingAppointmentService {
     Page<ClientTrainingAppointmentDto> findAll(String gym, String training, LocalDate date, LocalTime time,
                                                String status, Long clientId, Pageable pageable);
 
-    ClientTrainingAppointmentDto create(ClientTrainingAppointmentCreateDto createDto);
+    ClientTrainingAppointmentDto create(ClientTrainingAppointmentCreateDto createDto) throws GymException;
 
-    ClientTrainingAppointmentDto update(ClientTrainingAppointmentUpdateDto updateDto);
+    ClientTrainingAppointmentDto update(ClientTrainingAppointmentUpdateDto updateDto) throws GymException;
 
 }

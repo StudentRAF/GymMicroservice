@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import rs.raf.gym.commons.dto.training.TrainingCreateDto;
 import rs.raf.gym.commons.dto.training.TrainingDto;
 import rs.raf.gym.commons.dto.training.TrainingUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.TrainingMapper;
 import rs.raf.gym.model.Training;
 import rs.raf.gym.model.TrainingType;
@@ -48,30 +50,25 @@ public class TrainingService implements ITrainingService {
     }
 
     @Override
-    public TrainingDto create(TrainingCreateDto trainingCreateDto) {
-        TrainingType trainingType = trainingTypeRepository.findByName(trainingCreateDto.getType())
-                                                          .orElse(null);
-
-        if (trainingType == null) //TODO: Replace with exception
-            return null;
+    public TrainingDto create(TrainingCreateDto createDto) throws GymException {
+        TrainingType trainingType = trainingTypeRepository.findByName(createDto.getType())
+                                                          .orElseThrow(() -> new GymException(ExceptionType.CREATE_TRAINING_NOT_FOUND_TRAINING_TYPE,
+                                                                                              createDto.getType()));
 
         Training training = new Training();
 
         training.setType(trainingType);
-        mapper.map(training, trainingCreateDto);
+        mapper.map(training, createDto);
 
         return mapper.toTrainingDto(repository.save(training));
     }
 
     @Override
-    public TrainingDto update(TrainingUpdateDto trainingUpdateDto) {
-        Training training = repository.findByName(trainingUpdateDto.getOldName())
-                                      .orElse(null);
+    public TrainingDto update(TrainingUpdateDto updateDto) throws GymException {
+        Training training = repository.findByName(updateDto.getOldName())
+                                      .orElseThrow(() -> new GymException(ExceptionType.UPDATE_TRAINING_NOT_FOUND_TRAINING,updateDto.getOldName()));
 
-        if (training == null) //TODO: Replace with exception
-            return null;
-
-        mapper.map(training, trainingUpdateDto);
+        mapper.map(training, updateDto);
 
         return mapper.toTrainingDto(repository.save(training));
     }

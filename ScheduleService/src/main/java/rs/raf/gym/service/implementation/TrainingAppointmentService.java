@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentDto;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.TrainingAppointmentMapper;
 import rs.raf.gym.model.AppointmentStatus;
 import rs.raf.gym.model.Gym;
@@ -62,14 +64,12 @@ public class TrainingAppointmentService implements ITrainingAppointmentService {
     }
 
     @Override
-    public TrainingAppointmentDto create(TrainingAppointmentCreateDto createDto) {
-        GymTraining gymTraining = findGymTraining(createDto.getGymName(), createDto.getTrainingName());
+    public TrainingAppointmentDto create(TrainingAppointmentCreateDto createDto) throws GymException {
+        GymTraining gymTraining = findGymTraining(createDto.getGymName(), createDto.getTrainingName(), false);
 
         AppointmentStatus appointmentStatus = statusRepository.findByName(createDto.getStatusName())
-                                                              .orElse(null);
-
-        if (gymTraining == null || appointmentStatus == null) //TODO: Replace with exception
-            return null;
+                                                              .orElseThrow(() -> new GymException(ExceptionType.CREATE_TRAINING_APPOINTMENT_NOT_FOUND_APPOINTMENT_STATUS,
+                                                                                                  createDto.getStatusName()));
 
         TrainingAppointment trainingAppointment = new TrainingAppointment();
 
@@ -81,22 +81,19 @@ public class TrainingAppointmentService implements ITrainingAppointmentService {
     }
 
     @Override
-    public TrainingAppointmentDto update(TrainingAppointmentUpdateDto updateDto) {
-        GymTraining gymTraining = findGymTraining(updateDto.getGymName(), updateDto.getTrainingName());
-
-        if (gymTraining == null) //TODO: Replace with exception
-            return null;
+    public TrainingAppointmentDto update(TrainingAppointmentUpdateDto updateDto) throws GymException {
+        GymTraining gymTraining = findGymTraining(updateDto.getGymName(), updateDto.getTrainingName(), true);
 
         TrainingAppointment trainingAppointment = repository.findByGymTrainingAndDateAndTime(gymTraining,
                                                                                              updateDto.getDate(),
                                                                                              updateDto.getTime())
-                                                            .orElse(null);
-
-        if (trainingAppointment == null) //TODO: Replace with exception
-            return null;
+                                                            .orElseThrow(() -> new GymException(ExceptionType.UPDATE_TRAINING_APPOINTMENT_NOT_FOUND_TRAINING_APPOINTMENT,
+                                                                                                updateDto.getGymName(), updateDto.getTrainingName(),
+                                                                                                updateDto.getDate().toString(), updateDto.getTime().toString()));
 
         AppointmentStatus appointmentStatus = statusRepository.findByName(updateDto.getStatusName())
-                                                              .orElse(null);
+                                                              .orElseThrow(() -> new GymException(ExceptionType.UPDATE_TRAINING_APPOINTMENT_NOT_FOUND_APPOINTMENT_STATUS,
+                                                                                                  updateDto.getStatusName()));
 
         trainingAppointment.setStatus(appointmentStatus);
         mapper.map(trainingAppointment, updateDto);
@@ -104,17 +101,21 @@ public class TrainingAppointmentService implements ITrainingAppointmentService {
         return mapper.toTrainingAppointmentDto(repository.save(trainingAppointment));
     }
 
-    private GymTraining findGymTraining(String gymName, String trainingName) {
+    private GymTraining findGymTraining(String gymName, String trainingName, boolean update) throws GymException {
         Gym gym = gymRepository.findByName(gymName)
-                               .orElse(null);
-        Training training = trainingRepository.findByName(trainingName)
-                                              .orElse(null);
+                               .orElseThrow(() -> new GymException(update ? ExceptionType.UPDATE_TRAINING_APPOINTMENT_NOT_FOUND_GYM
+                                                                          : ExceptionType.CREATE_TRAINING_APPOINTMENT_NOT_FOUND_GYM,
+                                                                   gymName));
 
-        if (gym == null || training == null) //TODO: Replace with exception
-            return null;
+        Training training = trainingRepository.findByName(trainingName)
+                                              .orElseThrow(() -> new GymException(update ? ExceptionType.UPDATE_TRAINING_APPOINTMENT_NOT_FOUND_TRAINING
+                                                                                         : ExceptionType.CREATE_TRAINING_APPOINTMENT_NOT_FOUND_TRAINING,
+                                                                                  gymName));
 
         return gymTrainingRepository.findByGymAndTraining(gym, training)
-                                    .orElse(null);
+                                    .orElseThrow(() -> new GymException(update ? ExceptionType.UPDATE_TRAINING_APPOINTMENT_NOT_FOUND_GYM_TRAINING
+                                                                               : ExceptionType.CREATE_TRAINING_APPOINTMENT_NOT_FOUND_GYM_TRAINING,
+                                                                        gymName, trainingName));
     }
 
 }

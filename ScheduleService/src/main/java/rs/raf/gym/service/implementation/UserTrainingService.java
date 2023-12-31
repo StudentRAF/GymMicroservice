@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import rs.raf.gym.commons.dto.user_training.UserTrainingCreateDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserTrainingMapper;
 import rs.raf.gym.model.Training;
 import rs.raf.gym.model.UserTraining;
@@ -48,14 +50,12 @@ public class UserTrainingService implements IUserTrainingService {
     }
 
     @Override
-    public UserTrainingDto create(UserTrainingCreateDto createDto) {
+    public UserTrainingDto create(UserTrainingCreateDto createDto) throws GymException {
         UserTraining userTraining = new UserTraining();
 
         Training training = trainingRepository.findByName(createDto.getTrainingName())
-                                              .orElse(null);
-
-        if (training == null)
-            return null;
+                                              .orElseThrow(() -> new GymException(ExceptionType.CREATE_USER_TRAINING_NOT_FOUND_TRAINING,
+                                                                                  createDto.getTrainingName()));
 
         userTraining.setTraining(training);
         mapper.map(userTraining, createDto);
@@ -64,18 +64,14 @@ public class UserTrainingService implements IUserTrainingService {
     }
 
     @Override
-    public UserTrainingDto update(UserTrainingUpdateDto updateDto) {
+    public UserTrainingDto update(UserTrainingUpdateDto updateDto) throws GymException {
         Training training = trainingRepository.findByName(updateDto.getTrainingName())
-                                              .orElse(null);
-
-        if (training == null)
-            return null;
+                                              .orElseThrow(() -> new GymException(ExceptionType.UPDATE_USER_TRAINING_NOT_FOUND_TRAINING,
+                                                                                  updateDto.getTrainingName()));
 
         UserTraining userTraining = repository.findByTrainingAndClientId(training, updateDto.getClientId())
-                                              .orElse(null);
-
-        if (userTraining == null)
-            return null;
+                                              .orElseThrow(() -> new GymException(ExceptionType.UPDATE_USER_TRAINING_NOT_FOUND_USER_TRAINING,
+                                                                                  updateDto.getTrainingName(), updateDto.getClientId().toString()));
 
         mapper.map(userTraining, updateDto);
 

@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.gym_training.GymTrainingCreateDto;
 import rs.raf.gym.commons.dto.gym_training.GymTrainingDto;
 import rs.raf.gym.commons.dto.gym_training.GymTrainingUpdateDto;
+import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.IGymTrainingService;
 
 @AllArgsConstructor
@@ -48,17 +49,17 @@ public class GymTrainingController {
                                                        @RequestParam(value = "min",      required = false) Integer min,
                                                        @RequestParam(value = "max",      required = false) Integer max,
                                                        Pageable pageable) {
-        return new ResponseEntity<>(service.findAll(gym, training, price, min, max, pageable), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(gym, training, price, min, max, pageable), HttpStatus.OK));
     }
 
     @PostMapping
     public ResponseEntity<GymTrainingDto> create(@RequestBody @Valid GymTrainingCreateDto createDto) {
-        return new ResponseEntity<>(service.create(createDto), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
     }
 
     @PutMapping
     public ResponseEntity<GymTrainingDto> update(@RequestBody @Valid GymTrainingUpdateDto updateDto) {
-        return new ResponseEntity<>(service.update(updateDto), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 
 }

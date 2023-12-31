@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.user_training.UserTrainingCreateDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
+import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.IUserTrainingService;
 
 @AllArgsConstructor
@@ -46,17 +47,17 @@ public class UserTrainingController {
     public ResponseEntity<Page<UserTrainingDto>> filter(@RequestParam(value = "training", required = false) String training,
                                                         @RequestParam(value = "client",   required = false) Long   client,
                                                         Pageable pageable) {
-        return new ResponseEntity<>(service.findAll(training, client, pageable), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(training, client, pageable), HttpStatus.OK));
     }
 
     @PostMapping
     public ResponseEntity<UserTrainingDto> create(@RequestBody @Valid UserTrainingCreateDto createDto) {
-        return new ResponseEntity<>(service.create(createDto), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.OK));
     }
 
     @PutMapping
     public ResponseEntity<UserTrainingDto> update(@RequestBody @Valid UserTrainingUpdateDto updateDto) {
-        return new ResponseEntity<>(service.update(updateDto), HttpStatus.OK);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 
 }

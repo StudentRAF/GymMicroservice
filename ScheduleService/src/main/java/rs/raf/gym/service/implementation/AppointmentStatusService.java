@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusCreateDto;
 import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusDto;
 import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.AppointmentStatusMapper;
 import rs.raf.gym.model.AppointmentStatus;
 import rs.raf.gym.repository.IAppointmentStatusRepository;
@@ -54,12 +56,10 @@ public class AppointmentStatusService implements IAppointmentStatusService {
     }
 
     @Override
-    public AppointmentStatusDto update(AppointmentStatusUpdateDto updateDto) {
+    public AppointmentStatusDto update(AppointmentStatusUpdateDto updateDto) throws GymException {
         AppointmentStatus appointmentStatus = repository.findByName(updateDto.getOldName())
-                                                        .orElse(null);
-
-        if (appointmentStatus == null) //TODO: Replace with exception
-            return null;
+                                                        .orElseThrow(() -> new GymException(ExceptionType.UPDATE_APPOINTMENT_STATUS_NOT_FOUND_APPOINTMENT_STATUS,
+                                                                                            updateDto.getOldName()));
 
         mapper.map(appointmentStatus, updateDto);
 
