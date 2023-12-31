@@ -24,32 +24,30 @@ import rs.raf.gym.commons.dto.client.ClientUpdateDto;
 import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
-import rs.raf.gym.commons.dto.user.UserCreateDto;
+import rs.raf.gym.commons.dto.user.AdminCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
-import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
 
 public interface IUserService {
 
     //Find all users on specific page
     Page<UserDto> getAllUsers(String role, String firstname, String lastname, String username, Pageable pageable);
 
-    UserDto findById(Long id);
+    UserDto findById(Long id) throws GymException;
 
-    UserDto createUser(UserCreateDto userCreateDto);
+    UserDto createAdmin(AdminCreateDto adminCreateDto) throws GymException;
 
-    UserDto updateUser(UserUpdateDto userUpdateDto);
+    UserDto updateUser(UserUpdateDto userUpdateDto) throws GymException;
 
-    ClientDto createClient(ClientCreateDto clientCreateDto);
+    ClientDto createClient(ClientCreateDto clientCreateDto) throws GymException;
 
-    ClientDto updateClient(ClientUpdateDto clientUpdateDto);
+    ClientDto updateClient(ClientUpdateDto clientUpdateDto) throws GymException;
 
-    ManagerDto createManager(ManagerCreateDto managerCreateDto);
+    ManagerDto createManager(ManagerCreateDto managerCreateDto) throws GymException;
 
-    ManagerDto updateManager(ManagerUpdateDto managerUpdateDto);
+    ManagerDto updateManager(ManagerUpdateDto managerUpdateDto) throws GymException;
 
-    String login(UserLoginDto userLoginDto);
-
-    String getRole(String token);
+    String login(UserLoginDto userLoginDto) throws GymException;
 }

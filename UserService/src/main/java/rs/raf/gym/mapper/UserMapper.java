@@ -24,7 +24,7 @@ import rs.raf.gym.commons.dto.client.ClientUpdateDto;
 import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
-import rs.raf.gym.commons.dto.user.UserCreateDto;
+import rs.raf.gym.commons.dto.user.AdminCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.model.User;
@@ -96,16 +96,16 @@ public class UserMapper {
         return user;
     }
 
-    public User mapUser(User user, UserCreateDto userCreateDto) {
-        user.setFirstname(userCreateDto.getFirstname());
-        user.setLastname(userCreateDto.getLastname());
-        user.setUsername(userCreateDto.getUsername());
-        user.setPassword(userCreateDto.getPassword());
-        user.setEmail(userCreateDto.getEmail());
-        user.setDateOfBirth(userCreateDto.getDateOfBirth());
-        user.setGymId(userCreateDto.getGymId());
-        user.setAccess(userCreateDto.isAccess());
-        user.setActivated(userCreateDto.isActivated());
+    public User mapUser(User user, AdminCreateDto adminCreateDto) {
+        user.setFirstname(adminCreateDto.getFirstname());
+        user.setLastname(adminCreateDto.getLastname());
+        user.setUsername(adminCreateDto.getUsername());
+        user.setPassword(adminCreateDto.getPassword());
+        user.setEmail(adminCreateDto.getEmail());
+        user.setDateOfBirth(adminCreateDto.getDateOfBirth());
+        user.setGymId(adminCreateDto.getGymId());
+        user.setAccess(adminCreateDto.isAccess());
+        user.setActivated(adminCreateDto.isActivated());
 
         return user;
     }

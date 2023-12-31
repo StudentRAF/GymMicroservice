@@ -23,9 +23,13 @@ import org.springframework.stereotype.Service;
 import rs.raf.gym.commons.dto.user_role.UserRoleCreateDto;
 import rs.raf.gym.commons.dto.user_role.UserRoleDto;
 import rs.raf.gym.commons.dto.user_role.UserRoleUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserRoleMapper;
+import rs.raf.gym.model.Roles;
 import rs.raf.gym.model.UserRole;
 import rs.raf.gym.repository.IUserRoleRepository;
+import rs.raf.gym.security.SecurityAspect;
 import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.specification.UserRoleSpecification;
 
@@ -33,8 +37,9 @@ import rs.raf.gym.specification.UserRoleSpecification;
 @AllArgsConstructor
 public class UserRoleService implements IUserRoleService {
 
-    private IUserRoleRepository userRoleRepository;
-    private UserRoleMapper      userRoleMapper;
+    private final IUserRoleRepository userRoleRepository;
+    private final UserRoleMapper      userRoleMapper;
+    private final SecurityAspect      securityAspect;
 
     @Override
     public Page<UserRoleDto> getAllUserRoles(String role, Pageable pageable) {
@@ -50,14 +55,20 @@ public class UserRoleService implements IUserRoleService {
     }
 
     @Override
-    public UserRoleDto updateUserRole(UserRoleUpdateDto userRoleUpdateDto) {
+    public UserRoleDto updateUserRole(UserRoleUpdateDto userRoleUpdateDto) throws GymException {
         UserRole userRole = userRoleRepository.findByName(userRoleUpdateDto.getOldName())
-                                              .orElse(null);
-        if (userRole == null)
-            return null;
+                                              .orElseThrow(() -> new GymException(ExceptionType.UPDATE_USER_ROLE_NOT_FOUND_USER_ROLE, userRoleUpdateDto.getOldName()));
+
 
         userRoleMapper.mapUserRole(userRole, userRoleUpdateDto);
         return userRoleMapper.userRoleToUserRoleDto(userRoleRepository.save(userRole));
+    }
+
+    @Override
+    public String findRole(String token) throws GymException {
+        Roles role = securityAspect.getRole(token);
+        if (role == null) throw new GymException(ExceptionType.FIND_ROLE_NOT_FOUND_USER_ROLE);
+        return role.getName();
     }
 
 }

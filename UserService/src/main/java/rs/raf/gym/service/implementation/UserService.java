@@ -27,17 +27,18 @@ import rs.raf.gym.commons.dto.client.ClientUpdateDto;
 import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
-import rs.raf.gym.commons.dto.user.UserCreateDto;
+import rs.raf.gym.commons.dto.user.AdminCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserMapper;
 import rs.raf.gym.model.Roles;
 import rs.raf.gym.model.User;
 import rs.raf.gym.model.UserRole;
 import rs.raf.gym.repository.IUserRepository;
 import rs.raf.gym.repository.IUserRoleRepository;
-import rs.raf.gym.security.SecurityAspect;
 import rs.raf.gym.security.service.ITokenService;
 import rs.raf.gym.service.IUserService;
 import rs.raf.gym.specification.UserSpecification;
@@ -54,7 +55,6 @@ public class UserService implements IUserService {
     private final IUserRoleRepository userRoleRepository;
     private final UserMapper          userMapper;
     private final ITokenService       tokenService;
-    private final SecurityAspect      securityAspect;
 
     @Override
     public Page<UserDto> getAllUsers(String role, String firstname, String lastname, String username, Pageable pageable) {
@@ -65,21 +65,26 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDto findById(Long id) {
-        return userMapper.userToUserDto(userRepository.findById(id).get());
+    public UserDto findById(Long id) throws GymException {
+        return userMapper.userToUserDto(userRepository.findById(id)
+                                                      .orElseThrow(() -> new GymException(ExceptionType.FIND_ID_USER_NOT_FOUND_USER, id.toString())));
     }
 
     @Override
-    public UserDto createUser(UserCreateDto userCreateDto) {
+    public UserDto createAdmin(AdminCreateDto adminCreateDto) throws GymException {
+        UserRole userRole = userRoleRepository.findByName(Roles.ADMIN.getName())
+                .orElseThrow(() -> new GymException(ExceptionType.CREATE_ADMIN_NOT_FOUND_USER_ROLE, Roles.ADMIN.getName()));
+
         User user = new User();
-        userMapper.mapUser(user, userCreateDto);
+        user.setUserRole(userRole);
+        userMapper.mapUser(user, adminCreateDto);
         return userMapper.userToUserDto(userRepository.save(user));
     }
 
     @Override
-    public ClientDto createClient(ClientCreateDto clientCreateDto) {
+    public ClientDto createClient(ClientCreateDto clientCreateDto) throws GymException {
         UserRole userRole = userRoleRepository.findByName(Roles.CLIENT.getName())
-                                              .orElse(null);
+                                              .orElseThrow(() -> new GymException(ExceptionType.CREATE_CLIENT_NOT_FOUND_USER_ROLE, Roles.CLIENT.getName()));
         User user = new User();
         user.setUserRole(userRole);
         userMapper.mapUser(user, clientCreateDto);
@@ -87,9 +92,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ManagerDto createManager(ManagerCreateDto managerCreateDto) {
+    public ManagerDto createManager(ManagerCreateDto managerCreateDto) throws GymException {
         UserRole userRole = userRoleRepository.findByName(Roles.MANAGER.getName())
-                                              .orElse(null);
+                                              .orElseThrow(() -> new GymException(ExceptionType.CREATE_MANAGER_NOT_FOUND_USER_ROLE, Roles.MANAGER.getName()));
         User user = new User();
         user.setUserRole(userRole);
         userMapper.mapUser(user, managerCreateDto);
@@ -97,12 +102,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDto updateUser(UserUpdateDto userUpdateDto) {
+    public UserDto updateUser(UserUpdateDto userUpdateDto) throws GymException {
         User user = userRepository.findUserByUsername(userUpdateDto.getOldUsername())
-                                  .orElse(null);
-
-        if (user == null)
-            return null;
+                                  .orElseThrow(() -> new GymException(ExceptionType.UPDATE_USER_NOT_FOUND_USERNAME, userUpdateDto.getOldUsername()));
 
         userMapper.mapUser(user, userUpdateDto);
 
@@ -110,12 +112,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ClientDto updateClient(ClientUpdateDto clientUpdateDto) {
+    public ClientDto updateClient(ClientUpdateDto clientUpdateDto) throws GymException {
         User user = userRepository.findUserByUsername(clientUpdateDto.getOldUsername())
-                                  .orElse(null);
-
-        if (user == null)
-            return null;
+                                  .orElseThrow(() -> new GymException(ExceptionType.UPDATE_CLIENT_NOT_FOUND_USERNAME, clientUpdateDto.getOldUsername()));
 
         userMapper.mapUser(user, clientUpdateDto);
 
@@ -124,12 +123,9 @@ public class UserService implements IUserService {
 
 
     @Override
-    public ManagerDto updateManager(ManagerUpdateDto managerUpdateDto) {
+    public ManagerDto updateManager(ManagerUpdateDto managerUpdateDto) throws GymException {
         User user = userRepository.findUserByUsername(managerUpdateDto.getOldUsername())
-                                  .orElse(null);
-
-        if (user == null)
-            return null;
+                                  .orElseThrow(() -> new GymException(ExceptionType.UPDATE_MANAGER_NOT_FOUND_USERNAME, managerUpdateDto.getOldUsername()));
 
         userMapper.mapUser(user, managerUpdateDto);
 
@@ -137,12 +133,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String login(UserLoginDto userLoginDto) {
+    public String login(UserLoginDto userLoginDto) throws GymException {
         User user = userRepository.findUserByUsernameAndPassword(userLoginDto.getUsername(), userLoginDto.getPassword())
-                                  .orElse(null);
+                .orElseThrow(() -> new GymException(ExceptionType.LOGIN_USER_NOT_FOUND_USERNAME_AND_PASSWORD, userLoginDto.getUsername(), userLoginDto.getPassword()));
 
-        if (user == null || !user.isActivated() || !user.isAccess())
-            return null;
+
+        if (!user.isActivated()) throw new GymException(ExceptionType.LOGIN_USER_NOT_ACTIVATED, userLoginDto.getUsername());
+        if (!user.isAccess()) throw new GymException(ExceptionType.LOGIN_USER_NOT_ACCESS, userLoginDto.getUsername());
 
         //Create token
         Map<String, Object> payload = new HashMap<>();
@@ -150,11 +147,5 @@ public class UserService implements IUserService {
         payload.put(User.userRole(), user.getUserRole().getName());
 
         return tokenService.encrypt(payload);
-    }
-
-    @Override
-    public String getRole(String token) {
-        Roles role = securityAspect.getRole(token);
-        return role != null ? role.getName() : null;
     }
 }

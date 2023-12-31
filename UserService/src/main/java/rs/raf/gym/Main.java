@@ -16,11 +16,12 @@
 
 package rs.raf.gym;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.web.bind.annotation.RestController;
+import rs.raf.gym.commons.exception.GymException;
 
 @SpringBootApplication
 @PropertySources({
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Main {
 
     public static void main(String[] args) {
+        GymException.setLogger(LoggerFactory.getLogger(Main.class));
         SpringApplication.run(Main.class, args);
     }
 
