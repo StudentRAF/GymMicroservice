@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
+import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.model.Roles;
 import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserService;
@@ -43,13 +44,13 @@ public class ManagerController {
     @CheckSecurity(roles = Roles.ADMIN)
     public ResponseEntity<ManagerDto> createManager(@RequestBody @Valid ManagerCreateDto managerCreateDto,
                                                     @RequestHeader(name = "authorization") String authorization) {
-        return new ResponseEntity<>(userService.createManager(managerCreateDto), HttpStatus.CREATED);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.createManager(managerCreateDto), HttpStatus.CREATED));
     }
 
     @PutMapping("/update")
     @CheckSecurity(roles = Roles.MANAGER)
     public ResponseEntity<ManagerDto> updateManager(@RequestBody @Valid ManagerUpdateDto managerUpdateDto,
                                                     @RequestHeader(name = "authorization") String authorization) {
-        return new ResponseEntity<>(userService.updateManager(managerUpdateDto), HttpStatus.ACCEPTED);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.updateManager(managerUpdateDto), HttpStatus.ACCEPTED));
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import rs.raf.gym.commons.dto.user_role.UserRoleCreateDto;
 import rs.raf.gym.commons.dto.user_role.UserRoleDto;
 import rs.raf.gym.commons.dto.user_role.UserRoleUpdateDto;
+import rs.raf.gym.commons.exception.GymException;
 
 public interface IUserRoleService {
 
@@ -28,6 +29,8 @@ public interface IUserRoleService {
 
     UserRoleDto createUserRole(UserRoleCreateDto userRoleCreateDto);
 
-    UserRoleDto updateUserRole(UserRoleUpdateDto userRoleUpdateDto);
-    
+    UserRoleDto updateUserRole(UserRoleUpdateDto userRoleUpdateDto) throws GymException;
+
+    String findRole(String token) throws GymException;
+
 }
