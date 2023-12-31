@@ -32,7 +32,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCreateDto { //NOTE: for admin
+public class AdminCreateDto {
 
     @NotBlank
     @Size(max = 40)

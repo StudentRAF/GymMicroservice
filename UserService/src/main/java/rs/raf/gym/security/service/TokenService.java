@@ -18,26 +18,23 @@ package rs.raf.gym.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Map;
 
-import static io.jsonwebtoken.Jwts.SIG.HS512;
-
 @Service
 public class TokenService implements ITokenService{
 
-   // @Value("${user.secret.key}")
+    @Value("${user.secret.key}")
     private String jwtSecret;
     private SecretKey secretKey;
 
-    public TokenService() {
-        this.jwtSecret = HS512.key().toString();
-
+    @PostConstruct
+    private void init() {
         byte[] secretKeyBytes = jwtSecret.getBytes();
         secretKey = Keys.hmacShaKeyFor(secretKeyBytes);
     }

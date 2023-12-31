@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.client.ClientCreateDto;
 import rs.raf.gym.commons.dto.client.ClientDto;
 import rs.raf.gym.commons.dto.client.ClientUpdateDto;
+import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.model.Roles;
 import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserService;
@@ -45,14 +45,14 @@ public class ClientController {
     @CheckSecurity(roles = Roles.CLIENT)
     public ResponseEntity<ClientDto> createClient(@RequestBody @Valid ClientCreateDto clientCreateDto,
                                                   @RequestHeader(name = "authorization") String authorization) {
-        return new ResponseEntity<>(userService.createClient(clientCreateDto), HttpStatus.CREATED);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.createClient(clientCreateDto), HttpStatus.CREATED));
     }
 
     @PutMapping("/update")
     @CheckSecurity(roles = Roles.CLIENT)
     public ResponseEntity<ClientDto> updateClient(@RequestBody @Valid ClientUpdateDto clientUpdateDto,
                                                   @RequestHeader(name = "authorization") String authorization) {
-        return new ResponseEntity<>(userService.updateClient(clientUpdateDto), HttpStatus.ACCEPTED);
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.updateClient(clientUpdateDto), HttpStatus.ACCEPTED));
     }
 
 }
