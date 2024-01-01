@@ -27,6 +27,7 @@ public enum ExceptionType implements IException {
 
     FIND_ID_USER_NOT_FOUND_USER               ("Could not found User. User with id \"{0}\" does not exist", Severity.WARNING, HttpStatus.BAD_REQUEST),
     FIND_ROLE_NOT_FOUND_USER_ROLE             ("Could not find User Role",                                  Severity.WARNING, HttpStatus.BAD_REQUEST),
+    FIND_ID_BY_TOKEN_INVALID_TOKEN            ("Could not find Id. Token is invalid",                       Severity.WARNING, HttpStatus.BAD_REQUEST),
 
     CREATE_ADMIN_NOT_FOUND_USER_ROLE          ("Could not create Admin. User Role with name \"{0}\" does not exist",   Severity.ERROR, HttpStatus.BAD_REQUEST),
     CREATE_CLIENT_NOT_FOUND_USER_ROLE         ("Could not create Client. User Role with name \"{0}\" does not exist",  Severity.ERROR, HttpStatus.BAD_REQUEST),
