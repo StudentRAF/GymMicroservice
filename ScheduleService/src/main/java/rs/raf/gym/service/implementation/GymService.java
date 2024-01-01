@@ -82,7 +82,7 @@ public class GymService implements IGymService {
                                                                 id.toString()));
 
 
-        return null;
+        return mapper.toGymDto(gym);
     }
 
 }
