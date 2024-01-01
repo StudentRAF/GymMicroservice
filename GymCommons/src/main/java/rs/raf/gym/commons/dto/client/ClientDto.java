@@ -39,8 +39,6 @@ public class ClientDto {
 
     private String username;
 
-    private String password; //todo should probably be removed
-
     private String email;
 
     private LocalDate dateOfBirth;

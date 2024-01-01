@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
@@ -42,8 +43,14 @@ public class UserController {
     }
 
     @GetMapping("/role")
-    public ResponseEntity<String> getRole(@RequestBody String token) {
+    public ResponseEntity<String> getRole(@RequestHeader(name = "authorization") String token) {
+        System.out.println("token: " + token);
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userRoleService.findRole(token), HttpStatus.OK));
+    }
+
+    @GetMapping("/id")
+    public ResponseEntity<Long> getId(@RequestHeader(name = "authorization") String token) {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findIdByToken(token), HttpStatus.OK));
     }
 
 }

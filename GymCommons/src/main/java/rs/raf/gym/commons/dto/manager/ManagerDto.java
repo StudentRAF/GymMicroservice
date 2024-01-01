@@ -38,8 +38,6 @@ public class ManagerDto {
 
     private String username;
 
-    private String password;
-
     private String email;
 
     private LocalDate dateOfBirth;

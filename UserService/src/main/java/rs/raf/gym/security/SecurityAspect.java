@@ -91,4 +91,17 @@ public class SecurityAspect {
 
         return Roles.findRole(payload.get(User.userRole(), String.class));
     }
+
+    public Long getId(String token) {
+        if (token == null)
+            return null;
+
+        token = token.split(" ")[1];
+        Claims payload = tokenService.decipherToken(token);
+
+        if (payload == null)
+            return null;
+
+        return payload.get(User.id(), Long.class);
+    }
 }
