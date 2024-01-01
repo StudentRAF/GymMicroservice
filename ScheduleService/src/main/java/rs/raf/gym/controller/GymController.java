@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,24 +45,34 @@ public class GymController {
     private final IGymService service;
 
     @GetMapping
-    public ResponseEntity<Page<GymDto>> filter(@RequestParam(value = "name",    required = false) String  name,
-                                               @RequestParam(value = "manager", required = false) Integer manager,
+    public ResponseEntity<Page<GymDto>> filter(@RequestParam (name = "name",    required = false) String  name,
+                                               @RequestParam (name = "manager", required = false) Integer manager,
+                                               @RequestHeader(name = "authorization"            ) String  token,
                                                Pageable pageable) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(name, manager, pageable),HttpStatus.OK));
     }
 
-    @GetMapping("/{gym}")
-    public ResponseEntity<Long> findWithName(@PathVariable(name = "gym") String gymName) {
+    @GetMapping("/{id}")
+    public ResponseEntity<GymDto> findGym(@PathVariable (name = "id"           ) Long   id,
+                                          @RequestHeader(name = "authorization") String token) {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findGymWithId(id),HttpStatus.OK));
+    }
+
+    @GetMapping("/id/{gym}")
+    public ResponseEntity<Long> findId(@PathVariable (name = "gym"          ) String gymName,
+                                       @RequestHeader(name = "authorization") String token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findId(gymName),HttpStatus.OK));
     }
 
     @PostMapping
-    public ResponseEntity<GymDto> create(@RequestBody @Valid GymCreateDto createDto) {
+    public ResponseEntity<GymDto> create(@RequestBody @Valid                    GymCreateDto createDto,
+                                         @RequestHeader(name = "authorization") String       token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
     }
 
     @PutMapping
-    public ResponseEntity<GymDto> update(@RequestBody @Valid GymUpdateDto updateDto) {
+    public ResponseEntity<GymDto> update(@RequestBody @Valid                    GymUpdateDto updateDto,
+                                         @RequestHeader(name = "authorization") String       token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 
