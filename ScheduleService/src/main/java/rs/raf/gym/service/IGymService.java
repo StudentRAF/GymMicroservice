@@ -30,5 +30,7 @@ public interface IGymService {
     GymDto create(GymCreateDto createDto);
 
     GymDto update(GymUpdateDto updateDto) throws GymException;
-    
+
+    Long findId(String gymName);
+
 }

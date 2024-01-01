@@ -7,6 +7,8 @@ import rs.raf.gym.commons.exception.Severity;
 
 public enum ExceptionType implements IException {
 
+    FIND_GYM_ID_NOT_FOUND_GYM                                               ("Could not find Gym id. Gym with name \"{0}\" does not exist", Severity.WARNING, HttpStatus.BAD_REQUEST),
+
     CREATE_CLIENT_TRAINING_APPOINTMENT_NOT_FOUND_GYM                        ("Could not create Client Training Appointment. Gym with name \"{0}\" does not exist",                                                                        Severity.WARNING, HttpStatus.BAD_REQUEST),
     CREATE_CLIENT_TRAINING_APPOINTMENT_NOT_FOUND_TRAINING                   ("Could not create Client Training Appointment. Training with name \"{0}\" does not exist",                                                                   Severity.WARNING, HttpStatus.BAD_REQUEST),
     CREATE_CLIENT_TRAINING_APPOINTMENT_NOT_FOUND_GYM_TRAINING               ("Could not create Client Training Appointment. Gym Training with gym \"{0}\" and training \"{1}\" does not exist",                                           Severity.WARNING, HttpStatus.BAD_REQUEST),
