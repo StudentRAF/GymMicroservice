@@ -41,7 +41,7 @@ public class ManagerController {
     private final IUserService userService;
 
     @PostMapping("/register")
-    @CheckSecurity(roles = Roles.ADMIN)
+    //@CheckSecurity(roles = Roles.ADMIN)
     public ResponseEntity<ManagerDto> createManager(@RequestBody @Valid ManagerCreateDto managerCreateDto,
                                                     @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.createManager(managerCreateDto), HttpStatus.CREATED));
