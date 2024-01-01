@@ -66,4 +66,13 @@ public class GymService implements IGymService {
         return mapper.toGymDto(repository.save(gym));
     }
 
+    @Override
+    public Long findId(String gymName) {
+        Gym gym = repository.findByName(gymName)
+                            .orElseThrow(() -> new GymException(ExceptionType.FIND_GYM_ID_NOT_FOUND_GYM,
+                                                                gymName));
+
+        return gym.getId();
+    }
+
 }
