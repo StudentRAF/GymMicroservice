@@ -75,4 +75,14 @@ public class GymService implements IGymService {
         return gym.getId();
     }
 
+    @Override
+    public GymDto findGymWithId(Long id) {
+        Gym gym = repository.findById(id)
+                            .orElseThrow(() -> new GymException(ExceptionType.FIND_GYM_NOT_FOUND_GYM_ID,
+                                                                id.toString()));
+
+
+        return null;
+    }
+
 }
