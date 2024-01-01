@@ -37,6 +37,9 @@ public class UserTrainingSpecification extends BaseSpecification<UserTraining> {
     }
 
     private void addClientSpecification(Long clientId) {
+        if (clientId == null)
+            return;
+
         specifications.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(UserTraining.client()),
                                                                                    clientId));
     }

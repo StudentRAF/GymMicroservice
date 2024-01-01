@@ -33,4 +33,6 @@ public interface IGymService {
 
     Long findId(String gymName);
 
+    GymDto findGymWithId(Long id);
+
 }
