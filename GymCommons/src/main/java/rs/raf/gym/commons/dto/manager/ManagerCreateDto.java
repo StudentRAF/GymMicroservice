@@ -57,8 +57,7 @@ public class ManagerCreateDto {
 
     private LocalDate dateOfBirth;
 
-    @NotNull
-    @Positive
-    private Long gymId;
+    @NotBlank
+    private String gymName;
 
 }

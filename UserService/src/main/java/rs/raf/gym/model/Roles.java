@@ -23,7 +23,8 @@ public enum Roles {
 
     ADMIN("Admin"), //public static final Roles ADMIN = new Roles("Admin");
     MANAGER("Manager"),
-    CLIENT("Client");
+    CLIENT("Client"),
+    SERVICE("Service");
 
     private final String name;
 

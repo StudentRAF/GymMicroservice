@@ -42,9 +42,7 @@ public class ClientController {
     private final IUserService userService;
 
     @PostMapping("/register")
-    @CheckSecurity(roles = Roles.CLIENT)
-    public ResponseEntity<ClientDto> createClient(@RequestBody @Valid ClientCreateDto clientCreateDto,
-                                                  @RequestHeader(name = "authorization") String authorization) {
+    public ResponseEntity<ClientDto> createClient(@RequestBody @Valid ClientCreateDto clientCreateDto) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.createClient(clientCreateDto), HttpStatus.CREATED));
     }
 
