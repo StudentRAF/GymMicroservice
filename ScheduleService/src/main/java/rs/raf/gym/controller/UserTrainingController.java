@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,19 +45,22 @@ public class UserTrainingController {
     private final IUserTrainingService service;
 
     @GetMapping
-    public ResponseEntity<Page<UserTrainingDto>> filter(@RequestParam(value = "training", required = false) String training,
-                                                        @RequestParam(value = "client",   required = false) Long   client,
+    public ResponseEntity<Page<UserTrainingDto>> filter(@RequestParam (name = "training", required = false) String training,
+                                                        @RequestParam (name = "client",   required = false) Long   client,
+                                                        @RequestHeader(name = "authorization"             ) String token,
                                                         Pageable pageable) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(training, client, pageable), HttpStatus.OK));
     }
 
     @PostMapping
-    public ResponseEntity<UserTrainingDto> create(@RequestBody @Valid UserTrainingCreateDto createDto) {
+    public ResponseEntity<UserTrainingDto> create(@RequestBody @Valid                    UserTrainingCreateDto createDto,
+                                                  @RequestHeader(name = "authorization") String                token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.OK));
     }
 
     @PutMapping
-    public ResponseEntity<UserTrainingDto> update(@RequestBody @Valid UserTrainingUpdateDto updateDto) {
+    public ResponseEntity<UserTrainingDto> update(@RequestBody @Valid                    UserTrainingUpdateDto updateDto,
+                                                  @RequestHeader(name = "authorization") String                token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 

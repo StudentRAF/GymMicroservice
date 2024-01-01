@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,23 +47,26 @@ public class ClientTrainingAppointmentController {
     private final IClientTrainingAppointmentService service;
 
     @GetMapping
-    public ResponseEntity<Page<ClientTrainingAppointmentDto>> filter(@RequestParam(value = "gym",      required = false) String    gym,
-                                                                     @RequestParam(value = "training", required = false) String    training,
-                                                                     @RequestParam(value = "date",     required = false) LocalDate date,
-                                                                     @RequestParam(value = "time",     required = false) LocalTime time,
-                                                                     @RequestParam(value = "client",   required = false) Long      clientId,
-                                                                     @RequestParam(value = "status",   required = false) String    status,
+    public ResponseEntity<Page<ClientTrainingAppointmentDto>> filter(@RequestParam (name = "gym",      required = false) String    gym,
+                                                                     @RequestParam (name = "training", required = false) String    training,
+                                                                     @RequestParam (name = "date",     required = false) LocalDate date,
+                                                                     @RequestParam (name = "time",     required = false) LocalTime time,
+                                                                     @RequestParam (name = "client",   required = false) Long      clientId,
+                                                                     @RequestParam (name = "status",   required = false) String    status,
+                                                                     @RequestHeader(name = "authorization"             ) String    token,
                                                                      Pageable pageable) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(gym, training, date, time, status, clientId, pageable), HttpStatus.OK));
     }
 
     @PostMapping
-    public ResponseEntity<ClientTrainingAppointmentDto> create(@RequestBody @Valid ClientTrainingAppointmentCreateDto createDto) {
+    public ResponseEntity<ClientTrainingAppointmentDto> create(@RequestBody @Valid                    ClientTrainingAppointmentCreateDto createDto,
+                                                               @RequestHeader(name = "authorization") String                             token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
     }
 
     @PutMapping
-    public ResponseEntity<ClientTrainingAppointmentDto> update(@RequestBody @Valid ClientTrainingAppointmentUpdateDto updateDto) {
+    public ResponseEntity<ClientTrainingAppointmentDto> update(@RequestBody @Valid                    ClientTrainingAppointmentUpdateDto updateDto,
+                                                               @RequestHeader(name = "authorization") String                             token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 

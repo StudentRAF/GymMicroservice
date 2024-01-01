@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,18 +45,21 @@ public class TrainingTypeController {
     private final ITrainingTypeService service;
 
     @GetMapping
-    public ResponseEntity<Page<TrainingTypeDto>> filter(@RequestParam(value = "name", required = false) String name,
+    public ResponseEntity<Page<TrainingTypeDto>> filter(@RequestParam (name = "name", required = false) String name,
+                                                        @RequestHeader(name = "authorization"         ) String token,
                                                         Pageable pageable) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(name, pageable), HttpStatus.OK));
     }
 
     @PostMapping
-    public ResponseEntity<TrainingTypeDto> create(@RequestBody @Valid TrainingTypeCreateDto createDto) {
+    public ResponseEntity<TrainingTypeDto> create(@RequestBody @Valid                    TrainingTypeCreateDto createDto,
+                                                  @RequestHeader(name = "authorization") String                token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
     }
 
     @PutMapping
-    public ResponseEntity<TrainingTypeDto> update(@RequestBody @Valid TrainingTypeUpdateDto updateDto) {
+    public ResponseEntity<TrainingTypeDto> update(@RequestBody @Valid                    TrainingTypeUpdateDto updateDto,
+                                                  @RequestHeader(name = "authorization") String                token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 
