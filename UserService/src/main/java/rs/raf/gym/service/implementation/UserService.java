@@ -19,14 +19,15 @@ package rs.raf.gym.service.implementation;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMethod;
 import rs.raf.gym.UserMain;
 import rs.raf.gym.commons.dto.client.ClientCreateDto;
 import rs.raf.gym.commons.dto.client.ClientDto;
 import rs.raf.gym.commons.dto.client.ClientUpdateDto;
 import rs.raf.gym.commons.dto.gym.GymDto;
+import rs.raf.gym.commons.dto.gym.GymUpdateManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
@@ -62,6 +63,7 @@ public class UserService implements IUserService {
     private final UserMapper          userMapper;
     private final ITokenService       tokenService;
     private final SecurityAspect      securityAspect;
+    private final NetworkUtils        networkUtils;
 
     @Override
     public Page<UserDto> getAllUsers(String role, String firstname, String lastname, String username, Pageable pageable) {
@@ -104,14 +106,25 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new GymException(ExceptionType.CREATE_MANAGER_NOT_FOUND_USER_ROLE, Roles.MANAGER.getName()));
 
         User user = new User();
-        user.setGymId(NetworkUtils.request(RequestMethod.GET, "/schedule/gym/id/" + managerCreateDto.getGymName(), UserMain.TOKEN, Long.class));
+        user.setGymId(networkUtils.request(HttpMethod.GET, "/schedule/gym/id/" + managerCreateDto.getGymName(), UserMain.TOKEN, Long.class));
         user.setUserRole(userRole);
         userMapper.mapUser(user, managerCreateDto);
 
-        //todo post gym/manager/ + user.getId for gym table to save managerid ASYNC COMMUNICATION
-        //NetworkUtils.request(RequestMethod.POST, "/schedule/gym/manager/" + user.getId(), UserMain.TOKEN, Void.class);
+        User previousManager = userRepository.findUserByGymId(user.getGymId())
+                                             .orElse(null);
 
-        return userToManagerDto(userRepository.save(user), UserMain.TOKEN);
+        if (previousManager != null) { // if manager exists, he should be thrown out of gym
+            previousManager.setGymId(null);
+            previousManager.setAccess(false);
+            userRepository.save(previousManager);
+        }
+
+        user = userRepository.save(user);
+
+        networkUtils.asyncRequest(HttpMethod.PUT, "/schedule/gym/manager", UserMain.TOKEN,
+                new GymUpdateManagerDto(managerCreateDto.getGymName(), user.getId()), GymDto.class);
+
+        return userToManagerDto(user, UserMain.TOKEN);
     }
 
     @Override
@@ -140,8 +153,6 @@ public class UserService implements IUserService {
         User user = userRepository.findUserByUsername(managerUpdateDto.getOldUsername())
                 .orElseThrow(() -> new GymException(ExceptionType.UPDATE_MANAGER_NOT_FOUND_USERNAME, managerUpdateDto.getOldUsername()));
 
-        //update user
-        user.setGymId(NetworkUtils.request(RequestMethod.GET, "/schedule/gym/id/" + managerUpdateDto.getGymDto().getName(), UserMain.TOKEN, Long.class));
         userMapper.mapUser(user, managerUpdateDto);
 
         return userToManagerDto(userRepository.save(user), UserMain.TOKEN);
@@ -161,7 +172,7 @@ public class UserService implements IUserService {
         payload.put(User.id(), user.getId());
         payload.put(User.userRole(), user.getUserRole().getName());
 
-        return new UserTokenDto(userToUserDto(user, UserMain.TOKEN), tokenService.encrypt(payload));
+        return new UserTokenDto(userMapper.userToUserDto(user), tokenService.encrypt(payload));
     }
 
     @Override
@@ -175,14 +186,15 @@ public class UserService implements IUserService {
         UserDto userDto = userMapper.userToUserDto(user);
 
         if (user.getGymId() != null)
-            userDto.setGymDto(NetworkUtils.request(RequestMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class));
+            userDto.setGymDto(networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class));
 
         return userDto;
     }
 
     private ManagerDto userToManagerDto(User user, String token) {
         ManagerDto managerDto = userMapper.userToManagerDto(user);
-        managerDto.setGymDto(NetworkUtils.request(RequestMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class));
+        GymDto gymDto = networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class);
+        managerDto.setGymDto(gymDto);
 
         return managerDto;
     }

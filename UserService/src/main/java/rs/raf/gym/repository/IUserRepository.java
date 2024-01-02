@@ -25,6 +25,7 @@ import java.util.Optional;
 
 @Repository
 public interface IUserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+    Optional<User> findUserByGymId(Long gymId);
     Optional<User> findUserByUsername(String username);
     Optional<User> findUserByUsernameAndPassword(String username, String password);
 }

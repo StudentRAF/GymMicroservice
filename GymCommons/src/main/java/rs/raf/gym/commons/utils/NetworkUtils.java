@@ -16,45 +16,77 @@
 
 package rs.raf.gym.commons.utils;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.util.retry.Retry;
 
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
+@Component
 public class NetworkUtils {
 
-    private static final WebClient apiGateway = WebClient.create("http://localhost:8000/api");
+    private final WebClient apiGateway = WebClient.create("http://localhost:8000/api");
 
-    public static <Type> Type request(RequestMethod method, String uri, String token, Class<Type> typeClass) {
-        return switch (method) {
-            case GET  -> apiGateway.get()
-                                   .uri(uri)
-                                   .header("authorization", token)
-                                   .accept(MediaType.APPLICATION_JSON)
-                                   .retrieve()
-                                   .bodyToMono(typeClass)
-                                   .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
-                                   .block();
-            case PUT  -> apiGateway.put()
-                                   .uri(uri)
-                                   .header("authorization", token)
-                                   .accept(MediaType.APPLICATION_JSON)
-                                   .retrieve()
-                                   .bodyToMono(typeClass)
-                                   .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
-                                   .block();
-            case POST -> apiGateway.post()
-                                   .uri(uri)
-                                   .header("authorization", token)
-                                   .accept(MediaType.APPLICATION_JSON)
-                                   .retrieve()
-                                   .bodyToMono(typeClass)
-                                   .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
-                                   .block();
-            default -> null;
-        };
+    public <TypeReturn> TypeReturn request(HttpMethod method, String uri, String token, Class<TypeReturn> returnClass) {
+        return request(method, uri, token, null, returnClass);
+    }
+
+    public <TypeReturn> TypeReturn request(HttpMethod method, String uri, String token, Object content, Class<TypeReturn> returnClass) {
+        if (content == null)
+            return apiGateway.method(method)
+                             .uri(uri)
+                             .header("authorization", token)
+                             .accept(MediaType.APPLICATION_JSON)
+                             .retrieve()
+                             .bodyToMono(returnClass)
+                             .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
+                             .block();
+
+        return apiGateway.method(method)
+                         .uri(uri)
+                         .header("authorization", token)
+                         .contentType(MediaType.APPLICATION_JSON)
+                         .bodyValue(content)
+                         .accept(MediaType.APPLICATION_JSON)
+                         .retrieve()
+                         .bodyToMono(returnClass)
+                         .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
+                         .block();
+    }
+
+    @Async
+    public <TypeReturn> CompletableFuture<TypeReturn> asyncRequest(HttpMethod method, String uri, String token, Class<TypeReturn> returnClass) {
+        return asyncRequest(method, uri, token, null, returnClass);
+    }
+
+    @Async
+    public <TypeReturn> CompletableFuture<TypeReturn> asyncRequest(HttpMethod method, String uri, String token, Object content, Class<TypeReturn> returnClass) {
+        if (content == null)
+            return CompletableFuture.completedFuture(apiGateway.method(method)
+                                    .uri(uri)
+                                    .header("authorization", token)
+                                    .accept(MediaType.APPLICATION_JSON)
+                                    .retrieve()
+                                    .bodyToMono(returnClass)
+                                    .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
+                                    .block());
+
+        return CompletableFuture.completedFuture(apiGateway.method(method)
+                                .uri(uri)
+                                .header("authorization", token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(content)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .retrieve()
+                                .bodyToMono(returnClass)
+                                .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
+                                .block());
     }
 
 }
