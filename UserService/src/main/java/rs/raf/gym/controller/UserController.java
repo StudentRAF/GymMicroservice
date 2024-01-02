@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
+import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.service.IUserService;
@@ -38,13 +39,12 @@ public class UserController {
     private final IUserRoleService userRoleService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody @Valid UserLoginDto userLoginDto) {
+    public ResponseEntity<UserTokenDto> loginUser(@RequestBody @Valid UserLoginDto userLoginDto) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.login(userLoginDto), HttpStatus.OK));
     }
 
     @GetMapping("/role")
     public ResponseEntity<String> getRole(@RequestHeader(name = "authorization") String token) {
-        System.out.println("token: " + token);
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userRoleService.findRole(token), HttpStatus.OK));
     }
 
