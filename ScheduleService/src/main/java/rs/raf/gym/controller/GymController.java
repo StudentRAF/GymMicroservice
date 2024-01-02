@@ -77,7 +77,7 @@ public class GymController {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 
-    @PutMapping
+    @PutMapping("/manager")
     public ResponseEntity<GymDto> updateManager(@RequestBody @Valid                    GymUpdateManagerDto updateDto,
                                                 @RequestHeader(name = "authorization") String              token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.updateManager(updateDto), HttpStatus.OK));
