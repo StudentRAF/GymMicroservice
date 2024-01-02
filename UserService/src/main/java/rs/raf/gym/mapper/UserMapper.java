@@ -16,8 +16,14 @@
 
 package rs.raf.gym.mapper;
 
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.AllArgsConstructor;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 import rs.raf.gym.commons.dto.client.ClientCreateDto;
 import rs.raf.gym.commons.dto.client.ClientDto;
 import rs.raf.gym.commons.dto.client.ClientUpdateDto;
@@ -28,6 +34,10 @@ import rs.raf.gym.commons.dto.user.AdminCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.model.User;
+
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 
 @Component
 @AllArgsConstructor
@@ -46,7 +56,6 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         userDto.setDateOfBirth(user.getDateOfBirth());
         userDto.setMembershipId(user.getMembershipId());
-        userDto.setGymId(user.getGymId());
         userDto.setRecruitmentDate(user.getRecruitmentDate());
         userDto.setAccess(user.isAccess());
         userDto.setActivated(user.isActivated());
@@ -77,7 +86,6 @@ public class UserMapper {
         managerDto.setUsername(user.getUsername());
         managerDto.setEmail(user.getEmail());
         managerDto.setDateOfBirth(user.getDateOfBirth());
-        managerDto.setGymId(user.getGymId());
         managerDto.setRecruitmentDate(user.getRecruitmentDate());
 
         return managerDto;
@@ -137,7 +145,6 @@ public class UserMapper {
         user.setPassword(managerCreateDto.getPassword());
         user.setEmail(managerCreateDto.getEmail());
         user.setDateOfBirth(managerCreateDto.getDateOfBirth());
-        user.setGymId(managerCreateDto.getGymId());
 
         return user;
     }
@@ -149,7 +156,6 @@ public class UserMapper {
         user.setPassword(managerUpdateDto.getPassword());
         user.setEmail(managerUpdateDto.getEmail());
         user.setDateOfBirth(managerUpdateDto.getDateOfBirth());
-        user.setGymId(managerUpdateDto.getGymId());
 
         return user;
     }

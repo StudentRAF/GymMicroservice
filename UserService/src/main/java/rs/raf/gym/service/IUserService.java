@@ -27,6 +27,7 @@ import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
 import rs.raf.gym.commons.dto.user.AdminCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
+import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
 
@@ -49,7 +50,7 @@ public interface IUserService {
 
     ManagerDto updateManager(ManagerUpdateDto managerUpdateDto) throws GymException;
 
-    String login(UserLoginDto userLoginDto) throws GymException;
+    UserTokenDto login(UserLoginDto userLoginDto) throws GymException;
 
     Long findIdByToken(String token);
 }

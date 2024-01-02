@@ -21,18 +21,26 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.scheduling.annotation.EnableAsync;
 import rs.raf.gym.commons.exception.GymException;
 
+@EnableAsync
 @SpringBootApplication
 @PropertySources({
         @PropertySource("classpath:config/spring/local.properties"),
         @PropertySource("classpath:config/spring/application.properties")
 })
-public class Main {
+public class UserMain {
+
+    static {
+        TOKEN = "TODO";
+    }
+
+    public static final String TOKEN;
 
     public static void main(String[] args) {
-        GymException.setLogger(LoggerFactory.getLogger(Main.class));
-        SpringApplication.run(Main.class, args);
+        GymException.setLogger(LoggerFactory.getLogger(UserMain.class));
+        SpringApplication.run(UserMain.class, args);
     }
 
 }
