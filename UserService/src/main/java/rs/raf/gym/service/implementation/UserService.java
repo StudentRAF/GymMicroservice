@@ -33,6 +33,7 @@ import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
 import rs.raf.gym.commons.dto.user.AdminCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
+import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
 import rs.raf.gym.commons.utils.NetworkUtils;
@@ -147,7 +148,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String login(UserLoginDto userLoginDto) throws GymException {
+    public UserTokenDto login(UserLoginDto userLoginDto) throws GymException {
         User user = userRepository.findUserByUsernameAndPassword(userLoginDto.getUsername(), userLoginDto.getPassword())
                 .orElseThrow(() -> new GymException(ExceptionType.LOGIN_USER_NOT_FOUND_USERNAME_AND_PASSWORD, userLoginDto.getUsername(), userLoginDto.getPassword()));
 
@@ -160,7 +161,7 @@ public class UserService implements IUserService {
         payload.put(User.id(), user.getId());
         payload.put(User.userRole(), user.getUserRole().getName());
 
-        return tokenService.encrypt(payload);
+        return new UserTokenDto(userToUserDto(user, UserMain.TOKEN), tokenService.encrypt(payload));
     }
 
     @Override
@@ -172,16 +173,16 @@ public class UserService implements IUserService {
 
     private UserDto userToUserDto(User user, String token) {
         UserDto userDto = userMapper.userToUserDto(user);
-        GymDto gymDto = NetworkUtils.request(RequestMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class);
-        userDto.setGymDto(gymDto);
+
+        if (user.getGymId() != null)
+            userDto.setGymDto(NetworkUtils.request(RequestMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class));
 
         return userDto;
     }
 
     private ManagerDto userToManagerDto(User user, String token) {
         ManagerDto managerDto = userMapper.userToManagerDto(user);
-        GymDto gymDto = NetworkUtils.request(RequestMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class);
-        managerDto.setGymDto(gymDto);
+        managerDto.setGymDto(NetworkUtils.request(RequestMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class));
 
         return managerDto;
     }

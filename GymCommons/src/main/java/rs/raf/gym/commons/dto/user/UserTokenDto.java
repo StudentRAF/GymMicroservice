@@ -28,10 +28,8 @@ import rs.raf.gym.commons.dto.user_role.UserRoleDto;
 @NoArgsConstructor
 public class UserTokenDto {
 
-    private UserRoleDto userRole;
+    private UserDto userDto;
 
-    private String username;
-
-    private boolean canAccess; //NOTE: change in future (remove)
+    private String token;
 
 }
