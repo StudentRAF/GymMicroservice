@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.gym.GymCreateDto;
 import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateDto;
+import rs.raf.gym.commons.dto.gym.GymUpdateManagerDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.IGymService;
 
@@ -74,6 +75,12 @@ public class GymController {
     public ResponseEntity<GymDto> update(@RequestBody @Valid                    GymUpdateDto updateDto,
                                          @RequestHeader(name = "authorization") String       token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
+    }
+
+    @PutMapping
+    public ResponseEntity<GymDto> updateManager(@RequestBody @Valid                    GymUpdateManagerDto updateDto,
+                                                @RequestHeader(name = "authorization") String              token) {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.updateManager(updateDto), HttpStatus.OK));
     }
 
 }

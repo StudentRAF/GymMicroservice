@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import rs.raf.gym.commons.dto.gym.GymCreateDto;
 import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateDto;
+import rs.raf.gym.commons.dto.gym.GymUpdateManagerDto;
 import rs.raf.gym.commons.exception.GymException;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.GymMapper;
@@ -62,6 +63,17 @@ public class GymService implements IGymService {
                                                                 updateDto.getOldName()));
 
         mapper.map(gym, updateDto);
+
+        return mapper.toGymDto(repository.save(gym));
+    }
+
+    @Override
+    public GymDto updateManager(GymUpdateManagerDto updateDto) {
+        Gym gym = repository.findByName(updateDto.getGymName())
+                            .orElseThrow(() -> new GymException(ExceptionType.UPDATE_GYM_MANAGER_NOT_FOUND_GYM,
+                                                                updateDto.getGymName()));
+
+        gym.setManagerId(updateDto.getManagerId());
 
         return mapper.toGymDto(repository.save(gym));
     }

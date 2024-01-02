@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import rs.raf.gym.commons.dto.gym.GymCreateDto;
 import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateDto;
+import rs.raf.gym.commons.dto.gym.GymUpdateManagerDto;
 import rs.raf.gym.commons.exception.GymException;
 
 public interface IGymService {
@@ -30,6 +31,8 @@ public interface IGymService {
     GymDto create(GymCreateDto createDto);
 
     GymDto update(GymUpdateDto updateDto) throws GymException;
+
+    GymDto updateManager(GymUpdateManagerDto updateDto);
 
     Long findId(String gymName);
 
