@@ -61,13 +61,13 @@ public class ClientTrainingAppointmentController {
     @PostMapping
     public ResponseEntity<ClientTrainingAppointmentDto> create(@RequestBody @Valid                    ClientTrainingAppointmentCreateDto createDto,
                                                                @RequestHeader(name = "authorization") String                             token) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto, token), HttpStatus.CREATED));
     }
 
     @PutMapping
     public ResponseEntity<ClientTrainingAppointmentDto> update(@RequestBody @Valid                    ClientTrainingAppointmentUpdateDto updateDto,
                                                                @RequestHeader(name = "authorization") String                             token) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto, token), HttpStatus.OK));
     }
 
 }

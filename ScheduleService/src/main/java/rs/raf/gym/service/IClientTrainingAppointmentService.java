@@ -31,8 +31,8 @@ public interface IClientTrainingAppointmentService {
     Page<ClientTrainingAppointmentDto> findAll(String gym, String training, LocalDate date, LocalTime time,
                                                String status, Long clientId, Pageable pageable);
 
-    ClientTrainingAppointmentDto create(ClientTrainingAppointmentCreateDto createDto) throws GymException;
+    ClientTrainingAppointmentDto create(ClientTrainingAppointmentCreateDto createDto, String token) throws GymException;
 
-    ClientTrainingAppointmentDto update(ClientTrainingAppointmentUpdateDto updateDto) throws GymException;
+    ClientTrainingAppointmentDto update(ClientTrainingAppointmentUpdateDto updateDto, String token) throws GymException;
 
 }

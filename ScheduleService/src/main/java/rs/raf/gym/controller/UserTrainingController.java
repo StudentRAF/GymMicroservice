@@ -24,14 +24,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.commons.dto.user_training.UserTrainingCreateDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
@@ -52,16 +50,10 @@ public class UserTrainingController {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(training, client, pageable), HttpStatus.OK));
     }
 
-    @PostMapping
-    public ResponseEntity<UserTrainingDto> create(@RequestBody @Valid                    UserTrainingCreateDto createDto,
-                                                  @RequestHeader(name = "authorization") String                token) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.OK));
-    }
-
     @PutMapping
     public ResponseEntity<UserTrainingDto> update(@RequestBody @Valid                    UserTrainingUpdateDto updateDto,
                                                   @RequestHeader(name = "authorization") String                token) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto, token), HttpStatus.OK));
     }
 
 }

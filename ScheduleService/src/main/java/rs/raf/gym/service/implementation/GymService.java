@@ -93,7 +93,6 @@ public class GymService implements IGymService {
                             .orElseThrow(() -> new GymException(ExceptionType.FIND_GYM_NOT_FOUND_GYM_ID,
                                                                 id.toString()));
 
-
         return mapper.toGymDto(gym);
     }
 

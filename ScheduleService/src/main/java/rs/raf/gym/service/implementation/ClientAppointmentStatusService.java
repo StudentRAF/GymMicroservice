@@ -43,7 +43,7 @@ public class ClientAppointmentStatusService implements IClientAppointmentStatusS
         ClientAppointmentStatusSpecification specification = new ClientAppointmentStatusSpecification(name);
 
         return repository.findAll(specification.filter(), pageable)
-                         .map(mapper::toAppointmentStatusDto);
+                         .map(mapper::toClientAppointmentStatusDto);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ClientAppointmentStatusService implements IClientAppointmentStatusS
 
         mapper.map(appointmentStatus, createDto);
 
-        return mapper.toAppointmentStatusDto(repository.save(appointmentStatus));
+        return mapper.toClientAppointmentStatusDto(repository.save(appointmentStatus));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ClientAppointmentStatusService implements IClientAppointmentStatusS
 
         mapper.map(appointmentStatus, updateDto);
 
-        return mapper.toAppointmentStatusDto(repository.save(appointmentStatus));
+        return mapper.toClientAppointmentStatusDto(repository.save(appointmentStatus));
     }
 
 }

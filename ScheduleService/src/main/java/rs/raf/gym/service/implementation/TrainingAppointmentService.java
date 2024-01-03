@@ -31,6 +31,7 @@ import rs.raf.gym.model.Gym;
 import rs.raf.gym.model.GymTraining;
 import rs.raf.gym.model.Training;
 import rs.raf.gym.model.TrainingAppointment;
+import rs.raf.gym.model.data.AppointmentStatusType;
 import rs.raf.gym.repository.IAppointmentStatusRepository;
 import rs.raf.gym.repository.IGymRepository;
 import rs.raf.gym.repository.IGymTrainingRepository;
@@ -67,9 +68,9 @@ public class TrainingAppointmentService implements ITrainingAppointmentService {
     public TrainingAppointmentDto create(TrainingAppointmentCreateDto createDto) throws GymException {
         GymTraining gymTraining = findGymTraining(createDto.getGymName(), createDto.getTrainingName(), false);
 
-        AppointmentStatus appointmentStatus = statusRepository.findByName(createDto.getStatusName())
+        AppointmentStatus appointmentStatus = statusRepository.findByName(AppointmentStatusType.PENDING.getName())
                                                               .orElseThrow(() -> new GymException(ExceptionType.CREATE_TRAINING_APPOINTMENT_NOT_FOUND_APPOINTMENT_STATUS,
-                                                                                                  createDto.getStatusName()));
+                                                                                                  AppointmentStatusType.PENDING.getName()));
 
         TrainingAppointment trainingAppointment = new TrainingAppointment();
 
