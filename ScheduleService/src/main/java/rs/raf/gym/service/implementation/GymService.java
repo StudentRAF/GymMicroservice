@@ -88,12 +88,12 @@ public class GymService implements IGymService {
     }
 
     @Override
-    public GymDto findGymWithId(Long id) {
+    public GymDto findGymWithId(Long id, Boolean flag) {
         Gym gym = repository.findById(id)
                             .orElseThrow(() -> new GymException(ExceptionType.FIND_GYM_NOT_FOUND_GYM_ID,
                                                                 id.toString()));
 
-        return mapper.toGymDto(gym);
+        return mapper.toGymDto(gym, flag);
     }
 
 }

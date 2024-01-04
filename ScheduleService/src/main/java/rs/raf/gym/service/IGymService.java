@@ -36,6 +36,6 @@ public interface IGymService {
 
     Long findId(String gymName);
 
-    GymDto findGymWithId(Long id);
+    GymDto findGymWithId(Long id, Boolean flag);
 
 }

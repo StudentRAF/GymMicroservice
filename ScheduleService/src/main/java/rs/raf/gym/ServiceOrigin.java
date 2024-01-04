@@ -31,7 +31,7 @@ import rs.raf.gym.commons.exception.GymException;
 public class ServiceOrigin {
 
     static {
-        TOKEN = "TODO";
+        TOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwicm9sZSI6IlNlcnZpY2UifQ.JfgE3vdcKA0mnrm2o0qmvVx5UGfona19DfBsqROyDHg";
     }
 
     public static final String TOKEN;

@@ -24,6 +24,7 @@ import rs.raf.gym.commons.dto.gym.GymCreateDto;
 import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
+import rs.raf.gym.commons.mapper.DtoMapper;
 import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.model.Gym;
 
@@ -32,6 +33,7 @@ import rs.raf.gym.model.Gym;
 public class GymMapper {
 
     private final NetworkUtils networkUtils;
+    private final DtoMapper    dtoMapper;
 
     /**
      * Maps Gym to GymDto object.
@@ -41,8 +43,22 @@ public class GymMapper {
     public GymDto toGymDto(Gym gym) {
         return new GymDto(gym.getName(),
                           gym.getDescription(),
-                          gym.getManagerId() != null ? networkUtils.request(HttpMethod.GET, "/user/" + gym.getManagerId(), ServiceOrigin.TOKEN, UserDto.class)
+                          gym.getManagerId() != null ? dtoMapper.toManagerNoGymDto(networkUtils.request(HttpMethod.GET, "/user/" + gym.getManagerId(), ServiceOrigin.TOKEN, UserDto.class))
                                                      : null,
+                          gym.getTrainers());
+    }
+
+    /**
+     * Maps Gym to GymDto object.
+     * @param gym gym
+     * @return GymDto object
+     */
+    public GymDto toGymDto(Gym gym, Boolean flag) {
+        return new GymDto(gym.getName(),
+                          gym.getDescription(),
+                          flag ? gym.getManagerId() != null ? dtoMapper.toManagerNoGymDto(networkUtils.request(HttpMethod.GET, "/user/" + gym.getManagerId(), ServiceOrigin.TOKEN, UserDto.class))
+                                                     : null
+                               : null,
                           gym.getTrainers());
     }
 
