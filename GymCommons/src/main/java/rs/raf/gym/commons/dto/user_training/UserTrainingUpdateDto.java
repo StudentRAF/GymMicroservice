@@ -17,9 +17,6 @@
 package rs.raf.gym.commons.dto.user_training;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,16 +29,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserTrainingUpdateDto {
 
-    @NotNull
-    @Positive
-    private Long clientId;
-
     @NotBlank
     @Size(max = 40)
     private String trainingName;
-
-    @NotNull
-    @PositiveOrZero
-    private Integer count;
 
 }

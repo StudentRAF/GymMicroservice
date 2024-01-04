@@ -30,7 +30,7 @@ public class ClientAppointmentStatusMapper {
      * @param appointmentStatus appointment status
      * @return ClientAppointmentStatusDto object
      */
-    public ClientAppointmentStatusDto toAppointmentStatusDto(ClientAppointmentStatus appointmentStatus) {
+    public ClientAppointmentStatusDto toClientAppointmentStatusDto(ClientAppointmentStatus appointmentStatus) {
         return new ClientAppointmentStatusDto(appointmentStatus.getName());
     }
 

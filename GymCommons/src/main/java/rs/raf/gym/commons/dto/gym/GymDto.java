@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.raf.gym.commons.dto.user.UserDto;
 
 @Setter
 @Getter
@@ -31,7 +32,7 @@ public class GymDto {
 
     private String description;
 
-    private Long managerId;
+    private UserDto manager;
 
     private Integer trainers;
 

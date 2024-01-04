@@ -52,8 +52,4 @@ public class TrainingAppointmentCreateDto {
     @Positive
     private Integer duration;
 
-    @NotBlank
-    @Size(max = 30)
-    private String statusName;
-
 }

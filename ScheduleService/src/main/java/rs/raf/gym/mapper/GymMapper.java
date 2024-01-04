@@ -16,14 +16,22 @@
 
 package rs.raf.gym.mapper;
 
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+import rs.raf.gym.ServiceOrigin;
 import rs.raf.gym.commons.dto.gym.GymCreateDto;
 import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateDto;
+import rs.raf.gym.commons.dto.user.UserDto;
+import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.model.Gym;
 
 @Component
+@AllArgsConstructor
 public class GymMapper {
+
+    private final NetworkUtils networkUtils;
 
     /**
      * Maps Gym to GymDto object.
@@ -33,7 +41,8 @@ public class GymMapper {
     public GymDto toGymDto(Gym gym) {
         return new GymDto(gym.getName(),
                           gym.getDescription(),
-                          gym.getManagerId(),
+                          gym.getManagerId() != null ? networkUtils.request(HttpMethod.GET, "/user/" + gym.getManagerId(), ServiceOrigin.TOKEN, UserDto.class)
+                                                     : null,
                           gym.getTrainers());
     }
 
@@ -60,7 +69,6 @@ public class GymMapper {
     public Gym map(Gym gym, GymUpdateDto updateDto) {
         gym.setName(updateDto.getName());
         gym.setDescription(updateDto.getDescription());
-        gym.setManagerId(updateDto.getManagerId());
         gym.setTrainers(updateDto.getTrainers());
 
         return gym;

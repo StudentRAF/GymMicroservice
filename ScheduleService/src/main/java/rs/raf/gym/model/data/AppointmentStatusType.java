@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023. Lazar Dobrota and Nemanja Radovanovic
+ * Copyright (C) 2024. Lazar Dobrota and Nemanja Radovanovic
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,36 +14,19 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.commons.dto.gym;
+package rs.raf.gym.model.data;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class GymUpdateDto {
+public enum AppointmentStatusType {
 
-    @NotBlank
-    @Size(max = 40)
-    private String oldName;
+    PENDING ("Pending" ),
+    HELD    ("Held"    ),
+    CANCELED("Canceled");
 
-    @NotBlank
-    @Size(max = 40)
-    private String name;
-
-    @Size(max = 1000)
-    private String description;
-
-    @NotNull
-    @PositiveOrZero
-    private Integer trainers;
+    private final String name;
 
 }

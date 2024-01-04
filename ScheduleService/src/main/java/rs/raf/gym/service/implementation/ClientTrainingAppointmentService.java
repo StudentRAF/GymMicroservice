@@ -19,11 +19,15 @@ package rs.raf.gym.service.implementation;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import rs.raf.gym.ServiceOrigin;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
+import rs.raf.gym.commons.dto.user.UserAuthorizationDto;
 import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.ClientTrainingAppointmentMapper;
 import rs.raf.gym.model.ClientAppointmentStatus;
@@ -32,6 +36,7 @@ import rs.raf.gym.model.Gym;
 import rs.raf.gym.model.GymTraining;
 import rs.raf.gym.model.Training;
 import rs.raf.gym.model.TrainingAppointment;
+import rs.raf.gym.model.data.ClientAppointmentStatusType;
 import rs.raf.gym.repository.IClientAppointmentStatusRepository;
 import rs.raf.gym.repository.IClientTrainingAppointmentRepository;
 import rs.raf.gym.repository.IGymRepository;
@@ -55,6 +60,7 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
     private final ITrainingAppointmentRepository       trainingAppointmentRepository;
     private final IClientAppointmentStatusRepository   statusRepository;
     private final ClientTrainingAppointmentMapper      mapper;
+    private final NetworkUtils                         networkUtils;
 
     @Override
     public Page<ClientTrainingAppointmentDto> findAll(String gym, String training, LocalDate date, LocalTime time,
@@ -71,27 +77,33 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
     }
 
     @Override
-    public ClientTrainingAppointmentDto create(ClientTrainingAppointmentCreateDto createDto) throws GymException {
+    public ClientTrainingAppointmentDto create(ClientTrainingAppointmentCreateDto createDto, String token) throws GymException {
+        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
+
         TrainingAppointment trainingAppointment = findTrainingAppointment(createDto.getGymName(),
                                                                           createDto.getTrainingName(),
                                                                           createDto.getDate(),
                                                                           createDto.getTime(),
                                                                           false);
 
-        ClientAppointmentStatus status = statusRepository.findByName(createDto.getStatusName())
+        ClientAppointmentStatus status = statusRepository.findByName(ClientAppointmentStatusType.REQUESTED.getName())
                                                          .orElseThrow(() -> new GymException(ExceptionType.CREATE_CLIENT_TRAINING_APPOINTMENT_NOT_FOUND_CLIENT_APPOINTMENT_STATUS,
-                                                                                             createDto.getStatusName()));
+                                                                                             ClientAppointmentStatusType.REQUESTED.getName()));
 
         ClientTrainingAppointment clientTrainingAppointment = new ClientTrainingAppointment();
+
+        clientTrainingAppointment.setClientId(clientId);
         clientTrainingAppointment.setTrainingAppointment(trainingAppointment);
         clientTrainingAppointment.setStatus(status);
         mapper.map(clientTrainingAppointment, createDto);
 
-        return mapper.toClientTrainingAppointmentDto(repository.save(clientTrainingAppointment));
+        return mapper.toClientTrainingAppointmentDto(clientTrainingAppointment);
     }
 
     @Override
-    public ClientTrainingAppointmentDto update(ClientTrainingAppointmentUpdateDto updateDto) throws GymException {
+    public ClientTrainingAppointmentDto update(ClientTrainingAppointmentUpdateDto updateDto, String token) throws GymException {
+        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
+
         TrainingAppointment trainingAppointment = findTrainingAppointment(updateDto.getGymName(),
                                                                           updateDto.getTrainingName(),
                                                                           updateDto.getDate(),
@@ -102,16 +114,15 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
                                                          .orElseThrow(() -> new GymException(ExceptionType.UPDATE_CLIENT_TRAINING_APPOINTMENT_NOT_FOUND_CLIENT_APPOINTMENT_STATUS,
                                                                                              updateDto.getStatusName()));
 
-        ClientTrainingAppointment clientTrainingAppointment = repository.findByTrainingAppointmentAndClientId(trainingAppointment,
-                                                                                                              updateDto.getClientId())
+        ClientTrainingAppointment clientTrainingAppointment = repository.findByTrainingAppointmentAndClientId(trainingAppointment, clientId)
                                                                         .orElseThrow(() -> new GymException(ExceptionType.UPDATE_CLIENT_TRAINING_APPOINTMENT_NOT_FOUND_CLIENT_TRAINING_APPOINTMENT,
                                                                                                             updateDto.getGymName(), updateDto.getTrainingName(), updateDto.getDate().toString(),
-                                                                                                            updateDto.getTime().toString(), updateDto.getClientId().toString()));
+                                                                                                            updateDto.getTime().toString(), clientId.toString()));
 
         clientTrainingAppointment.setStatus(status);
         mapper.map(clientTrainingAppointment, updateDto);
 
-        return mapper.toClientTrainingAppointmentDto(repository.save(clientTrainingAppointment));
+        return mapper.toClientTrainingAppointmentDto(clientTrainingAppointment);
     }
 
     private TrainingAppointment findTrainingAppointment(String gymName, String trainingName, LocalDate date, LocalTime time, boolean update) throws GymException {

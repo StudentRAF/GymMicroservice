@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.raf.gym.commons.dto.training.TrainingDto;
+import rs.raf.gym.commons.dto.user.UserDto;
 
 @Setter
 @Getter
@@ -28,7 +29,7 @@ import rs.raf.gym.commons.dto.training.TrainingDto;
 @AllArgsConstructor
 public class UserTrainingDto {
 
-    private Long clientId;
+    private UserDto client;
 
     private TrainingDto training;
 

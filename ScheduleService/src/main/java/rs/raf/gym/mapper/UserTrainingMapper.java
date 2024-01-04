@@ -17,10 +17,13 @@
 package rs.raf.gym.mapper;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import rs.raf.gym.commons.dto.user_training.UserTrainingCreateDto;
+import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
+import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.model.UserTraining;
 
 @Component
@@ -28,6 +31,7 @@ import rs.raf.gym.model.UserTraining;
 public class UserTrainingMapper {
 
     private final TrainingMapper trainingMapper;
+    private final NetworkUtils   networkUtils;
 
     /**
      * Maps UserTraining to UserTrainingDto object.
@@ -35,22 +39,9 @@ public class UserTrainingMapper {
      * @return UserTrainingDto object
      */
     public UserTrainingDto toUserTrainingDto(UserTraining userTraining) {
-        return new UserTrainingDto(userTraining.getClientId(),
+        return new UserTrainingDto(networkUtils.request(HttpMethod.GET, "/user/" + userTraining.getClientId(), ServiceOrigin.TOKEN, UserDto.class),
                                    trainingMapper.toTrainingDto(userTraining.getTraining()),
                                    userTraining.getCount());
-    }
-
-    /**
-     * Maps UserTrainingCreateDto to existing UserTraining object.
-     * @param userTraining user training
-     * @param createDto create dto
-     * @return UserTraining object
-     */
-    public UserTraining map(UserTraining userTraining, UserTrainingCreateDto createDto) {
-        userTraining.setClientId(createDto.getClientId());
-        userTraining.setCount(0);
-
-        return userTraining;
     }
 
     /**
@@ -60,8 +51,6 @@ public class UserTrainingMapper {
      * @return UserTraining object
      */
     public UserTraining map(UserTraining userTraining, UserTrainingUpdateDto updateDto) {
-        userTraining.setCount(updateDto.getCount());
-
         return userTraining;
     }
 

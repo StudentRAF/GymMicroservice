@@ -17,10 +17,14 @@
 package rs.raf.gym.mapper;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+import rs.raf.gym.ServiceOrigin;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
+import rs.raf.gym.commons.dto.user.UserDto;
+import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.model.ClientTrainingAppointment;
 
 @Component
@@ -29,6 +33,7 @@ public class ClientTrainingAppointmentMapper {
 
     private final TrainingAppointmentMapper     trainingAppointmentMapper;
     private final ClientAppointmentStatusMapper clientAppointmentStatusMapper;
+    private final NetworkUtils                  networkUtils;
 
     /**
      * Maps ClientTrainingAppointment to ClientTrainingAppointmentDto object.
@@ -37,8 +42,8 @@ public class ClientTrainingAppointmentMapper {
      */
     public ClientTrainingAppointmentDto toClientTrainingAppointmentDto(ClientTrainingAppointment trainingAppointment) {
         return new ClientTrainingAppointmentDto(trainingAppointmentMapper.toTrainingAppointmentDto(trainingAppointment.getTrainingAppointment()),
-                                                trainingAppointment.getClientId(),
-                                                clientAppointmentStatusMapper.toAppointmentStatusDto(trainingAppointment.getStatus()));
+                                                networkUtils.request(HttpMethod.GET, "/user/" + trainingAppointment.getClientId(), ServiceOrigin.TOKEN, UserDto.class),
+                                                clientAppointmentStatusMapper.toClientAppointmentStatusDto(trainingAppointment.getStatus()));
     }
 
     /**
@@ -47,10 +52,7 @@ public class ClientTrainingAppointmentMapper {
      * @param createDto create dto
      * @return ClientTrainingAppointment object
      */
-    public ClientTrainingAppointment map(ClientTrainingAppointment trainingAppointment,
-                                         ClientTrainingAppointmentCreateDto createDto) {
-        trainingAppointment.setClientId(createDto.getClientId());
-
+    public ClientTrainingAppointment map(ClientTrainingAppointment trainingAppointment, ClientTrainingAppointmentCreateDto createDto) {
         return trainingAppointment;
     }
 
@@ -60,8 +62,7 @@ public class ClientTrainingAppointmentMapper {
      * @param updateDto update dto
      * @return ClientTrainingAppointment object
      */
-    public ClientTrainingAppointment map(ClientTrainingAppointment trainingAppointment,
-                                         ClientTrainingAppointmentUpdateDto updateDto) {
+    public ClientTrainingAppointment map(ClientTrainingAppointment trainingAppointment,  ClientTrainingAppointmentUpdateDto updateDto) {
         return trainingAppointment;
     }
 

@@ -19,11 +19,14 @@ package rs.raf.gym.service.implementation;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import rs.raf.gym.commons.dto.user_training.UserTrainingCreateDto;
+import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.dto.user.UserAuthorizationDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserTrainingMapper;
 import rs.raf.gym.model.Training;
@@ -40,6 +43,7 @@ public class UserTrainingService implements IUserTrainingService {
     private final IUserTrainingRepository repository;
     private final ITrainingRepository     trainingRepository;
     private final UserTrainingMapper      mapper;
+    private final NetworkUtils            networkUtils;
 
     @Override
     public Page<UserTrainingDto> findAll(String training, Long clientId, Pageable pageable) {
@@ -50,29 +54,24 @@ public class UserTrainingService implements IUserTrainingService {
     }
 
     @Override
-    public UserTrainingDto create(UserTrainingCreateDto createDto) throws GymException {
-        UserTraining userTraining = new UserTraining();
+    public UserTrainingDto update(UserTrainingUpdateDto updateDto, String token) throws GymException {
+        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
 
-        Training training = trainingRepository.findByName(createDto.getTrainingName())
-                                              .orElseThrow(() -> new GymException(ExceptionType.CREATE_USER_TRAINING_NOT_FOUND_TRAINING,
-                                                                                  createDto.getTrainingName()));
-
-        userTraining.setTraining(training);
-        mapper.map(userTraining, createDto);
-
-        return mapper.toUserTrainingDto(repository.save(userTraining));
-    }
-
-    @Override
-    public UserTrainingDto update(UserTrainingUpdateDto updateDto) throws GymException {
         Training training = trainingRepository.findByName(updateDto.getTrainingName())
                                               .orElseThrow(() -> new GymException(ExceptionType.UPDATE_USER_TRAINING_NOT_FOUND_TRAINING,
                                                                                   updateDto.getTrainingName()));
 
-        UserTraining userTraining = repository.findByTrainingAndClientId(training, updateDto.getClientId())
-                                              .orElseThrow(() -> new GymException(ExceptionType.UPDATE_USER_TRAINING_NOT_FOUND_USER_TRAINING,
-                                                                                  updateDto.getTrainingName(), updateDto.getClientId().toString()));
+        UserTraining userTraining = repository.findByTrainingAndClientId(training, clientId)
+                                              .orElse(null);
 
+        if (userTraining == null) {
+            userTraining = new UserTraining();
+            userTraining.setTraining(training);
+            userTraining.setClientId(clientId);
+            userTraining.setCount(0);
+        }
+
+        userTraining.setCount((userTraining.getCount() + 1) / training.getLoyalty());
         mapper.map(userTraining, updateDto);
 
         return mapper.toUserTrainingDto(repository.save(userTraining));
