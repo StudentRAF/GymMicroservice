@@ -21,13 +21,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import rs.raf.gym.commons.dto.client.ClientDto;
+import rs.raf.gym.commons.dto.user.UserAuthorizationDto;
+import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
 import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.model.Roles;
+import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.service.IUserService;
 
@@ -44,13 +50,15 @@ public class UserController {
     }
 
     @GetMapping("/role")
-    public ResponseEntity<String> getRole(@RequestHeader(name = "authorization") String token) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userRoleService.findRole(token), HttpStatus.OK));
+    @CheckSecurity(roles = Roles.SERVICE)
+    public ResponseEntity<String> getRole( @RequestBody @Valid UserAuthorizationDto userAuthorizationDto, @RequestHeader(name = "authorization") String token) {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userRoleService.findRole(userAuthorizationDto.getToken()), HttpStatus.OK));
     }
 
     @GetMapping("/id")
-    public ResponseEntity<Long> getId(@RequestHeader(name = "authorization") String token) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findIdByToken(token), HttpStatus.OK));
+    @CheckSecurity(roles = Roles.SERVICE)
+    public ResponseEntity<Long> getId(@RequestBody @Valid UserAuthorizationDto userAuthorizationDto, @RequestHeader(name = "authorization") String token) {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findIdByToken(userAuthorizationDto.getToken()), HttpStatus.OK));
     }
 
 }
