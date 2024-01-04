@@ -54,9 +54,10 @@ public class GymController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GymDto> findGym(@PathVariable (name = "id"           ) Long   id,
-                                          @RequestHeader(name = "authorization") String token) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findGymWithId(id),HttpStatus.OK));
+    public ResponseEntity<GymDto> findGym(@PathVariable (name = "id"                             ) Long    id,
+                                          @RequestParam (name = "flag",          required = false) Boolean flag,
+                                          @RequestHeader(name = "authorization"                  ) String  token) {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findGymWithId(id, flag != null && flag), HttpStatus.OK));
     }
 
     @GetMapping("/id/{gym}")

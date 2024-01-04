@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.commons.dto.gym.GymDto;
+import rs.raf.gym.commons.dto.gym.GymNoManagerDto;
 import rs.raf.gym.commons.dto.user_role.UserRoleDto;
 
 import java.time.LocalDate;
@@ -43,7 +43,7 @@ public class ManagerDto {
 
     private LocalDate dateOfBirth;
 
-    private GymDto gymDto;
+    private GymNoManagerDto gymDto;
 
     private LocalDate recruitmentDate;
 
