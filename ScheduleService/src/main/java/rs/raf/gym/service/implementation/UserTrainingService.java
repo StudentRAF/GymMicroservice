@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.dto.user.UserAuthorizationDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
