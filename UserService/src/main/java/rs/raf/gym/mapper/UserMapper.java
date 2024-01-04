@@ -20,30 +20,36 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
+import rs.raf.gym.UserMain;
 import rs.raf.gym.commons.dto.client.ClientCreateDto;
 import rs.raf.gym.commons.dto.client.ClientDto;
 import rs.raf.gym.commons.dto.client.ClientUpdateDto;
+import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
 import rs.raf.gym.commons.dto.user.AdminCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
+import rs.raf.gym.commons.mapper.DtoMapper;
+import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.model.User;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-
 
 @Component
 @AllArgsConstructor
 public class UserMapper {
 
     private final UserRoleMapper userRoleMapper;
+    private final NetworkUtils   networkUtils;
+    private final DtoMapper      dtoMapper;
 
     public UserDto userToUserDto(User user) {
         UserDto userDto = new UserDto();
@@ -59,6 +65,9 @@ public class UserMapper {
         userDto.setRecruitmentDate(user.getRecruitmentDate());
         userDto.setAccess(user.isAccess());
         userDto.setActivated(user.isActivated());
+
+        if (user.getGymId() != null)
+            userDto.setGym(networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), UserMain.TOKEN, GymDto.class));
 
         return userDto;
     }
@@ -88,6 +97,9 @@ public class UserMapper {
         managerDto.setDateOfBirth(user.getDateOfBirth());
         managerDto.setRecruitmentDate(user.getRecruitmentDate());
 
+        if (user.getGymId() != null)
+            managerDto.setGym(dtoMapper.toGymNoManagerDto(networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), UserMain.TOKEN, GymDto.class)));
+
         return managerDto;
     }
 
@@ -109,9 +121,6 @@ public class UserMapper {
         user.setPassword(adminCreateDto.getPassword());
         user.setEmail(adminCreateDto.getEmail());
         user.setDateOfBirth(adminCreateDto.getDateOfBirth());
-        user.setGymId(adminCreateDto.getGymId());
-        user.setAccess(adminCreateDto.isAccess());
-        user.setActivated(adminCreateDto.isActivated());
 
         return user;
     }

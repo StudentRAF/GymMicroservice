@@ -34,19 +34,19 @@ public class NetworkUtils {
     private final WebClient apiGateway = WebClient.create("http://localhost:8000/api");
 
     public <TypeReturn> TypeReturn request(HttpMethod method, String uri, String token, Class<TypeReturn> returnClass) {
-        return request(method, uri, token, null, returnClass);
+        return apiGateway.method(method)
+                         .uri(uri)
+                         .header("authorization", token)
+                         .accept(MediaType.APPLICATION_JSON)
+                         .retrieve()
+                         .bodyToMono(returnClass)
+                         .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
+                         .block();
     }
 
     public <TypeReturn> TypeReturn request(HttpMethod method, String uri, String token, Object content, Class<TypeReturn> returnClass) {
         if (content == null)
-            return apiGateway.method(method)
-                             .uri(uri)
-                             .header("authorization", token)
-                             .accept(MediaType.APPLICATION_JSON)
-                             .retrieve()
-                             .bodyToMono(returnClass)
-                             .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
-                             .block();
+            return null;
 
         return apiGateway.method(method)
                          .uri(uri)
@@ -62,20 +62,20 @@ public class NetworkUtils {
 
     @Async
     public <TypeReturn> CompletableFuture<TypeReturn> asyncRequest(HttpMethod method, String uri, String token, Class<TypeReturn> returnClass) {
-        return asyncRequest(method, uri, token, null, returnClass);
+        return CompletableFuture.completedFuture(apiGateway.method(method)
+                                .uri(uri)
+                                .header("authorization", token)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .retrieve()
+                                .bodyToMono(returnClass)
+                                .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
+                                .block());
     }
 
     @Async
     public <TypeReturn> CompletableFuture<TypeReturn> asyncRequest(HttpMethod method, String uri, String token, Object content, Class<TypeReturn> returnClass) {
         if (content == null)
-            return CompletableFuture.completedFuture(apiGateway.method(method)
-                                    .uri(uri)
-                                    .header("authorization", token)
-                                    .accept(MediaType.APPLICATION_JSON)
-                                    .retrieve()
-                                    .bodyToMono(returnClass)
-                                    .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(2)))
-                                    .block());
+            return null;
 
         return CompletableFuture.completedFuture(apiGateway.method(method)
                                 .uri(uri)

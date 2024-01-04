@@ -61,7 +61,8 @@ public class AdminController {
 
     @GetMapping("/{id}")
     @CheckSecurity(roles = Roles.ADMIN)
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id, @RequestHeader(name = "authorization") String authorization) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id,
+                                               @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findById(id), HttpStatus.OK));
     }
 

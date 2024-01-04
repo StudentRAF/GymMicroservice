@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import rs.raf.gym.commons.dto.client.ClientDto;
 import rs.raf.gym.commons.dto.user.UserAuthorizationDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
@@ -59,6 +58,11 @@ public class UserController {
     @CheckSecurity(roles = Roles.SERVICE)
     public ResponseEntity<Long> getId(@RequestBody @Valid UserAuthorizationDto userAuthorizationDto, @RequestHeader(name = "authorization") String token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findIdByToken(userAuthorizationDto.getToken()), HttpStatus.OK));
+    }
+
+    @GetMapping("/activate/{token}")
+    public ResponseEntity<UserDto> activateAccount(@PathVariable("token") String token) {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.activateAccount(token), HttpStatus.ACCEPTED));
     }
 
 }

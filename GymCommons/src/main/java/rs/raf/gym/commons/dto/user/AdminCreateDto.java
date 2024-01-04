@@ -61,13 +61,4 @@ public class AdminCreateDto {
 
     private LocalDate dateOfBirth;
 
-    @Positive
-    private Long gymId;
-
-    @NotNull
-    private boolean access;
-
-    @NotNull
-    private boolean activated;
-
 }

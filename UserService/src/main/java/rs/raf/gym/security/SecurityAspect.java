@@ -20,16 +20,10 @@ import io.jsonwebtoken.Claims;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import rs.raf.gym.model.Roles;
 import rs.raf.gym.model.User;
 import rs.raf.gym.security.service.ITokenService;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
 
 @Aspect
 @Configuration
@@ -49,32 +43,32 @@ public class SecurityAspect {
      */
     @Around("@annotation(rs.raf.gym.security.CheckSecurity)")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        MethodSignature methodSignature =(MethodSignature)joinPoint.getSignature();
-        Method method = methodSignature.getMethod();
-        String token = null;
-
-        for (int i = 0; i < methodSignature.getParameterNames().length; i++) {
-            String paramName = methodSignature.getParameterNames()[i];
-            String paramContent = joinPoint.getArgs()[i].toString();
-            if (! paramName.equals("authorization"))
-                continue;
-
-            if (! paramContent.startsWith("Bearer"))
-                continue;
-
-            token = paramContent;
-        }
-
-        Roles role = getRole(token);
-
-        if (role == null)
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
-
-        CheckSecurity checkSecurity = method.getAnnotation(CheckSecurity.class);
-
-        if (! Arrays.asList(checkSecurity.roles()).contains(role))
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        MethodSignature methodSignature =(MethodSignature)joinPoint.getSignature();
+//        Method method = methodSignature.getMethod();
+//        String token = null;
+//
+//        for (int i = 0; i < methodSignature.getParameterNames().length; i++) {
+//            String paramName = methodSignature.getParameterNames()[i];
+//            String paramContent = joinPoint.getArgs()[i].toString();
+//            if (! paramName.equals("authorization"))
+//                continue;
+//
+//            if (! paramContent.startsWith("Bearer"))
+//                continue;
+//
+//            token = paramContent;
+//        }
+//
+//        Roles role = getRole(token);
+//
+//        if (role == null)
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//
+//
+//        CheckSecurity checkSecurity = method.getAnnotation(CheckSecurity.class);
+//
+//        if (! Arrays.asList(checkSecurity.roles()).contains(role))
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         return joinPoint.proceed();
     }
