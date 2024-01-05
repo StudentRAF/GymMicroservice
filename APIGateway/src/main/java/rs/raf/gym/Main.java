@@ -23,6 +23,13 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import java.util.Collections;
+import java.util.List;
 
 @SpringBootApplication
 @PropertySources({
@@ -35,6 +42,7 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
+    @CrossOrigin
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
@@ -48,6 +56,20 @@ public class Main {
                                                    .filters(filter -> filter.rewritePath("/api/notification/(?<route>.*)", "/notification/${route}"))
                                                    .uri("lb://NOTIFICATION-SERVICE"))
                       .build();
+    }
+
+    @Bean
+    public CorsWebFilter corsWebFilter() {
+
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT"));
+        corsConfig.addAllowedHeader("Authorization");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", corsConfig);
+
+        return new CorsWebFilter(source);
     }
 
 }
