@@ -65,6 +65,7 @@ public class Main {
         corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
         corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT"));
         corsConfig.addAllowedHeader("Authorization");
+        corsConfig.addAllowedHeader("Content-Type");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", corsConfig);
