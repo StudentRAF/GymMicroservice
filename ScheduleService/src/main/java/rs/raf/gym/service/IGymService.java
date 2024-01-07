@@ -24,7 +24,11 @@ import rs.raf.gym.commons.dto.gym.GymUpdateDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateManagerDto;
 import rs.raf.gym.commons.exception.GymException;
 
+import java.util.List;
+
 public interface IGymService {
+
+    List<GymDto> getAll();
 
     Page<GymDto> findAll(String name, Integer managerId, Pageable pageable);
 

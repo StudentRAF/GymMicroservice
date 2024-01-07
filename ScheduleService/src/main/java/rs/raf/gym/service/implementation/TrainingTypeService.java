@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rs.raf.gym.commons.dto.training.TrainingDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeCreateDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeUpdateDto;
@@ -31,12 +32,22 @@ import rs.raf.gym.repository.ITrainingTypeRepository;
 import rs.raf.gym.service.ITrainingTypeService;
 import rs.raf.gym.specification.TrainingTypeSpecification;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class TrainingTypeService implements ITrainingTypeService {
 
     private final ITrainingTypeRepository repository;
     private final TrainingTypeMapper      mapper;
+
+    @Override
+    public List<TrainingTypeDto> getAll() {
+        return repository.findAll()
+                         .stream()
+                         .map(mapper::toTrainingTypeDto)
+                         .toList();
+    }
 
     @Override
     public Page<TrainingTypeDto> findAll(String name, Pageable pageable) {

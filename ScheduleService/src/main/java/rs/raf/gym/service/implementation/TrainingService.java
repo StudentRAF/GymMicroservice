@@ -33,6 +33,8 @@ import rs.raf.gym.repository.ITrainingTypeRepository;
 import rs.raf.gym.service.ITrainingService;
 import rs.raf.gym.specification.TrainingSpecification;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class TrainingService implements ITrainingService {
@@ -40,6 +42,14 @@ public class TrainingService implements ITrainingService {
     private final ITrainingRepository     repository;
     private final ITrainingTypeRepository trainingTypeRepository;
     private final TrainingMapper          mapper;
+
+    @Override
+    public List<TrainingDto> getAll() {
+        return repository.findAll()
+                         .stream()
+                         .map(mapper::toTrainingDto)
+                         .toList();
+    }
 
     @Override
     public Page<TrainingDto> findAll(String name, String type, Integer loyalty, Pageable pageable) {

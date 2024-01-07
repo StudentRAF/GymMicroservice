@@ -36,12 +36,19 @@ import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.IAppointmentStatusService;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/appointment-status")
 public class AppointmentStatusController {
 
     private final IAppointmentStatusService service;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<AppointmentStatusDto>> getAll() {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.getAll(), HttpStatus.OK));
+    }
 
     @GetMapping
     public ResponseEntity<Page<AppointmentStatusDto>> filter(@RequestParam (name = "name", required = false) String name,

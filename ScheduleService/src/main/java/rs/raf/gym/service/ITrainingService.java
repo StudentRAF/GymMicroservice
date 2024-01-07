@@ -23,7 +23,11 @@ import rs.raf.gym.commons.dto.training.TrainingDto;
 import rs.raf.gym.commons.dto.training.TrainingUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
 
+import java.util.List;
+
 public interface ITrainingService {
+
+    List<TrainingDto> getAll();
 
     Page<TrainingDto> findAll(String name, String type, Integer loyalty, Pageable pageable);
 

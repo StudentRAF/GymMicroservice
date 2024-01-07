@@ -23,7 +23,11 @@ import rs.raf.gym.commons.dto.training_type.TrainingTypeDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
 
+import java.util.List;
+
 public interface ITrainingTypeService {
+
+    List<TrainingTypeDto> getAll();
 
     Page<TrainingTypeDto> findAll(String name, Pageable pageable);
 
