@@ -16,6 +16,7 @@
 
 package rs.raf.gym.commons.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,12 +45,14 @@ public class UserDto {
 
     private String email;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate dateOfBirth;
 
     private UUID membershipId;
 
     private GymDto gym;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate recruitmentDate;
 
     private boolean access;

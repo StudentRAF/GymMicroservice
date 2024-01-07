@@ -28,7 +28,7 @@ import rs.raf.gym.commons.dto.user_role.UserRoleDto;
 @NoArgsConstructor
 public class UserTokenDto {
 
-    private UserDto userDto;
+    private UserDto user;
 
     private String token;
 

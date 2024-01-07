@@ -16,6 +16,7 @@
 
 package rs.raf.gym.commons.dto.client;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -57,6 +58,7 @@ public class ClientUpdateDto {
     @Size(max = 50)
     private String email;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate dateOfBirth;
 
 }
