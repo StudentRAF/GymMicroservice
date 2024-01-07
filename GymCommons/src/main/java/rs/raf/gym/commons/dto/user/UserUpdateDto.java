@@ -16,6 +16,7 @@
 
 package rs.raf.gym.commons.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -61,10 +62,12 @@ public class UserUpdateDto {
     @Size(min = 1, max = 50)
     private String email;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate dateOfBirth;
 
     private String gymName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate recruitmentDate;
 
     @NotNull
