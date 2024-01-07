@@ -32,12 +32,22 @@ import rs.raf.gym.repository.IGymRepository;
 import rs.raf.gym.service.IGymService;
 import rs.raf.gym.specification.GymSpecification;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class GymService implements IGymService {
 
     private final IGymRepository repository;
     private final GymMapper      mapper;
+
+    @Override
+    public List<GymDto> getAll() {
+        return repository.findAll()
+                         .stream()
+                         .map(mapper::toGymDto)
+                         .toList();
+    }
 
     @Override
     public Page<GymDto> findAll(String name, Integer managerId, Pageable pageable) {

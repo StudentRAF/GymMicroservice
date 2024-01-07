@@ -37,12 +37,19 @@ import rs.raf.gym.commons.dto.training_type.TrainingTypeUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.ITrainingTypeService;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/training-type")
 public class TrainingTypeController {
 
     private final ITrainingTypeService service;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<TrainingTypeDto>> getAll() {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.getAll(), HttpStatus.OK));
+    }
 
     @GetMapping
     public ResponseEntity<Page<TrainingTypeDto>> filter(@RequestParam (name = "name", required = false) String name,

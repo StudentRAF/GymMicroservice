@@ -23,7 +23,11 @@ import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusD
 import rs.raf.gym.commons.dto.client_appointment_status.ClientAppointmentStatusUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
 
+import java.util.List;
+
 public interface IClientAppointmentStatusService {
+
+    List<ClientAppointmentStatusDto> getAll();
 
     Page<ClientAppointmentStatusDto> findAll(String name, Pageable pageable);
 

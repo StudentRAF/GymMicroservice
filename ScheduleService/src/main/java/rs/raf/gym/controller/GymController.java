@@ -38,12 +38,19 @@ import rs.raf.gym.commons.dto.gym.GymUpdateManagerDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.IGymService;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/gym")
 public class GymController {
 
     private final IGymService service;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<GymDto>> getAll() {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.getAll(), HttpStatus.OK));
+    }
 
     @GetMapping
     public ResponseEntity<Page<GymDto>> filter(@RequestParam (name = "name",    required = false) String  name,

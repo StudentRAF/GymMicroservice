@@ -31,12 +31,22 @@ import rs.raf.gym.repository.IClientAppointmentStatusRepository;
 import rs.raf.gym.service.IClientAppointmentStatusService;
 import rs.raf.gym.specification.ClientAppointmentStatusSpecification;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class ClientAppointmentStatusService implements IClientAppointmentStatusService {
 
     private final IClientAppointmentStatusRepository repository;
     private final ClientAppointmentStatusMapper      mapper;
+
+    @Override
+    public List<ClientAppointmentStatusDto> getAll() {
+        return repository.findAll()
+                         .stream()
+                         .map(mapper::toClientAppointmentStatusDto)
+                         .toList();
+    }
 
     @Override
     public Page<ClientAppointmentStatusDto> findAll(String name, Pageable pageable) {

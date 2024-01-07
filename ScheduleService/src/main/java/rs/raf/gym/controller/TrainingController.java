@@ -33,7 +33,10 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.training.TrainingCreateDto;
 import rs.raf.gym.commons.dto.training.TrainingDto;
 import rs.raf.gym.commons.dto.training.TrainingUpdateDto;
+import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.service.ITrainingService;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -41,6 +44,11 @@ import rs.raf.gym.service.ITrainingService;
 public class TrainingController {
 
     private final ITrainingService service;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<TrainingDto>> getAll() {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.getAll(), HttpStatus.OK));
+    }
 
     @GetMapping
     public ResponseEntity<Page<TrainingDto>> filter(@RequestParam (name = "name",    required = false) String  name,
