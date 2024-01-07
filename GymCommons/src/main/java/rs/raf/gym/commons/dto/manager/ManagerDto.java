@@ -43,7 +43,7 @@ public class ManagerDto {
 
     private LocalDate dateOfBirth;
 
-    private GymNoManagerDto gymDto;
+    private GymNoManagerDto gym;
 
     private LocalDate recruitmentDate;
 

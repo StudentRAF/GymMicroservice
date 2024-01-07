@@ -53,4 +53,7 @@ public interface IUserService {
     UserTokenDto login(UserLoginDto userLoginDto) throws GymException;
 
     Long findIdByToken(String token);
+
+    UserDto activateAccount(String token);
+
 }

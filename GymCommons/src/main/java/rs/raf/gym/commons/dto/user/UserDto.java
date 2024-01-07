@@ -48,7 +48,7 @@ public class UserDto {
 
     private UUID membershipId;
 
-    private GymDto gymDto;
+    private GymDto gym;
 
     private LocalDate recruitmentDate;
 

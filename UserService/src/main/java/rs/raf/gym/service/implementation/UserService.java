@@ -37,6 +37,7 @@ import rs.raf.gym.commons.dto.user.UserLoginDto;
 import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.commons.mapper.DtoMapper;
 import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserMapper;
@@ -70,13 +71,13 @@ public class UserService implements IUserService {
         UserSpecification specification = new UserSpecification(role, firstname, lastname, username);
 
         return userRepository.findAll(specification.filter(), pageable)
-                .map((user) -> userToUserDto(user, UserMain.TOKEN));
+                .map(userMapper::userToUserDto);
     }
 
     @Override
     public UserDto findById(Long id) throws GymException {
-        return userToUserDto(userRepository.findById(id)
-                .orElseThrow(() -> new GymException(ExceptionType.FIND_ID_USER_NOT_FOUND_USER, id.toString())), UserMain.TOKEN);
+        return userMapper.userToUserDto(userRepository.findById(id)
+                .orElseThrow(() -> new GymException(ExceptionType.FIND_ID_USER_NOT_FOUND_USER, id.toString())));
     }
 
     @Override
@@ -87,7 +88,7 @@ public class UserService implements IUserService {
         User user = new User();
         user.setUserRole(userRole);
         userMapper.mapUser(user, adminCreateDto);
-        return userToUserDto(userRepository.save(user), UserMain.TOKEN);
+        return userMapper.userToUserDto(userRepository.save(user));
     }
 
     @Override
@@ -124,7 +125,7 @@ public class UserService implements IUserService {
         networkUtils.asyncRequest(HttpMethod.PUT, "/schedule/gym/manager", UserMain.TOKEN,
                 new GymUpdateManagerDto(managerCreateDto.getGymName(), user.getId()), GymDto.class);
 
-        return userToManagerDto(user, UserMain.TOKEN);
+        return userMapper.userToManagerDto(user);
     }
 
     @Override
@@ -134,7 +135,7 @@ public class UserService implements IUserService {
 
         userMapper.mapUser(user, userUpdateDto);
 
-        return userToUserDto(userRepository.save(user), UserMain.TOKEN);
+        return userMapper.userToUserDto(userRepository.save(user));
     }
 
     @Override
@@ -147,7 +148,7 @@ public class UserService implements IUserService {
         return userMapper.userToClientDto(userRepository.save(user));
     }
 
-
+    //note: manager can't update its gym, only admin can
     @Override
     public ManagerDto updateManager(ManagerUpdateDto managerUpdateDto) throws GymException {
         User user = userRepository.findUserByUsername(managerUpdateDto.getOldUsername())
@@ -155,7 +156,7 @@ public class UserService implements IUserService {
 
         userMapper.mapUser(user, managerUpdateDto);
 
-        return userToManagerDto(userRepository.save(user), UserMain.TOKEN);
+        return userMapper.userToManagerDto(userRepository.save(user));
     }
 
     @Override
@@ -182,20 +183,16 @@ public class UserService implements IUserService {
         return id;
     }
 
-    private UserDto userToUserDto(User user, String token) {
-        UserDto userDto = userMapper.userToUserDto(user);
-
-        if (user.getGymId() != null)
-            userDto.setGymDto(networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class));
-
-        return userDto;
+    /**
+     * Activate account when someone registers
+     * @param token credentials of that person
+     * @return UserDto if everything is alright
+     */
+    @Override
+    public UserDto activateAccount(String token) {
+        Long id = findIdByToken(token);
+        User user = userRepository.findById(id).orElseThrow(() -> new GymException(ExceptionType.ACTIVATE_USER_NOT_FOUND_USER, id.toString()));
+        return userMapper.userToUserDto(user);
     }
 
-    private ManagerDto userToManagerDto(User user, String token) {
-        ManagerDto managerDto = userMapper.userToManagerDto(user);
-        GymDto gymDto = networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), token, GymDto.class);
-        managerDto.setGymDto(gymDto);
-
-        return managerDto;
-    }
 }

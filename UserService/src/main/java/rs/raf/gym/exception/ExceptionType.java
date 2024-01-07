@@ -40,7 +40,8 @@ public enum ExceptionType implements IException {
 
     LOGIN_USER_NOT_FOUND_USERNAME_AND_PASSWORD("Could not login User. User with username \"{0}\" and password \"{1}\" does not exist", Severity.WARNING, HttpStatus.BAD_REQUEST),
     LOGIN_USER_NOT_ACTIVATED                  ("Could not login User. User with username \"{0}\" is not activated",                    Severity.WARNING, HttpStatus.BAD_REQUEST),
-    LOGIN_USER_NOT_ACCESS                     ("Could not login User. User with username \"{0}\" does not have access",                Severity.WARNING, HttpStatus.BAD_REQUEST);
+    LOGIN_USER_NOT_ACCESS                     ("Could not login User. User with username \"{0}\" does not have access",                Severity.WARNING, HttpStatus.BAD_REQUEST),
+    ACTIVATE_USER_NOT_FOUND_USER              ("Could not activate User. User with id \"{0}\" does not exist",  Severity.ERROR, HttpStatus.BAD_REQUEST);
 
     private final String     pattern;
     private final Severity   severity;
