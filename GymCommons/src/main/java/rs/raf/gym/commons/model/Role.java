@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023. Lazar Dobrota and Nemanja Radovanovic
+ * Copyright (C) 2024. Lazar Dobrota and Nemanja Radovanovic
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.model;
+package rs.raf.gym.commons.model;
 
 import lombok.Getter;
 
@@ -37,12 +37,6 @@ public enum Roles {
         return this.name;
     }
 
-    public UserRole getObject() {
-        UserRole userRole = new UserRole();
-        userRole.setName(this.name);
-        return userRole;
-    }
-
     public static Roles findRole(String name) {
         for (Roles role : Roles.values())
             if (role.name.equals(name))
@@ -51,7 +45,4 @@ public enum Roles {
         return null;
     }
 
-    public boolean isEqual(UserRole userRole) {
-        return userRole.getName().equals(this.name);
-    }
 }

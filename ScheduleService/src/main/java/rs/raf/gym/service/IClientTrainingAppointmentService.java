@@ -29,7 +29,7 @@ import java.time.LocalTime;
 public interface IClientTrainingAppointmentService {
 
     Page<ClientTrainingAppointmentDto> findAll(String gym, String training, LocalDate date, LocalTime time,
-                                               String status, Long clientId, Pageable pageable);
+                                               String status, String token, Pageable pageable);
 
     ClientTrainingAppointmentDto create(ClientTrainingAppointmentCreateDto createDto, String token) throws GymException;
 

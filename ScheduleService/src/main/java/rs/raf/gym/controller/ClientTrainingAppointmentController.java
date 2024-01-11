@@ -51,11 +51,10 @@ public class ClientTrainingAppointmentController {
                                                                      @RequestParam (name = "training", required = false) String    training,
                                                                      @RequestParam (name = "date",     required = false) LocalDate date,
                                                                      @RequestParam (name = "time",     required = false) LocalTime time,
-                                                                     @RequestParam (name = "client",   required = false) Long      clientId,
                                                                      @RequestParam (name = "status",   required = false) String    status,
                                                                      @RequestHeader(name = "authorization"             ) String    token,
                                                                      Pageable pageable) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(gym, training, date, time, status, clientId, pageable), HttpStatus.OK));
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(gym, training, date, time, status, token, pageable), HttpStatus.OK));
     }
 
     @PostMapping

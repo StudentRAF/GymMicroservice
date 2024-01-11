@@ -55,7 +55,7 @@ public class TrainingAppointmentController {
                                                                @RequestParam (name = "status",   required = false) String    status,
                                                                @RequestHeader(name = "authorization"             ) String    token,
                                                                Pageable pageable) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(gym, training, date, time, duration, status, pageable), HttpStatus.OK));
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findAll(gym, training, date, time, duration, status, token, pageable), HttpStatus.OK));
     }
 
     @PostMapping
