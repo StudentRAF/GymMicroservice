@@ -26,7 +26,7 @@ import rs.raf.gym.commons.dto.user_role.UserRoleUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserRoleMapper;
-import rs.raf.gym.model.Roles;
+import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.model.UserRole;
 import rs.raf.gym.repository.IUserRoleRepository;
 import rs.raf.gym.security.SecurityAspect;
@@ -66,7 +66,7 @@ public class UserRoleService implements IUserRoleService {
 
     @Override
     public String findRole(String token) throws GymException {
-        Roles role = securityAspect.getRole(token);
+        Role role = securityAspect.getRole(token);
         if (role == null) throw new GymException(ExceptionType.FIND_ROLE_NOT_FOUND_USER_ROLE);
         return role.getName();
     }

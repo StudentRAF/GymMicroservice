@@ -21,7 +21,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.context.annotation.Configuration;
-import rs.raf.gym.model.Roles;
+import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.model.User;
 import rs.raf.gym.security.service.ITokenService;
 
@@ -73,24 +73,24 @@ public class SecurityAspect {
         return joinPoint.proceed();
     }
 
-    public Roles getRole(String token) {
+    public Role getRole(String token) {
         if (token == null)
             return null;
 
-        token = token.split(" ")[1];
+//        token = token.split(" ")[1];
         Claims payload = tokenService.decipherToken(token);
 
         if (payload == null)
             return null;
 
-        return Roles.findRole(payload.get(User.userRole(), String.class));
+        return Role.findRole(payload.get(User.userRole(), String.class));
     }
 
     public Long getId(String token) {
         if (token == null)
             return null;
 
-        token = token.split(" ")[1];
+//        token = token.split(" ")[1];
         Claims payload = tokenService.decipherToken(token);
 
         if (payload == null)

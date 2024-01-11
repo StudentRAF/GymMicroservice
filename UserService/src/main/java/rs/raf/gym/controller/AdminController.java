@@ -36,7 +36,7 @@ import rs.raf.gym.commons.dto.user_role.UserRoleCreateDto;
 import rs.raf.gym.commons.dto.user_role.UserRoleDto;
 import rs.raf.gym.commons.dto.user_role.UserRoleUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
-import rs.raf.gym.model.Roles;
+import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.service.IUserService;
@@ -49,7 +49,7 @@ public class AdminController {
     private final IUserRoleService userRoleService;
 
     @GetMapping(value = "/all")
-    @CheckSecurity(roles = Roles.ADMIN)
+    @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<Page<UserDto>> getAllUsers(@RequestParam(name = "role",      required = false) String role,
                                                      @RequestParam(name = "firstname", required = false) String firstname,
                                                      @RequestParam(name = "lastname",  required = false) String lastname,
@@ -60,20 +60,20 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
-    @CheckSecurity(roles = Roles.ADMIN)
+    @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id,
                                                @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findById(id), HttpStatus.OK));
     }
 
     @PutMapping("/update")
-    @CheckSecurity(roles = Roles.ADMIN)
+    @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto, @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.updateUser(userUpdateDto), HttpStatus.ACCEPTED));
     }
 
     @GetMapping("/role/all")
-    @CheckSecurity(roles = Roles.ADMIN)
+    @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<Page<UserRoleDto>> getAllUserRoles(@RequestParam(name = "role", required = false) String role,
                                                              @RequestHeader(name = "authorization") String authorization,
                                                              Pageable pageable) {
@@ -81,14 +81,14 @@ public class AdminController {
     }
 
     @PostMapping("/role")
-    @CheckSecurity(roles = Roles.ADMIN)
+    @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<UserRoleDto> createUserRole(@RequestBody @Valid UserRoleCreateDto userRoleCreateDto,
                                                       @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userRoleService.createUserRole(userRoleCreateDto), HttpStatus.ACCEPTED));
     }
 
     @PutMapping("/role")
-    @CheckSecurity(roles = Roles.ADMIN)
+    @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<UserRoleDto> updateUserRole(@RequestBody @Valid UserRoleUpdateDto userRoleUpdateDto,
                                                       @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userRoleService.updateUserRole(userRoleUpdateDto), HttpStatus.ACCEPTED));

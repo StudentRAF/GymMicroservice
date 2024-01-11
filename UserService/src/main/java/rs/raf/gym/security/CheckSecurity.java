@@ -16,7 +16,7 @@
 
 package rs.raf.gym.security;
 
-import rs.raf.gym.model.Roles;
+import rs.raf.gym.commons.model.Role;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,5 +27,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CheckSecurity {
 
-    Roles[] roles() default {};
+    Role[] roles() default {};
 }

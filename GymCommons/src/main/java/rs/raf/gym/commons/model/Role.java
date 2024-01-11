@@ -19,7 +19,7 @@ package rs.raf.gym.commons.model;
 import lombok.Getter;
 
 @Getter
-public enum Roles {
+public enum Role {
 
     ADMIN("Admin"), //public static final Roles ADMIN = new Roles("Admin");
     MANAGER("Manager"),
@@ -28,7 +28,7 @@ public enum Roles {
 
     private final String name;
 
-    Roles(String name) {
+    Role(String name) {
         this.name = name;
     }
 
@@ -37,8 +37,8 @@ public enum Roles {
         return this.name;
     }
 
-    public static Roles findRole(String name) {
-        for (Roles role : Roles.values())
+    public static Role findRole(String name) {
+        for (Role role : Role.values())
             if (role.name.equals(name))
                 return role;
 
