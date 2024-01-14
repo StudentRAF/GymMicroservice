@@ -37,11 +37,10 @@ import rs.raf.gym.commons.dto.user.UserLoginDto;
 import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
-import rs.raf.gym.commons.mapper.DtoMapper;
 import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserMapper;
-import rs.raf.gym.model.Roles;
+import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.model.User;
 import rs.raf.gym.model.UserRole;
 import rs.raf.gym.repository.IUserRepository;
@@ -82,8 +81,8 @@ public class UserService implements IUserService {
 
     @Override
     public UserDto createAdmin(AdminCreateDto adminCreateDto) throws GymException {
-        UserRole userRole = userRoleRepository.findByName(Roles.ADMIN.getName())
-                .orElseThrow(() -> new GymException(ExceptionType.CREATE_ADMIN_NOT_FOUND_USER_ROLE, Roles.ADMIN.getName()));
+        UserRole userRole = userRoleRepository.findByName(Role.ADMIN.getName())
+                .orElseThrow(() -> new GymException(ExceptionType.CREATE_ADMIN_NOT_FOUND_USER_ROLE, Role.ADMIN.getName()));
 
         User user = new User();
         user.setUserRole(userRole);
@@ -93,8 +92,8 @@ public class UserService implements IUserService {
 
     @Override
     public ClientDto createClient(ClientCreateDto clientCreateDto) throws GymException {
-        UserRole userRole = userRoleRepository.findByName(Roles.CLIENT.getName())
-                .orElseThrow(() -> new GymException(ExceptionType.CREATE_CLIENT_NOT_FOUND_USER_ROLE, Roles.CLIENT.getName()));
+        UserRole userRole = userRoleRepository.findByName(Role.CLIENT.getName())
+                .orElseThrow(() -> new GymException(ExceptionType.CREATE_CLIENT_NOT_FOUND_USER_ROLE, Role.CLIENT.getName()));
         User user = new User();
         user.setUserRole(userRole);
         userMapper.mapUser(user, clientCreateDto);
@@ -103,8 +102,8 @@ public class UserService implements IUserService {
 
     @Override
     public ManagerDto createManager(ManagerCreateDto managerCreateDto) throws GymException {
-        UserRole userRole = userRoleRepository.findByName(Roles.MANAGER.getName())
-                .orElseThrow(() -> new GymException(ExceptionType.CREATE_MANAGER_NOT_FOUND_USER_ROLE, Roles.MANAGER.getName()));
+        UserRole userRole = userRoleRepository.findByName(Role.MANAGER.getName())
+                .orElseThrow(() -> new GymException(ExceptionType.CREATE_MANAGER_NOT_FOUND_USER_ROLE, Role.MANAGER.getName()));
 
         User user = new User();
         user.setGymId(networkUtils.request(HttpMethod.GET, "/schedule/gym/id/" + managerCreateDto.getGymName(), UserMain.TOKEN, Long.class));

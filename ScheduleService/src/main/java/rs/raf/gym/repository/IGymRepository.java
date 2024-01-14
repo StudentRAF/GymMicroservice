@@ -27,4 +27,6 @@ public interface IGymRepository extends JpaSpecificationRepository<Gym, Long> {
 
     Optional<Gym> findByName(String name);
 
+    Optional<Gym> findByManagerId(Long managerId);
+
 }

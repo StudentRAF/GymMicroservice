@@ -27,6 +27,7 @@ import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointm
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
 import rs.raf.gym.commons.dto.user.UserAuthorizationDto;
 import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.ClientTrainingAppointmentMapper;
@@ -64,13 +65,20 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
 
     @Override
     public Page<ClientTrainingAppointmentDto> findAll(String gym, String training, LocalDate date, LocalTime time,
-                                                      String status, Long clientId, Pageable pageable) {
+                                                      String status, String token, Pageable pageable) {
+        Long userId = null;
+        Role role   = Role.valueOf(networkUtils.request(HttpMethod.GET, "/user/role", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), String.class)
+                                                   .toUpperCase());
+
+        if (Role.CLIENT.equals(role))
+            userId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
+
         ClientTrainingAppointmentSpecification specification = new ClientTrainingAppointmentSpecification(gym,
                                                                                                           training,
                                                                                                           date,
                                                                                                           time,
                                                                                                           status,
-                                                                                                          clientId);
+                                                                                                          Role.CLIENT.equals(role) ? userId : null);
 
         return repository.findAll(specification.filter(), pageable)
                          .map(mapper::toClientTrainingAppointmentDto);

@@ -30,7 +30,7 @@ import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
-import rs.raf.gym.model.Roles;
+import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserService;
 
@@ -41,14 +41,14 @@ public class ManagerController {
     private final IUserService userService;
 
     @PostMapping("/register")
-    @CheckSecurity(roles = Roles.ADMIN)
+    @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<ManagerDto> createManager(@RequestBody @Valid ManagerCreateDto managerCreateDto,
                                                     @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.createManager(managerCreateDto), HttpStatus.CREATED));
     }
 
     @PutMapping("/update")
-    @CheckSecurity(roles = Roles.MANAGER)
+    @CheckSecurity(roles = Role.MANAGER)
     public ResponseEntity<ManagerDto> updateManager(@RequestBody @Valid ManagerUpdateDto managerUpdateDto,
                                                     @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.updateManager(managerUpdateDto), HttpStatus.ACCEPTED));

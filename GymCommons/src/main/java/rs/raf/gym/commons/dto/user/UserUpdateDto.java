@@ -35,9 +35,6 @@ import java.time.LocalDate;
 public class UserUpdateDto {
 
     @NotBlank
-    private String userRole;
-
-    @NotBlank
     @Size(max = 30)
     private String firstname;
 

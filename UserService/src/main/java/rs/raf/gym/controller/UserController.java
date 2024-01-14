@@ -31,7 +31,7 @@ import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
 import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
-import rs.raf.gym.model.Roles;
+import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.security.CheckSecurity;
 import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.service.IUserService;
@@ -49,13 +49,13 @@ public class UserController {
     }
 
     @GetMapping("/role")
-    @CheckSecurity(roles = Roles.SERVICE)
+    @CheckSecurity(roles = Role.SERVICE)
     public ResponseEntity<String> getRole( @RequestBody @Valid UserAuthorizationDto userAuthorizationDto, @RequestHeader(name = "authorization") String token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userRoleService.findRole(userAuthorizationDto.getToken()), HttpStatus.OK));
     }
 
     @GetMapping("/id")
-    @CheckSecurity(roles = Roles.SERVICE)
+    @CheckSecurity(roles = Role.SERVICE)
     public ResponseEntity<Long> getId(@RequestBody @Valid UserAuthorizationDto userAuthorizationDto, @RequestHeader(name = "authorization") String token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findIdByToken(userAuthorizationDto.getToken()), HttpStatus.OK));
     }

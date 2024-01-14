@@ -28,8 +28,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
+import rs.raf.gym.commons.model.Role;
 
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.UUID;
 
 @Getter
@@ -81,9 +83,11 @@ public class User {
     //When insert in database is called
     @PrePersist
     protected void onInsert() {
-        if (Roles.CLIENT.isEqual(this.userRole))
+        Role role = Role.valueOf(this.userRole.getName().toUpperCase());
+
+        if (Role.CLIENT.equals(role))
             this.setMembershipId(UUID.randomUUID());
-        else if (Roles.MANAGER.isEqual(this.userRole))
+        else if (Role.MANAGER.equals(role))
             this.setRecruitmentDate(LocalDate.now());
 
         this.access = true;
