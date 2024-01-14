@@ -15,4 +15,14 @@ public class ExceptionUtils {
         }
     }
 
+    public static <Type> Type handleException(Supplier<Type> supplier) {
+        try {
+            return supplier.get();
+        }
+        catch (Exception exception) {
+            exception.printStackTrace(System.out);
+        }
+        return null;
+    }
+
 }
