@@ -67,7 +67,7 @@ public class AdminController {
     }
 
     @GetMapping()
-    @CheckSecurity(roles = Roles.ADMIN)
+    @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<UserDto> getUserByUsername(@RequestParam(name = "username",  required = false) String username,
                                                @RequestHeader(name = "authorization") String authorization) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findByUsername(username), HttpStatus.OK));
