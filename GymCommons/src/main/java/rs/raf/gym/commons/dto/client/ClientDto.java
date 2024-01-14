@@ -40,6 +40,8 @@ public class ClientDto {
 
     private String username;
 
+    private String password;
+
     private String email;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")

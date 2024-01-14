@@ -16,10 +16,12 @@
 
 package rs.raf.gym.service.implementation;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.raf.gym.UserMain;
@@ -31,12 +33,15 @@ import rs.raf.gym.commons.dto.gym.GymUpdateManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerCreateDto;
 import rs.raf.gym.commons.dto.manager.ManagerDto;
 import rs.raf.gym.commons.dto.manager.ManagerUpdateDto;
+import rs.raf.gym.commons.dto.notification.NotificationBodyDto;
 import rs.raf.gym.commons.dto.user.AdminCreateDto;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user.UserLoginDto;
 import rs.raf.gym.commons.dto.user.UserTokenDto;
 import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.commons.message_broker.Converter;
+import rs.raf.gym.commons.message_broker.MailFormat;
 import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserMapper;
@@ -55,7 +60,7 @@ import java.util.Map;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService implements IUserService {
 
     private final IUserRepository     userRepository;
@@ -64,6 +69,11 @@ public class UserService implements IUserService {
     private final ITokenService       tokenService;
     private final SecurityAspect      securityAspect;
     private final NetworkUtils        networkUtils;
+
+    @Value("${queue.location}")
+    private       String              destinationNameRegister;
+    private final Converter           converter;
+    private final JmsTemplate         jmsTemplate;
 
     @Override
     public Page<UserDto> getAllUsers(String role, String firstname, String lastname, String username, Pageable pageable) {
@@ -97,7 +107,11 @@ public class UserService implements IUserService {
         User user = new User();
         user.setUserRole(userRole);
         userMapper.mapUser(user, clientCreateDto);
-        return userMapper.userToClientDto(userRepository.save(user));
+
+        user = userRepository.save(user);
+        sendRegisterNotification(user);
+
+        return userMapper.userToClientDto(user);
     }
 
     @Override
@@ -106,7 +120,7 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new GymException(ExceptionType.CREATE_MANAGER_NOT_FOUND_USER_ROLE, Role.MANAGER.getName()));
 
         User user = new User();
-        user.setGymId(networkUtils.request(HttpMethod.GET, "/schedule/gym/id/" + managerCreateDto.getGymName(), UserMain.TOKEN, Long.class));
+        user.setGymId(networkUtils.request(HttpMethod.GET, "/schedule/gym/id/" + managerCreateDto.getGym(), UserMain.TOKEN, Long.class));
         user.setUserRole(userRole);
         userMapper.mapUser(user, managerCreateDto);
 
@@ -122,7 +136,9 @@ public class UserService implements IUserService {
         user = userRepository.save(user);
 
         networkUtils.asyncRequest(HttpMethod.PUT, "/schedule/gym/manager", UserMain.TOKEN,
-                new GymUpdateManagerDto(managerCreateDto.getGymName(), user.getId()), GymDto.class);
+                new GymUpdateManagerDto(managerCreateDto.getGym(), user.getId()), GymDto.class);
+
+        sendRegisterNotification(user);
 
         return userMapper.userToManagerDto(user);
     }
@@ -132,9 +148,15 @@ public class UserService implements IUserService {
         User user = userRepository.findUserByUsername(userUpdateDto.getOldUsername())
                 .orElseThrow(() -> new GymException(ExceptionType.UPDATE_USER_NOT_FOUND_USERNAME, userUpdateDto.getOldUsername()));
 
-        userMapper.mapUser(user, userUpdateDto);
+        String oldPassword = user.getPassword();
 
-        return userMapper.userToUserDto(userRepository.save(user));
+        userMapper.mapUser(user, userUpdateDto);
+        user = userRepository.save(user);
+
+        if (!oldPassword.equals(userUpdateDto.getPassword()))
+            sendChangePasswordNotification(user);
+
+        return userMapper.userToUserDto(user);
     }
 
     @Override
@@ -142,9 +164,15 @@ public class UserService implements IUserService {
         User user = userRepository.findUserByUsername(clientUpdateDto.getOldUsername())
                 .orElseThrow(() -> new GymException(ExceptionType.UPDATE_CLIENT_NOT_FOUND_USERNAME, clientUpdateDto.getOldUsername()));
 
-        userMapper.mapUser(user, clientUpdateDto);
+        String oldPassword = user.getPassword();
 
-        return userMapper.userToClientDto(userRepository.save(user));
+        userMapper.mapUser(user, clientUpdateDto);
+        user = userRepository.save(user);
+
+        if (!oldPassword.equals(clientUpdateDto.getPassword()))
+            sendChangePasswordNotification(user);
+
+        return userMapper.userToClientDto(user);
     }
 
     //note: manager can't update its gym, only admin can
@@ -153,9 +181,15 @@ public class UserService implements IUserService {
         User user = userRepository.findUserByUsername(managerUpdateDto.getOldUsername())
                 .orElseThrow(() -> new GymException(ExceptionType.UPDATE_MANAGER_NOT_FOUND_USERNAME, managerUpdateDto.getOldUsername()));
 
-        userMapper.mapUser(user, managerUpdateDto);
+        String oldPassword = user.getPassword();
 
-        return userMapper.userToManagerDto(userRepository.save(user));
+        userMapper.mapUser(user, managerUpdateDto);
+        user = userRepository.save(user);
+
+        if (!oldPassword.equals(managerUpdateDto.getPassword()))
+            sendChangePasswordNotification(user);
+
+        return userMapper.userToManagerDto(user);
     }
 
     @Override
@@ -191,7 +225,39 @@ public class UserService implements IUserService {
     public UserDto activateAccount(String token) {
         Long id = findIdByToken(token);
         User user = userRepository.findById(id).orElseThrow(() -> new GymException(ExceptionType.ACTIVATE_USER_NOT_FOUND_USER, id.toString()));
+        user.setActivated(true);
         return userMapper.userToUserDto(user);
+    }
+
+    @Override
+    public UserDto findByUsername(String username) {
+        User user = userRepository.findUserByUsername(username).orElseThrow(() -> new GymException(ExceptionType.FIND_USER_BY_USERNAME_NOT_FOUND_USER, username));
+        return userMapper.userToUserDto(user);
+    }
+
+    private String makeToken(User user) {
+        //Create token
+        Map<String, Object> payload = new HashMap<>();
+        payload.put(User.id(), user.getId());
+        payload.put(User.userRole(), user.getUserRole().getName());
+
+        return tokenService.encrypt(payload);
+    }
+
+    private void sendRegisterNotification(User user) {
+        String token = makeToken(user);
+
+        UserDto userDto =  userMapper.userToUserDto(user);
+        NotificationBodyDto notificationBodyDto = new NotificationBodyDto("Register", userDto, token, user.getId(), MailFormat.REGISTER_MAIL);
+        jmsTemplate.convertAndSend(destinationNameRegister, converter.serialize(notificationBodyDto));
+    }
+
+    private void sendChangePasswordNotification(User user) {
+        String token = makeToken(user);
+
+        UserDto userDto = userMapper.userToUserDto(user);
+        NotificationBodyDto notificationBodyDto = new NotificationBodyDto("Password changed", userDto, token, user.getId(), MailFormat.CHANGE_PASSWORD);
+        jmsTemplate.convertAndSend(destinationNameRegister, converter.serialize(notificationBodyDto));
     }
 
 }

@@ -56,4 +56,5 @@ public interface IUserService {
 
     UserDto activateAccount(String token);
 
+    UserDto findByUsername(String username);
 }
