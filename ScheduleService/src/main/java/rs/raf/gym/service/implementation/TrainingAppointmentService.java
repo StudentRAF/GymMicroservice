@@ -21,7 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentDto;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentUpdateDto;
@@ -59,24 +59,22 @@ public class TrainingAppointmentService implements ITrainingAppointmentService {
     private final IAppointmentStatusRepository   statusRepository;
     private final TrainingAppointmentMapper      mapper;
     private final NetworkUtils                   networkUtils;
+    private final ServiceConfiguration           configuration;
 
     @Override
     public Page<TrainingAppointmentDto> findAll(String gymName, String training, LocalDate date, LocalTime time,
                                                 Integer duration, String status, String token, Pageable pageable) {
 
-        Role role   = Role.valueOf(networkUtils.request(HttpMethod.GET, "/user/role", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), String.class)
+        Role role   = Role.valueOf(networkUtils.request(HttpMethod.GET, "/user/role", configuration.token, new UserAuthorizationDto(token), String.class)
                                                .toUpperCase());
         Gym gym = null;
 
         if (Role.MANAGER.equals(role)) {
-            Long managerId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
+            Long managerId = networkUtils.request(HttpMethod.GET, "/user/id", configuration.token, new UserAuthorizationDto(token), Long.class);
             gym = gymRepository.findByManagerId(managerId)
                                .orElseThrow(() -> new GymException(ExceptionType.FIND_GYM_TRAINING_APPOINTMENT_NOT_FOUND_MANAGER_GYM,
                                                                    managerId.toString()));
-            System.out.println(managerId);
         }
-
-        System.out.println(gym == null ? gymName : gym.getName());
 
         TrainingAppointmentSpecification specification = new TrainingAppointmentSpecification(gym == null ? gymName : gym.getName(), training, date, time,
                                                                                               duration, status);

@@ -19,7 +19,7 @@ package rs.raf.gym.mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 import rs.raf.gym.commons.dto.user.UserDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
@@ -30,8 +30,9 @@ import rs.raf.gym.model.UserTraining;
 @AllArgsConstructor
 public class UserTrainingMapper {
 
-    private final TrainingMapper trainingMapper;
-    private final NetworkUtils   networkUtils;
+    private final TrainingMapper       trainingMapper;
+    private final NetworkUtils         networkUtils;
+    private final ServiceConfiguration configuration;
 
     /**
      * Maps UserTraining to UserTrainingDto object.
@@ -39,7 +40,7 @@ public class UserTrainingMapper {
      * @return UserTrainingDto object
      */
     public UserTrainingDto toUserTrainingDto(UserTraining userTraining) {
-        return new UserTrainingDto(networkUtils.request(HttpMethod.GET, "/user/" + userTraining.getClientId(), ServiceOrigin.TOKEN, UserDto.class),
+        return new UserTrainingDto(networkUtils.request(HttpMethod.GET, "/user/" + userTraining.getClientId(), configuration.token, UserDto.class),
                                    trainingMapper.toTrainingDto(userTraining.getTraining()),
                                    userTraining.getCount());
     }

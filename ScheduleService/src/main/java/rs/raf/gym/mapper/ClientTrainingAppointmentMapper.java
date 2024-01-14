@@ -19,7 +19,7 @@ package rs.raf.gym.mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
@@ -34,6 +34,7 @@ public class ClientTrainingAppointmentMapper {
     private final TrainingAppointmentMapper     trainingAppointmentMapper;
     private final ClientAppointmentStatusMapper clientAppointmentStatusMapper;
     private final NetworkUtils                  networkUtils;
+    private final ServiceConfiguration          configuration;
 
     /**
      * Maps ClientTrainingAppointment to ClientTrainingAppointmentDto object.
@@ -42,7 +43,7 @@ public class ClientTrainingAppointmentMapper {
      */
     public ClientTrainingAppointmentDto toClientTrainingAppointmentDto(ClientTrainingAppointment trainingAppointment) {
         return new ClientTrainingAppointmentDto(trainingAppointmentMapper.toTrainingAppointmentDto(trainingAppointment.getTrainingAppointment()),
-                                                networkUtils.request(HttpMethod.GET, "/user/" + trainingAppointment.getClientId(), ServiceOrigin.TOKEN, UserDto.class),
+                                                networkUtils.request(HttpMethod.GET, "/user/" + trainingAppointment.getClientId(), configuration.token, UserDto.class),
                                                 clientAppointmentStatusMapper.toClientAppointmentStatusDto(trainingAppointment.getStatus()));
     }
 
