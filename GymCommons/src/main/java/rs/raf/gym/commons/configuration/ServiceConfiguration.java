@@ -16,8 +16,20 @@
 
 package rs.raf.gym.commons.configuration;
 
-public class Configuration {
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
-    public static final String SECRET_KEY = "4723BF9CA836509AA4DA49C5C56D5217507EEE5CFCCCD30E0C106A8B0C009217";
+@Component
+@PropertySource("classpath:config/local.properties")
+public class ServiceConfiguration {
+
+    public final String secret;
+    public final String token;
+
+    public ServiceConfiguration(@Value("${service.secret}") String secret, @Value("${service.token}") String token) {
+        this.secret = secret;
+        this.token  = token;
+    }
 
 }

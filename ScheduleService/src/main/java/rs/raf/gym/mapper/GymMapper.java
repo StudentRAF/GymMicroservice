@@ -19,7 +19,7 @@ package rs.raf.gym.mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 import rs.raf.gym.commons.dto.gym.GymCreateDto;
 import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateDto;
@@ -32,8 +32,9 @@ import rs.raf.gym.model.Gym;
 @AllArgsConstructor
 public class GymMapper {
 
-    private final NetworkUtils networkUtils;
-    private final DtoMapper    dtoMapper;
+    private final NetworkUtils         networkUtils;
+    private final DtoMapper            dtoMapper;
+    private final ServiceConfiguration configuration;
 
     /**
      * Maps Gym to GymDto object.
@@ -43,7 +44,7 @@ public class GymMapper {
     public GymDto toGymDto(Gym gym) {
         return new GymDto(gym.getName(),
                           gym.getDescription(),
-                          gym.getManagerId() != null ? dtoMapper.toManagerNoGymDto(networkUtils.request(HttpMethod.GET, "/user/" + gym.getManagerId(), ServiceOrigin.TOKEN, UserDto.class))
+                          gym.getManagerId() != null ? dtoMapper.toManagerNoGymDto(networkUtils.request(HttpMethod.GET, "/user/" + gym.getManagerId(), configuration.token, UserDto.class))
                                                      : null,
                           gym.getTrainers());
     }
@@ -56,7 +57,7 @@ public class GymMapper {
     public GymDto toGymDto(Gym gym, Boolean flag) {
         return new GymDto(gym.getName(),
                           gym.getDescription(),
-                          flag ? gym.getManagerId() != null ? dtoMapper.toManagerNoGymDto(networkUtils.request(HttpMethod.GET, "/user/" + gym.getManagerId(), ServiceOrigin.TOKEN, UserDto.class))
+                          flag ? gym.getManagerId() != null ? dtoMapper.toManagerNoGymDto(networkUtils.request(HttpMethod.GET, "/user/" + gym.getManagerId(), configuration.token, UserDto.class))
                                                      : null
                                : null,
                           gym.getTrainers());

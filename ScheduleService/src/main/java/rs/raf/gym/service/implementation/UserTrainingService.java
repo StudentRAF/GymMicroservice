@@ -21,7 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 import rs.raf.gym.commons.dto.user.UserAuthorizationDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
@@ -44,6 +44,7 @@ public class UserTrainingService implements IUserTrainingService {
     private final ITrainingRepository     trainingRepository;
     private final UserTrainingMapper      mapper;
     private final NetworkUtils            networkUtils;
+    private final ServiceConfiguration    configuration;
 
     @Override
     public Page<UserTrainingDto> findAll(String training, Long clientId, Pageable pageable) {
@@ -55,7 +56,7 @@ public class UserTrainingService implements IUserTrainingService {
 
     @Override
     public UserTrainingDto update(UserTrainingUpdateDto updateDto, String token) throws GymException {
-        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
+        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", configuration.token, new UserAuthorizationDto(token), Long.class);
 
         Training training = trainingRepository.findByName(updateDto.getTrainingName())
                                               .orElseThrow(() -> new GymException(ExceptionType.UPDATE_USER_TRAINING_NOT_FOUND_TRAINING,

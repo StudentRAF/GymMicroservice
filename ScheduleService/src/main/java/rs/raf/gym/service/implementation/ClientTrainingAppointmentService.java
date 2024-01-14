@@ -21,7 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import rs.raf.gym.ServiceOrigin;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
@@ -61,17 +61,18 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
     private final ITrainingAppointmentRepository       trainingAppointmentRepository;
     private final IClientAppointmentStatusRepository   statusRepository;
     private final ClientTrainingAppointmentMapper      mapper;
-    private final NetworkUtils                         networkUtils;
+    private final NetworkUtils         networkUtils;
+    private final ServiceConfiguration configuration;
 
     @Override
     public Page<ClientTrainingAppointmentDto> findAll(String gym, String training, LocalDate date, LocalTime time,
                                                       String status, String token, Pageable pageable) {
         Long userId = null;
-        Role role   = Role.valueOf(networkUtils.request(HttpMethod.GET, "/user/role", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), String.class)
+        Role role   = Role.valueOf(networkUtils.request(HttpMethod.GET, "/user/role", configuration.token, new UserAuthorizationDto(token), String.class)
                                                    .toUpperCase());
 
         if (Role.CLIENT.equals(role))
-            userId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
+            userId = networkUtils.request(HttpMethod.GET, "/user/id", configuration.token, new UserAuthorizationDto(token), Long.class);
 
         ClientTrainingAppointmentSpecification specification = new ClientTrainingAppointmentSpecification(gym,
                                                                                                           training,
@@ -86,7 +87,7 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
 
     @Override
     public ClientTrainingAppointmentDto create(ClientTrainingAppointmentCreateDto createDto, String token) throws GymException {
-        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
+        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", configuration.token, new UserAuthorizationDto(token), Long.class);
 
         TrainingAppointment trainingAppointment = findTrainingAppointment(createDto.getGymName(),
                                                                           createDto.getTrainingName(),
@@ -105,12 +106,12 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
         clientTrainingAppointment.setStatus(status);
         mapper.map(clientTrainingAppointment, createDto);
 
-        return mapper.toClientTrainingAppointmentDto(clientTrainingAppointment);
+        return mapper.toClientTrainingAppointmentDto(repository.save(clientTrainingAppointment));
     }
 
     @Override
     public ClientTrainingAppointmentDto update(ClientTrainingAppointmentUpdateDto updateDto, String token) throws GymException {
-        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", ServiceOrigin.TOKEN, new UserAuthorizationDto(token), Long.class);
+        Long clientId = networkUtils.request(HttpMethod.GET, "/user/id", configuration.token, new UserAuthorizationDto(token), Long.class);
 
         TrainingAppointment trainingAppointment = findTrainingAppointment(updateDto.getGymName(),
                                                                           updateDto.getTrainingName(),
@@ -130,7 +131,7 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
         clientTrainingAppointment.setStatus(status);
         mapper.map(clientTrainingAppointment, updateDto);
 
-        return mapper.toClientTrainingAppointmentDto(clientTrainingAppointment);
+        return mapper.toClientTrainingAppointmentDto(repository.save(clientTrainingAppointment));
     }
 
     private TrainingAppointment findTrainingAppointment(String gymName, String trainingName, LocalDate date, LocalTime time, boolean update) throws GymException {
