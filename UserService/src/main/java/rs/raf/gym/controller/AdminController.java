@@ -66,6 +66,13 @@ public class AdminController {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findById(id), HttpStatus.OK));
     }
 
+    @GetMapping()
+    @CheckSecurity(roles = Role.ADMIN)
+    public ResponseEntity<UserDto> getUserByUsername(@RequestParam(name = "username",  required = false) String username,
+                                               @RequestHeader(name = "authorization") String authorization) {
+        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.findByUsername(username), HttpStatus.OK));
+    }
+
     @PutMapping("/update")
     @CheckSecurity(roles = Role.ADMIN)
     public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserUpdateDto userUpdateDto, @RequestHeader(name = "authorization") String authorization) {

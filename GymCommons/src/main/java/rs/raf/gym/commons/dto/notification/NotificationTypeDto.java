@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023. Lazar Dobrota and Nemanja Radovanovic
+ * Copyright (C) 2024. Lazar Dobrota and Nemanja Radovanovic
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,39 +14,19 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.commons.dto.client;
+package rs.raf.gym.commons.dto.notification;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.commons.dto.user_role.UserRoleDto;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
-@Getter
 @Setter
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
-public class ClientDto {
+@AllArgsConstructor
+public class NotificationTypeDto {
+    private String name;
 
-    private UserRoleDto userRole;
-
-    private String firstname;
-
-    private String lastname;
-
-    private String username;
-
-    private String password;
-
-    private String email;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
-    private LocalDate dateOfBirth;
-
-    private UUID membershipId;
-
+    private String pattern;
 }

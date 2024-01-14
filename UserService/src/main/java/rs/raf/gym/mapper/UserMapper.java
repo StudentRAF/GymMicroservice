@@ -16,15 +16,9 @@
 
 package rs.raf.gym.mapper;
 
-import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
 import rs.raf.gym.UserMain;
 import rs.raf.gym.commons.dto.client.ClientCreateDto;
 import rs.raf.gym.commons.dto.client.ClientDto;
@@ -39,9 +33,6 @@ import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.commons.mapper.DtoMapper;
 import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.model.User;
-
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 @Component
 @AllArgsConstructor
@@ -80,6 +71,7 @@ public class UserMapper {
         clientDto.setLastname(user.getLastname());
         clientDto.setUsername(user.getUsername());
         clientDto.setEmail(user.getEmail());
+        clientDto.setPassword(user.getPassword());
         clientDto.setDateOfBirth(user.getDateOfBirth());
         clientDto.setMembershipId(user.getMembershipId());
 
@@ -94,6 +86,7 @@ public class UserMapper {
         managerDto.setLastname(user.getLastname());
         managerDto.setUsername(user.getUsername());
         managerDto.setEmail(user.getEmail());
+        managerDto.setPassword(user.getPassword());
         managerDto.setDateOfBirth(user.getDateOfBirth());
         managerDto.setRecruitmentDate(user.getRecruitmentDate());
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023. Lazar Dobrota and Nemanja Radovanovic
+ * Copyright (C) 2024. Lazar Dobrota and Nemanja Radovanovic
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,39 +14,42 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.commons.dto.client;
+package rs.raf.gym.commons.dto.notification;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rs.raf.gym.commons.dto.user_role.UserRoleDto;
+import rs.raf.gym.commons.dto.user.UserDto;
+import rs.raf.gym.commons.message_broker.MailFormat;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientDto {
+public class NotificationBodyDto {
 
-    private UserRoleDto userRole;
+    private String subject;
 
-    private String firstname;
+    private UserDto user;
 
-    private String lastname;
+    private String token;
 
-    private String username;
+    private Long userId;
 
-    private String password;
+    private LocalDate trainingDate;
 
-    private String email;
+    private String trainingName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
-    private LocalDate dateOfBirth;
+    private MailFormat mailFormat;
 
-    private UUID membershipId;
-
+    public NotificationBodyDto(String subject, UserDto user, String token, Long userId, MailFormat mailFormat) {
+        this.subject = subject;
+        this.user = user;
+        this.token = token;
+        this.userId = userId;
+        this.mailFormat = mailFormat;
+    }
 }

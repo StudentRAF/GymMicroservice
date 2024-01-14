@@ -62,7 +62,7 @@ public class UserUpdateDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate dateOfBirth;
 
-    private String gymName;
+    private String gymName; //TODO remove
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate recruitmentDate;

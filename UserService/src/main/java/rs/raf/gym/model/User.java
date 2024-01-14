@@ -91,7 +91,7 @@ public class User {
             this.setRecruitmentDate(LocalDate.now());
 
         this.access = true;
-        this.activated = true;
+        this.activated = false;
     }
 
 
