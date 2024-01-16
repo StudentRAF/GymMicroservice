@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.raf.gym.commons.dto.user_training.UserTrainingDto;
 import rs.raf.gym.commons.dto.user_training.UserTrainingUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.IUserTrainingService;
 
 @AllArgsConstructor
@@ -43,6 +45,7 @@ public class UserTrainingController {
     private final IUserTrainingService service;
 
     @GetMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN})
     public ResponseEntity<Page<UserTrainingDto>> filter(@RequestParam (name = "training", required = false) String training,
                                                         @RequestParam (name = "client",   required = false) Long   client,
                                                         @RequestHeader(name = "authorization"             ) String token,
@@ -51,6 +54,7 @@ public class UserTrainingController {
     }
 
     @PutMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN})
     public ResponseEntity<UserTrainingDto> update(@RequestBody @Valid                    UserTrainingUpdateDto updateDto,
                                                   @RequestHeader(name = "authorization") String                token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto, token), HttpStatus.OK));

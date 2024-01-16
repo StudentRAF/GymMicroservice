@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import rs.raf.gym.UserMain;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 import rs.raf.gym.commons.dto.client.ClientCreateDto;
 import rs.raf.gym.commons.dto.client.ClientDto;
 import rs.raf.gym.commons.dto.client.ClientUpdateDto;
@@ -38,9 +39,10 @@ import rs.raf.gym.model.User;
 @AllArgsConstructor
 public class UserMapper {
 
-    private final UserRoleMapper userRoleMapper;
-    private final NetworkUtils   networkUtils;
-    private final DtoMapper      dtoMapper;
+    private final UserRoleMapper       userRoleMapper;
+    private final NetworkUtils         networkUtils;
+    private final DtoMapper            dtoMapper;
+    private final ServiceConfiguration serviceConfiguration;
 
     public UserDto userToUserDto(User user) {
         UserDto userDto = new UserDto();
@@ -58,7 +60,7 @@ public class UserMapper {
         userDto.setActivated(user.isActivated());
 
         if (user.getGymId() != null)
-            userDto.setGym(networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), UserMain.TOKEN, GymDto.class));
+            userDto.setGym(networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), serviceConfiguration.token, GymDto.class));
 
         return userDto;
     }
@@ -91,7 +93,7 @@ public class UserMapper {
         managerDto.setRecruitmentDate(user.getRecruitmentDate());
 
         if (user.getGymId() != null)
-            managerDto.setGym(dtoMapper.toGymNoManagerDto(networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), UserMain.TOKEN, GymDto.class)));
+            managerDto.setGym(dtoMapper.toGymNoManagerDto(networkUtils.request(HttpMethod.GET, "/schedule/gym/" + user.getGymId(), serviceConfiguration.token, GymDto.class)));
 
         return managerDto;
     }

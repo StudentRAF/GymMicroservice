@@ -36,6 +36,8 @@ import rs.raf.gym.commons.dto.gym.GymDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateDto;
 import rs.raf.gym.commons.dto.gym.GymUpdateManagerDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.IGymService;
 
 import java.util.List;
@@ -53,6 +55,7 @@ public class GymController {
     }
 
     @GetMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<Page<GymDto>> filter(@RequestParam (name = "name",    required = false) String  name,
                                                @RequestParam (name = "manager", required = false) Integer manager,
                                                @RequestHeader(name = "authorization"            ) String  token,
@@ -61,6 +64,7 @@ public class GymController {
     }
 
     @GetMapping("/{id}")
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<GymDto> findGym(@PathVariable (name = "id"                             ) Long    id,
                                           @RequestParam (name = "flag",          required = false) Boolean flag,
                                           @RequestHeader(name = "authorization"                  ) String  token) {
@@ -68,24 +72,28 @@ public class GymController {
     }
 
     @GetMapping("/id/{gym}")
+    @CheckSecurity(role = {Role.SERVICE})
     public ResponseEntity<Long> findId(@PathVariable (name = "gym"          ) String gymName,
                                        @RequestHeader(name = "authorization") String token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.findId(gymName),HttpStatus.OK));
     }
 
     @PostMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN})
     public ResponseEntity<GymDto> create(@RequestBody @Valid                    GymCreateDto createDto,
                                          @RequestHeader(name = "authorization") String       token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
     }
 
     @PutMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<GymDto> update(@RequestBody @Valid                    GymUpdateDto updateDto,
                                          @RequestHeader(name = "authorization") String       token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
     }
 
     @PutMapping("/manager")
+    @CheckSecurity(role = {Role.SERVICE})
     public ResponseEntity<GymDto> updateManager(@RequestBody @Valid                    GymUpdateManagerDto updateDto,
                                                 @RequestHeader(name = "authorization") String              token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.updateManager(updateDto), HttpStatus.OK));

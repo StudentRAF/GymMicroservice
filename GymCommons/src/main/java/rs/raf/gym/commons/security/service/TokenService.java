@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023. Lazar Dobrota and Nemanja Radovanovic
+ * Copyright (C) 2024. Lazar Dobrota and Nemanja Radovanovic
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,33 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.security.service;
+package rs.raf.gym.commons.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 
 import javax.crypto.SecretKey;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class TokenService implements ITokenService{
 
-    @Value("${user.secret.key}")
-    private String jwtSecret;
     private SecretKey secretKey;
+
+    private final ServiceConfiguration configuration;
+
 
     @PostConstruct
     private void init() {
-        byte[] secretKeyBytes = jwtSecret.getBytes();
+        byte[] secretKeyBytes = configuration.secret.getBytes();
         secretKey = Keys.hmacShaKeyFor(secretKeyBytes);
     }
 

@@ -34,6 +34,8 @@ import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointm
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentDto;
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.IClientTrainingAppointmentService;
 
 import java.time.LocalDate;
@@ -47,6 +49,7 @@ public class ClientTrainingAppointmentController {
     private final IClientTrainingAppointmentService service;
 
     @GetMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.CLIENT, Role.ADMIN})
     public ResponseEntity<Page<ClientTrainingAppointmentDto>> filter(@RequestParam (name = "gym",      required = false) String    gym,
                                                                      @RequestParam (name = "training", required = false) String    training,
                                                                      @RequestParam (name = "date",     required = false) LocalDate date,
@@ -58,12 +61,14 @@ public class ClientTrainingAppointmentController {
     }
 
     @PostMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.CLIENT})
     public ResponseEntity<ClientTrainingAppointmentDto> create(@RequestBody @Valid                    ClientTrainingAppointmentCreateDto createDto,
                                                                @RequestHeader(name = "authorization") String                             token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto, token), HttpStatus.CREATED));
     }
 
     @PutMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.CLIENT})
     public ResponseEntity<ClientTrainingAppointmentDto> update(@RequestBody @Valid                    ClientTrainingAppointmentUpdateDto updateDto,
                                                                @RequestHeader(name = "authorization") String                             token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto, token), HttpStatus.OK));
