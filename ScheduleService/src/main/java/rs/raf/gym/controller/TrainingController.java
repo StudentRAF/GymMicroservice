@@ -34,6 +34,8 @@ import rs.raf.gym.commons.dto.training.TrainingCreateDto;
 import rs.raf.gym.commons.dto.training.TrainingDto;
 import rs.raf.gym.commons.dto.training.TrainingUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.ITrainingService;
 
 import java.util.List;
@@ -46,11 +48,13 @@ public class TrainingController {
     private final ITrainingService service;
 
     @GetMapping("/all")
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<List<TrainingDto>> getAll() {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.getAll(), HttpStatus.OK));
     }
 
     @GetMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<Page<TrainingDto>> filter(@RequestParam (name = "name",    required = false) String  name,
                                                     @RequestParam (name = "type",    required = false) String  type,
                                                     @RequestParam (name = "loyalty", required = false) Integer loyalty,
@@ -60,12 +64,14 @@ public class TrainingController {
     }
 
     @PostMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<TrainingDto> create(@RequestBody @Valid                    TrainingCreateDto createDto,
                                               @RequestHeader(name = "authorization") String            token) {
         return new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED);
     }
 
     @PutMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<TrainingDto> update(@RequestBody @Valid                    TrainingUpdateDto updateDto,
                                               @RequestHeader(name = "authorization") String            token) {
         return new ResponseEntity<>(service.update(updateDto), HttpStatus.OK);

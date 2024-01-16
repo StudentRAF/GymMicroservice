@@ -34,6 +34,8 @@ import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentCreateDto;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentDto;
 import rs.raf.gym.commons.dto.training_appointment.TrainingAppointmentUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.ITrainingAppointmentService;
 
 import java.time.LocalDate;
@@ -65,6 +67,7 @@ public class TrainingAppointmentController {
     }
 
     @PutMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<TrainingAppointmentDto> update(@RequestBody @Valid                    TrainingAppointmentUpdateDto updateDto,
                                                          @RequestHeader(name = "authorization") String                       token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));

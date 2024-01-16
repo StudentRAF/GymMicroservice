@@ -35,6 +35,8 @@ import rs.raf.gym.commons.dto.training_type.TrainingTypeCreateDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeDto;
 import rs.raf.gym.commons.dto.training_type.TrainingTypeUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.ITrainingTypeService;
 
 import java.util.List;
@@ -52,6 +54,7 @@ public class TrainingTypeController {
     }
 
     @GetMapping
+    @CheckSecurity(role = {Role.SERVICE})
     public ResponseEntity<Page<TrainingTypeDto>> filter(@RequestParam (name = "name", required = false) String name,
                                                         @RequestHeader(name = "authorization"         ) String token,
                                                         Pageable pageable) {
@@ -59,12 +62,14 @@ public class TrainingTypeController {
     }
 
     @PostMapping
+    @CheckSecurity(role = {Role.SERVICE})
     public ResponseEntity<TrainingTypeDto> create(@RequestBody @Valid                    TrainingTypeCreateDto createDto,
                                                   @RequestHeader(name = "authorization") String                token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
     }
 
     @PutMapping
+    @CheckSecurity(role = {Role.SERVICE})
     public ResponseEntity<TrainingTypeDto> update(@RequestBody @Valid                    TrainingTypeUpdateDto updateDto,
                                                   @RequestHeader(name = "authorization") String                token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));

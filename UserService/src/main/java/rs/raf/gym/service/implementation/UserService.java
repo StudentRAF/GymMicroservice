@@ -25,6 +25,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.raf.gym.UserMain;
+import rs.raf.gym.commons.configuration.ServiceConfiguration;
 import rs.raf.gym.commons.dto.client.ClientCreateDto;
 import rs.raf.gym.commons.dto.client.ClientDto;
 import rs.raf.gym.commons.dto.client.ClientUpdateDto;
@@ -42,16 +43,16 @@ import rs.raf.gym.commons.dto.user.UserUpdateDto;
 import rs.raf.gym.commons.exception.GymException;
 import rs.raf.gym.commons.message_broker.Converter;
 import rs.raf.gym.commons.message_broker.MailFormat;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.SecurityAspect;
+import rs.raf.gym.commons.security.service.ITokenService;
 import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.exception.ExceptionType;
 import rs.raf.gym.mapper.UserMapper;
-import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.model.User;
 import rs.raf.gym.model.UserRole;
 import rs.raf.gym.repository.IUserRepository;
 import rs.raf.gym.repository.IUserRoleRepository;
-import rs.raf.gym.security.SecurityAspect;
-import rs.raf.gym.security.service.ITokenService;
 import rs.raf.gym.service.IUserService;
 import rs.raf.gym.specification.UserSpecification;
 
@@ -63,22 +64,23 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
-    private final IUserRepository     userRepository;
-    private final IUserRoleRepository userRoleRepository;
-    private final UserMapper          userMapper;
-    private final ITokenService       tokenService;
-    private final SecurityAspect      securityAspect;
-    private final NetworkUtils        networkUtils;
+    private final IUserRepository      userRepository;
+    private final IUserRoleRepository  userRoleRepository;
+    private final UserMapper           userMapper;
+    private final ITokenService        tokenService;
+    private final SecurityAspect       securityAspect;
+    private final NetworkUtils         networkUtils;
+    private final ServiceConfiguration serviceConfiguration;
 
     @Value("${queue.location}")
-    private       String              destinationNameRegister;
-    private final Converter           converter;
-    private final JmsTemplate         jmsTemplate;
+    private       String               destinationNameRegister;
+    private final Converter            converter;
+    private final JmsTemplate          jmsTemplate;
 
     @Override
     public Page<UserDto> getAllUsers(String role, String firstname, String lastname, String username, Pageable pageable) {
         UserSpecification specification = new UserSpecification(role, firstname, lastname, username);
-
+        
         return userRepository.findAll(specification.filter(), pageable)
                 .map(userMapper::userToUserDto);
     }
@@ -120,7 +122,7 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new GymException(ExceptionType.CREATE_MANAGER_NOT_FOUND_USER_ROLE, Role.MANAGER.getName()));
 
         User user = new User();
-        user.setGymId(networkUtils.request(HttpMethod.GET, "/schedule/gym/id/" + managerCreateDto.getGym(), UserMain.TOKEN, Long.class));
+        user.setGymId(networkUtils.request(HttpMethod.GET, "/schedule/gym/id/" + managerCreateDto.getGym(), serviceConfiguration.token, Long.class));
         user.setUserRole(userRole);
         userMapper.mapUser(user, managerCreateDto);
 
@@ -135,7 +137,7 @@ public class UserService implements IUserService {
 
         user = userRepository.save(user);
 
-        networkUtils.asyncRequest(HttpMethod.PUT, "/schedule/gym/manager", UserMain.TOKEN,
+        networkUtils.asyncRequest(HttpMethod.PUT, "/schedule/gym/manager", serviceConfiguration.token,
                 new GymUpdateManagerDto(managerCreateDto.getGym(), user.getId()), GymDto.class);
 
         sendRegisterNotification(user);

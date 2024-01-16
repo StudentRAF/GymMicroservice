@@ -31,7 +31,7 @@ import rs.raf.gym.commons.dto.client.ClientDto;
 import rs.raf.gym.commons.dto.client.ClientUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
 import rs.raf.gym.commons.model.Role;
-import rs.raf.gym.security.CheckSecurity;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.IUserService;
 
 @AllArgsConstructor
@@ -47,9 +47,9 @@ public class ClientController {
     }
 
     @PutMapping("/update")
-    @CheckSecurity(roles = Role.CLIENT)
+    @CheckSecurity(role = {Role.SERVICE, Role.CLIENT})
     public ResponseEntity<ClientDto> updateClient(@RequestBody @Valid ClientUpdateDto clientUpdateDto,
-                                                  @RequestHeader(name = "authorization") String authorization) {
+                                                  @RequestHeader(name = "authorization") String token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(userService.updateClient(clientUpdateDto), HttpStatus.ACCEPTED));
     }
 

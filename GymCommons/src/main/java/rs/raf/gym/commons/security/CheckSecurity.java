@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023. Lazar Dobrota and Nemanja Radovanovic
+ * Copyright (C) 2024. Lazar Dobrota and Nemanja Radovanovic
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.security;
+package rs.raf.gym.commons.security;
 
 import rs.raf.gym.commons.model.Role;
 
@@ -27,5 +27,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CheckSecurity {
 
-    Role[] roles() default {};
+    Role[] role() default {};
 }
