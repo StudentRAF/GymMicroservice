@@ -31,13 +31,7 @@ import rs.raf.gym.commons.exception.GymException;
         @PropertySource("classpath:config/spring/application.properties")
 })
 public class UserMain {
-
-    static {
-        TOKEN = "TODO";
-    }
-
-    public static final String TOKEN;
-
+    
     public static void main(String[] args) {
         GymException.setLogger(LoggerFactory.getLogger(UserMain.class));
         SpringApplication.run(UserMain.class, args);

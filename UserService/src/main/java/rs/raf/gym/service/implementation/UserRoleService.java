@@ -29,7 +29,7 @@ import rs.raf.gym.mapper.UserRoleMapper;
 import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.model.UserRole;
 import rs.raf.gym.repository.IUserRoleRepository;
-import rs.raf.gym.security.SecurityAspect;
+import rs.raf.gym.commons.security.SecurityAspect;
 import rs.raf.gym.service.IUserRoleService;
 import rs.raf.gym.specification.UserRoleSpecification;
 

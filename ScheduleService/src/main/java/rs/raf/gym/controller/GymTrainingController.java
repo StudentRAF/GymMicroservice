@@ -34,6 +34,8 @@ import rs.raf.gym.commons.dto.gym_training.GymTrainingCreateDto;
 import rs.raf.gym.commons.dto.gym_training.GymTrainingDto;
 import rs.raf.gym.commons.dto.gym_training.GymTrainingUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.IGymTrainingService;
 
 @AllArgsConstructor
@@ -44,6 +46,7 @@ public class GymTrainingController {
     private final IGymTrainingService service;
 
     @GetMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<Page<GymTrainingDto>> filter(@RequestParam (name = "gym",      required = false) String  gym,
                                                        @RequestParam (name = "training", required = false) String  training,
                                                        @RequestParam (name = "price",    required = false) Double  price,
@@ -55,12 +58,14 @@ public class GymTrainingController {
     }
 
     @PostMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<GymTrainingDto> create(@RequestBody @Valid                    GymTrainingCreateDto createDto,
                                                  @RequestHeader(name = "authorization") String               token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
     }
 
     @PutMapping
+    @CheckSecurity(role = {Role.SERVICE, Role.ADMIN, Role.MANAGER})
     public ResponseEntity<GymTrainingDto> update(@RequestBody @Valid                    GymTrainingUpdateDto updateDto,
                                                  @RequestHeader(name = "authorization") String               token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));

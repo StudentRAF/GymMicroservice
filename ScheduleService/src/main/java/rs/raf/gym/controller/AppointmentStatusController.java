@@ -34,6 +34,8 @@ import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusCreateDto;
 import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusDto;
 import rs.raf.gym.commons.dto.appointment_status.AppointmentStatusUpdateDto;
 import rs.raf.gym.commons.exception.ExceptionUtils;
+import rs.raf.gym.commons.model.Role;
+import rs.raf.gym.commons.security.CheckSecurity;
 import rs.raf.gym.service.IAppointmentStatusService;
 
 import java.util.List;
@@ -51,6 +53,7 @@ public class AppointmentStatusController {
     }
 
     @GetMapping
+    @CheckSecurity(role = {Role.SERVICE})
     public ResponseEntity<Page<AppointmentStatusDto>> filter(@RequestParam (name = "name", required = false) String name,
                                                              @RequestHeader(name = "authorization"         ) String token,
                                                              Pageable pageable) {
@@ -58,12 +61,14 @@ public class AppointmentStatusController {
     }
 
     @PostMapping
+    @CheckSecurity(role = {Role.SERVICE})
     public ResponseEntity<AppointmentStatusDto> create(@RequestBody @Valid                    AppointmentStatusCreateDto createDto,
                                                        @RequestHeader(name = "authorization") String                     token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.create(createDto), HttpStatus.CREATED));
     }
 
     @PutMapping
+    @CheckSecurity(role = {Role.SERVICE})
     public ResponseEntity<AppointmentStatusDto> update(@RequestBody @Valid                    AppointmentStatusUpdateDto updateDto,
                                                        @RequestHeader(name = "authorization") String                     token) {
         return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.update(updateDto), HttpStatus.OK));
