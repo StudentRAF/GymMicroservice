@@ -16,7 +16,9 @@
 
 package rs.raf.gym.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentDto;
 import rs.raf.gym.commons.service.JpaSpecificationRepository;
 import rs.raf.gym.model.ClientTrainingAppointment;
 import rs.raf.gym.model.TrainingAppointment;
@@ -30,5 +32,7 @@ public interface IClientTrainingAppointmentRepository extends JpaSpecificationRe
     Optional<ClientTrainingAppointment> findByTrainingAppointmentAndClientId(TrainingAppointment appointment, Long clientId);
 
     List<ClientTrainingAppointment> findAllByTrainingAppointment(TrainingAppointment trainingAppointment);
+    @Query("SELECT c FROM ClientTrainingAppointment c INNER JOIN TrainingAppointment t ON c.trainingAppointment.id = t.id WHERE t.status.name = 'Pending'")
+    List<ClientTrainingAppointment> findReadyDates();
 
 }

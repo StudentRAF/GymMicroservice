@@ -21,9 +21,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import rs.raf.gym.commons.exception.GymException;
 
 @SpringBootApplication
+@EnableScheduling
 @PropertySources({
         @PropertySource("classpath:config/spring/local.properties"),
         @PropertySource("classpath:config/spring/application.properties")
