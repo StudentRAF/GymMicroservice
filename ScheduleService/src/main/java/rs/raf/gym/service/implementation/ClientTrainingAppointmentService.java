@@ -27,6 +27,7 @@ import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointm
 import rs.raf.gym.commons.dto.client_training_appointment.ClientTrainingAppointmentUpdateDto;
 import rs.raf.gym.commons.dto.user.UserAuthorizationDto;
 import rs.raf.gym.commons.exception.GymException;
+import rs.raf.gym.commons.model.ClientAppointmentStatusType;
 import rs.raf.gym.commons.model.Role;
 import rs.raf.gym.commons.utils.NetworkUtils;
 import rs.raf.gym.exception.ExceptionType;
@@ -37,7 +38,6 @@ import rs.raf.gym.model.Gym;
 import rs.raf.gym.model.GymTraining;
 import rs.raf.gym.model.Training;
 import rs.raf.gym.model.TrainingAppointment;
-import rs.raf.gym.model.data.ClientAppointmentStatusType;
 import rs.raf.gym.repository.IClientAppointmentStatusRepository;
 import rs.raf.gym.repository.IClientTrainingAppointmentRepository;
 import rs.raf.gym.repository.IGymRepository;

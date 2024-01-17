@@ -21,11 +21,14 @@ import rs.raf.gym.commons.service.JpaSpecificationRepository;
 import rs.raf.gym.model.ClientTrainingAppointment;
 import rs.raf.gym.model.TrainingAppointment;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface IClientTrainingAppointmentRepository extends JpaSpecificationRepository<ClientTrainingAppointment, Long> {
 
     Optional<ClientTrainingAppointment> findByTrainingAppointmentAndClientId(TrainingAppointment appointment, Long clientId);
+
+    List<ClientTrainingAppointment> findAllByTrainingAppointment(TrainingAppointment trainingAppointment);
 
 }
