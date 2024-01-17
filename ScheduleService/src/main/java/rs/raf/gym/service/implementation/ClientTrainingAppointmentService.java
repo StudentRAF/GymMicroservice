@@ -16,7 +16,6 @@
 
 package rs.raf.gym.service.implementation;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -80,8 +79,8 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
     private final ServiceConfiguration configuration;
 
     @Value("${queue.location}")
-    private String destinationName;
-    private final Converter converter;
+    private       String      destinationName;
+    private final Converter   converter;
     private final JmsTemplate jmsTemplate;
 
     @Override
@@ -148,7 +147,21 @@ public class ClientTrainingAppointmentService implements IClientTrainingAppointm
                                                                                                             updateDto.getGymName(), updateDto.getTrainingName(), updateDto.getDate().toString(),
                                                                                                             updateDto.getTime().toString(), clientId.toString()));
 
-        clientTrainingAppointment.setStatus(status);
+        System.out.println("Update " + updateDto.getStatusName());
+        System.out.println("Current " + clientTrainingAppointment.getStatus().getName());
+        if (ClientAppointmentStatusType.CANCELED.equals(ClientAppointmentStatusType.findStatus(updateDto.getStatusName())) &&
+            ClientAppointmentStatusType.REQUESTED.equals(ClientAppointmentStatusType.findStatus(clientTrainingAppointment.getStatus().getName()))) {
+            clientTrainingAppointment.setStatus(status);
+
+            UserDto userDto = networkUtils.request(HttpMethod.GET, "/user/" + clientTrainingAppointment.getClientId(), configuration.token, UserDto.class);
+
+            NotificationBodyDto notificationBodyDto = new NotificationBodyDto("Canceled training", userDto, clientTrainingAppointment.getClientId(),
+                                                                              clientTrainingAppointment.getTrainingAppointment().getDate(),
+                                                                              clientTrainingAppointment.getTrainingAppointment().getGymTraining().getTraining().getName(),
+                                                                              MailFormat.CANCELED_TRAINING);
+            jmsTemplate.convertAndSend(destinationName, converter.serialize(notificationBodyDto));
+        }
+
         mapper.map(clientTrainingAppointment, updateDto);
 
         return mapper.toClientTrainingAppointmentDto(repository.save(clientTrainingAppointment));
