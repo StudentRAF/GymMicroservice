@@ -75,7 +75,7 @@ public class TrainingAppointmentService implements ITrainingAppointmentService {
     private final ServiceConfiguration                 configuration;
 
     @Value("${queue.location}")
-    private       String      destinationNameRegister;
+    private       String      destinationName;
     private final Converter   converter;
     private final JmsTemplate jmsTemplate;
 
@@ -163,7 +163,7 @@ public class TrainingAppointmentService implements ITrainingAppointmentService {
                                                                           clientTrainingAppointment.getTrainingAppointment().getDate(),
                                                                           clientTrainingAppointment.getTrainingAppointment().getGymTraining().getTraining().getName(),
                                                                           MailFormat.CANCELED_TRAINING);
-        jmsTemplate.convertAndSend(destinationNameRegister, converter.serialize(notificationBodyDto));
+        jmsTemplate.convertAndSend(destinationName, converter.serialize(notificationBodyDto));
     }
 
     private GymTraining findGymTraining(String gymName, String trainingName, boolean update) throws GymException {
