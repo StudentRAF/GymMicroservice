@@ -105,6 +105,7 @@ public class UserMapper {
         user.setPassword(userUpdateDto.getPassword());
         user.setEmail(userUpdateDto.getEmail());
         user.setDateOfBirth(userUpdateDto.getDateOfBirth());
+        user.setAccess(userUpdateDto.isAccess());
 
         return user;
     }
