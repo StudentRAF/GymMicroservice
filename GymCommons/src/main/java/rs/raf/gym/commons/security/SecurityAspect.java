@@ -77,7 +77,6 @@ public class SecurityAspect {
     }
 
     public Role getRole(String token) {
-        System.out.println("Token: " + token);
         if (token == null)
             return null;
 
@@ -86,8 +85,6 @@ public class SecurityAspect {
         if (payload == null)
             return null;
 
-        System.out.println("Id: " + payload.get("id", Long.class));
-        System.out.println("Role: " + payload.get("userRole", String.class));
         return Role.findRole(payload.get("userRole", String.class));
     }
 

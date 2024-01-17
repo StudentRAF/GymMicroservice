@@ -70,7 +70,4 @@ public class UserUpdateDto {
     @NotNull
     private boolean access;
 
-    @NotNull
-    private boolean activated;
-
 }

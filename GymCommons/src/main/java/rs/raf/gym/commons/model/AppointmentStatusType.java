@@ -14,19 +14,33 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.model.data;
+package rs.raf.gym.commons.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
 
 @Getter
 @AllArgsConstructor
 public enum AppointmentStatusType {
 
     PENDING ("Pending" ),
-    HELD    ("Held"    ),
-    CANCELED("Canceled");
+    CANCELED("Canceled"),
+    HELD    ("Held"    );
 
     private final String name;
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    public static AppointmentStatusType findStatus(String name) {
+        for (AppointmentStatusType status : AppointmentStatusType.values())
+            if (status.name.equals(name))
+                return status;
+
+        return null;
+    }
 
 }
