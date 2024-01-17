@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package rs.raf.gym.model.data;
+package rs.raf.gym.commons.model;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,9 +25,22 @@ import lombok.Getter;
 public enum ClientAppointmentStatusType {
 
     REQUESTED("Requested"),
-    HELD     ("Held"     ),
-    CANCELED ("Canceled" );
+    CANCELED ("Canceled" ),
+    HELD     ("Held"     );
 
     private final String name;
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    public static ClientAppointmentStatusType findStatus(String name) {
+        for (ClientAppointmentStatusType status : ClientAppointmentStatusType.values())
+            if (status.name.equals(name))
+                return status;
+
+        return null;
+    }
 
 }

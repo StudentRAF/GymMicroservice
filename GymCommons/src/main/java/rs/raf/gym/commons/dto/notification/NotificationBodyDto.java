@@ -52,4 +52,14 @@ public class NotificationBodyDto {
         this.userId = userId;
         this.mailFormat = mailFormat;
     }
+
+    public NotificationBodyDto(String subject, UserDto user, Long userId, LocalDate trainingDate, String trainingName, MailFormat mailFormat) {
+        this.subject      = subject;
+        this.user         = user;
+        this.userId       = userId;
+        this.trainingDate = trainingDate;
+        this.trainingName = trainingName;
+        this.mailFormat   = mailFormat;
+    }
+
 }
